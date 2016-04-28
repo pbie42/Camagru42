@@ -248,7 +248,7 @@ button.welcome_font {
 /* Sign Up */
 
 .main_area_signup {
-  height:              400px;
+  height:              500px;
   width:               350px;
   background-color:    #FFFFFF;
   color:               #838383;
@@ -262,7 +262,7 @@ button.welcome_font {
   border-color:        #edeeee;
 }
 
-#signup_form {
+#signupform {
   margin-top:          0px;
 }
 

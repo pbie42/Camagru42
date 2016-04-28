@@ -8,6 +8,7 @@
      <meta charset="utf-8">
      <title>Camagru</title>
      <script type="text/javascript" src="js/camagru.js"></script>
+     <script type="text/javascript" src="js/ajax.js"></script>
      <link rel="stylesheet" href="css/camagru.css" charset="utf-8" />
      <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
    </head>
@@ -24,8 +25,8 @@
             }
             else if ($_SESSION['logged_on_user'] == "" || $_POST['submit'] == login)
             {
-              //include_once 'php_includes/login.php';
-              include_once 'php_includes/video.php';
+              include_once 'php_includes/login.php';
+              //include_once 'php_includes/video.php';
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'php_includes/logsignerror.php';
             }

@@ -1,4 +1,6 @@
-
+function _(x) {
+  return document.getElementById(x);
+}
 
 function camera() {
   navigator.getUserMedia = (navigator.getUserMedia ||
@@ -91,10 +93,4 @@ function dismissPhoto () {
   apd.style.display = "block";
   cp.style.display = "none";
   sd.style.display = "none";
-}
-
-Filters = {};
-
-Filters.getPixels = function(img) {
-
 }
