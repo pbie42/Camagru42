@@ -1,0 +1,649 @@
+/*****************************************************************************/
+/*****************************************************************************/
+/* SITEWIDE */
+
+html {
+  height:              100%;
+  margin:              0;
+  padding:             0;
+}
+
+body {
+  margin:              0;
+  padding:             0;
+  height:              100%;
+  background-color:    #FAFAFA;
+}
+
+a {
+  text-decoration:     none;
+  color:               inherit;
+}
+
+a:visited {
+  text-decoration:     none;
+  color:               inherit;
+}
+
+a:active {
+  text-decoration:     none;
+  color:               inherit;
+}
+
+.camagrufont {
+  font-family:         'Oswald', sans-serif;
+}
+
+li {
+  list-style-type:     none;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline:           none;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* HEADER */
+
+header {
+  width:               105%;
+  height:              75px;
+  padding:             0;
+}
+
+.logo_font {
+  font-family:         'Damion', cursive;
+  font-size:           55px;
+  height:              55px;
+  margin:              0;
+  margin-left:         20px;
+  margin-top:          0px;
+}
+
+.signinup {
+  position:            relative;
+  left:                -10px;
+}
+
+.menuitem {
+  margin-right:        30px;
+  font-size:           20px;
+}
+
+#header_top {
+  width:               102%;
+  height:              75px;
+  background-color:    rgb(117, 52, 52);
+  display:             flex;
+
+}
+
+#brand {
+  width:               20%;
+  display:             flex;
+}
+
+#logofont {
+  width:               200px;
+}
+
+#logo_header {
+  width:               50px;
+  height:              50px;
+  margin-left:         5px;
+  margin-top:          17px;
+}
+
+#menu_bottom {
+  float: right;
+  padding:             0;
+  padding-left:        0px;
+  padding-top:         6px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#menu {
+  position:            absolute;
+  width:               80%;
+}
+
+
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* INDEXPAGE */
+
+h1.welcome_font {
+  padding-top:         5px;
+  margin:              0;
+}
+
+h4.welcome_font {
+  padding:             0px;
+  margin:              0px;
+  margin-top:          0px;
+}
+
+button.welcome_font {
+  font-size:           15px;
+}
+
+.main_area {
+  height:              350px;
+  width:               350px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  text-align:          center;
+  border-radius:       10px;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          auto;
+  margin-bottom:       auto;
+  border:              1px solid;
+  border-color:        #edeeee;
+}
+
+#body {
+  width:               100%;
+  padding:             10px;
+  padding-bottom:      50px;
+  background-color:    #FAFAFA;
+}
+
+#container {
+  min-height:          100%;
+  position:            relative;
+  margin-bottom:       -50px;
+  display:             block;
+}
+
+#logsignerror_section {
+  height:              100px;
+  width:               350px;
+  margin-left:         auto;
+  margin-right:        auto;
+}
+
+#error {
+  text-align:          center;
+  color:               red;
+  border-radius:       10px;
+  font-size:           15px;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* Clear Footer */
+
+.clearfooter {
+  height:              50px;
+  clear:               both;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* Log In */
+
+.welcome_font {
+  font-family:         'Nunito', sans-serif;
+}
+
+.login_input {
+  height:              30px;
+  width:               300px;
+  text-align:          center;
+  background-color:    #FAFAFA;
+  border-radius:       3px;
+  border:              1px solid;
+  border-color:        #c7c0c0;
+  margin-top:          10px;
+  font-family:         'Nunito', sans-serif;
+}
+
+#login_logo {
+  margin: 0;
+  color:               rgb(117, 52, 52);
+}
+
+#login_forgot {
+  margin:              0;
+  font-size:           15px;
+  font-family:         'Nunito', sans-serif;
+}
+
+#login_button {
+  width:               306px;
+  height:              36px;
+  background-color:    rgb(117, 52, 52);
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  color:               #FFFFFF;
+  padding:             2px;
+  margin-top:          5px;
+}
+
+
+
+#login_signup {
+  height:              75px;
+  width:               350px;
+  border-radius:       10px;
+  background-color:    #FFFFFF;
+  border:              1px solid;
+  border-color:        #edeeee;
+  margin-top:          15px;
+  margin-left:         auto;
+  margin-right:        auto;
+  text-align:          center;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* Sign Up */
+
+.main_area_signup {
+  height:              400px;
+  width:               350px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  text-align:          center;
+  border-radius:       10px;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          auto;
+  margin-bottom:       auto;
+  border:              1px solid;
+  border-color:        #edeeee;
+}
+
+#signup_form {
+  margin-top:          0px;
+}
+
+#signup_section {
+  position:            relative;
+  width:               100%;
+  height:              100%;
+}
+
+#signup_welcome {
+  margin:              0;
+  margin-top:          15px;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* Photo */
+
+#container_photo {
+
+  margin:              0px auto;
+  margin-top:          30px;
+  width:               640px;
+  height:              480px;
+  border:              10px #333 solid;
+  display: none;
+}
+
+#videoElement {
+  width:               500px;
+  height:              375px;
+  background-color:    #666;
+}
+
+#snapdiv {
+  margin-left:         auto;
+  margin-right:        auto;
+  width:               612px;
+  display: none;
+}
+
+#addphotodiv {
+  margin-left:         auto;
+  margin-right:        auto;
+  width:               310px;
+}
+
+#addphoto {
+  margin-left:         auto;
+  margin-left:         auto;
+}
+
+.acceptdecline {
+  justify-content:     center;
+  text-align:          center;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          8px;
+  width:               620px;
+}
+
+.snapbutton {
+  width:               306px;
+  height:              36px;
+  background-color:    rgb(117, 52, 52);
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  color:               #FFFFFF;
+  padding:             2px;
+  margin-top:          5px;
+  font-size:           20px;
+}
+
+#myCanvas {
+  width:               640px;
+  height:              480px;
+  margin-top:          5px;
+  background-color:    none;
+  position:            relative;
+  z-index:             1;
+}
+
+#lightBoxBg {
+  position:            absolute;
+  top:                 0px;
+  left:                0px;
+  opacity:             0.8;
+  display:             none;
+  height:              100%;
+  width:               100%;
+  background-color:    black;
+}
+
+#lightBox {
+  position:            absolute;
+  top:                 7%;
+  margin-left:         auto;
+  margin-right:        auto;
+  display:             none;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* FEED */
+
+.main_feed_area {
+  height:              auto;
+  width:               600px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  border-radius:       0px;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          20px;
+  margin-bottom:       100px;
+  border:              1px solid;
+  border-color:        #edeeee;
+  font-family:        'Nunito', sans-serif;
+
+}
+
+.feed_username {
+  text-align:          left;
+  width:               50%;
+  padding-left:        15px;
+  padding-top:         5px;
+}
+
+.feed_date {
+  width:               50%;
+  text-align:          right;
+  padding-right:       15px;
+  padding-top:         5px;
+}
+
+.feed_post_header {
+  width:               100%;
+  height:              75px;
+  background-color:    none;
+  border:              none;
+  border-color:        none;
+  color:               none;
+  position:            relative;
+  margin-left:         -1px;
+  margin-top:          -1px;
+  display:             flex;
+}
+
+.postheader {
+  width:               100%;
+  display:             flex;
+}
+
+.feed_comments{
+  width:               552px;
+  height:              auto;
+  margin-left:         auto;
+  margin-right:        auto;
+}
+
+.feed_likes {
+  width:               100%;
+  height:              20px;
+}
+
+.likes {
+  margin:              0;
+  margin-top:          16px;
+}
+
+.username {
+  color:               rgb(117, 52, 52);
+}
+
+.comments {
+  list-style-type:     none;
+  padding:             0;
+}
+
+.username_comment {
+  margin-left:         10px;
+}
+
+.comment {
+
+}
+
+.add_comments {
+  display:             flex;
+  margin-bottom:       16px;
+}
+
+.heart {
+  height:              25px;
+  width:               25px;
+}
+
+.comment_form {
+  margin-left:         10px;
+}
+
+.add_comment {
+  border:              none;
+  font-family:         'Nunito', sans-serif;
+  font-size:           15px;
+}
+
+#feed_section {
+  margin-top:          10px
+
+}
+
+#photo {
+  width:               100%;
+  height:              100%;
+}
+
+#photo img {
+  width:               inherit;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* FOOTER */
+
+footer {
+  width:               102%;
+  height:              50px;
+  background:          none;
+  position:            absolute;
+  bottom:              0;
+  justify-content:	   center;
+  text-align:          center;
+  font-family:         'Comfortaa', cursive;
+}
+
+#footer_logo_div {
+  display:             flex;
+  justify-content:	   center;
+  width:               100%;
+}
+
+#logo_footer {
+  height:              50px;
+  width:               50px;
+  position:            relative;
+  font-family:         'Oswald', sans-serif;
+}
+
+#copyright {
+  width:               100px;
+  margin:              0;
+}
+
+#about {
+
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* Hamburger Menu */
+
+header ul {
+  margin:               0;
+  padding:              0;
+  list-style:           none;
+  overflow:             hidden;
+  background-color:     rgb(117, 52, 52);
+}
+
+header li a {
+  display:              block;
+  padding:              20px 20px;
+  border-right:         1px solid rgb(117, 52, 52);
+  text-decoration:      none;
+}
+
+header li a:hover,
+header .menu-btn:hover {
+  background-color:     rgb(117, 52, 52);
+}
+
+header .logo {
+  display:              block;
+  float:                left;
+  font-size:            2em;
+  padding:              10px 20px;
+  text-decoration:      none;
+}
+
+/* menu */
+
+header .menu {
+  clear:                both;
+  max-height:           0;
+  transition:           .2s ease-out;
+}
+
+/* menu icon */
+
+header .menu-icon {
+  cursor:               pointer;
+  display:              inline-block;
+  float:                right;
+  padding:              28px 20px;
+  position:             relative;
+  user-select:          none;
+  margin-top:           11px;
+}
+
+header .menu-icon .navicon {
+  background:           black;
+  display:              block;
+  height:               2px;
+  position:             relative;
+  transition:           background .2s ease-out;
+  width:                24px;
+}
+
+header .menu-icon .navicon:before,
+header .menu-icon .navicon:after {
+  background:           black;
+  content:              '';
+  display:              block;
+  height:               100%;
+  position:             absolute;
+  transition:           all .2s ease-out;
+  width:                100%;
+}
+
+header .menu-icon .navicon:before {
+  top:                  7px;
+}
+
+header .menu-icon .navicon:after {
+  top:                  -7px;
+}
+
+/* menu btn */
+
+header .menu-btn {
+  display:              none;
+}
+
+header .menu-btn:checked ~ .menu {
+  max-height:           240px;
+}
+
+header .menu-btn:checked ~ .menu-icon .navicon {
+  background:           transparent;
+}
+
+header .menu-btn:checked ~ .menu-icon .navicon:before {
+  transform:            rotate(-45deg);
+}
+
+header .menu-btn:checked ~ .menu-icon .navicon:after {
+  transform:            rotate(45deg);
+}
+
+header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:before,
+header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
+  top:                   0;
+}
+
+/* 48em = 768px */
+
+@media (min-width: 48em) {
+  header li {
+    float:              right;left;
+  }
+  header li a {
+    padding:            20px 30px;
+  }
+  header .menu {
+    clear:              none;
+    float:              right;
+    max-height:         none;
+  }
+  header .menu-icon {
+    display:            none;
+  }
+}
