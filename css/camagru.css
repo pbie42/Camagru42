@@ -262,6 +262,18 @@ button.welcome_font {
   border-color:        #edeeee;
 }
 
+#signupbtn {
+  width:               306px;
+  height:              36px;
+  background-color:    rgb(117, 52, 52);
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  color:               #FFFFFF;
+  padding:             2px;
+  margin-top:          5px;
+}
+
 #signupform {
   margin-top:          0px;
 }
