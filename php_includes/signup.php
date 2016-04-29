@@ -74,10 +74,31 @@ if(isset($_POST["usernamecheck"])) {
       $cryptpass = crypt($p);
       include_once 'php_includes/randStrGen.php';
       $p_hash = randStrGen(20)."$cryptpass".randStrGen(20);
-      //Add user info into the deeatabase table for the main site table
-      
+      //Add user info into the database table for the main site table
+      $sql = "INSERT INTO users (username, email, password, country, ip, signup, lastlogin, notescheck)
+              VALUES('$u', '$e', '$p_hash', '$c','$ip', now(), now(), now())";
+      $query = mysqli_query($db, $sql);
+      $uid = mysqli_insert_id($db);
+      //Establish their row in the useroptions table
+      $sql = "INSERT INTO useroptions (id, username) VALUES ('$uid', '$u')";
+      $query = mysqli_query($db, $sql);
+      //Create directory(folder) to hold each user's files(pics)
+      if (!file_exists("user/$u")) {
+        mkdir("user/$u", 0755);
+      }
+      //Email the user their activation link
+      $to = "$e";
+      $from = "pbiecamagru42@gmail.com";
+      $subject = "Camagru Account Activation PLEASE DO NOT RESPOND";
+      $message = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Camagru Message</title><link href="https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa" rel='stylesheet' type='text/css'></head><body style="margin:0px; font-family:'Nunito', sans-serif;"><div style="padding:10px; background:rgb(117, 52, 52); font-size:24px; color:#CCC;"><span style="font-family:'Damion', cursive; font-size:30px;">Camagru</span><a href="http://localhost:8080/42/camagru/index.php"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Camera_retro_font_awesome.svg/2000px-Camera_retro_font_awesome.svg.png" width="36" height="36" alt="yoursitename" style="border:none; float:left; color:#CCC"></a>Account Activation</div><div style="padding:24px; font-size:17px;">Hello '.$u.',<br /><br />Click the link below to activate your account when ready:<br /><br /><a href="http://localhost:8080/42/camagru/php_includes/activation.php?id='.$uid.'&u='.$u.'&e='.$e.'&p='.$p_hash.'">Click here to activate your account now</a><br /><br />Login after successful activation using your:<br />* E-mail Address: <b>'.$e.'</b></div></body></html>';
+      $headers = "From: $from\n";
+      $headers .= "MIME-Version: 1.0\n";
+      $headers .= "Content-type: text/html; charset=iso-8859-1\n";
+      mail($to, $subject, $message, $headers);
+      echo "signup_success";
+      exit();
    }
-
+   exit();
  }
 ?>
 
