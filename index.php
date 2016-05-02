@@ -1,5 +1,6 @@
 <?php
   session_start();
+  include_once 'config/setup.php';
  ?>
 
  <!DOCTYPE html>
@@ -22,7 +23,7 @@
           <?php
             if ($_SESSION['logged_on_user'] == "" && isset($_POST['submit']) && $_POST['submit'] == signup)
             {
-              include_once 'php_includes/signup.php';
+              include_once 'signup.php';
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'logsignerror.php';
             }

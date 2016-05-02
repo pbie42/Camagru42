@@ -8,7 +8,7 @@ if (isset($_GET['id']) && isset($_GET['u']) && isset($_GET['e']) && isset($_GET[
   $p = mysqli_real_escape_string($db, $_GET['p']);
   //Evaluate the lengths of the incoming $_GET variables
   if ($id = "" || strlen($u) < 3 || strlen($e) < 5 || strlen($p) > 1) {
-    header('Location: http://localhost:8080/42/camagru/problem.php?msg=activation_string_length_issues');
+    header('Location: message.php?msg=activation_string_length_issues');
     exit();
   }
   //Check their crednetials against the database
@@ -18,7 +18,7 @@ if (isset($_GET['id']) && isset($_GET['u']) && isset($_GET['e']) && isset($_GET[
   //Evaluate for a match in the system (0 = no match, 1 = match)
   if ($numrows == 0) {
     //Log this potential hack attempt to text file and email details to yourself
-    header("Location: http://localhost:8080/42/camagru/problem.php?msg=bad_credentials");
+    header("Location: message.php?msg=bad_credentials");
     exit();
   }
   //Match was found, you can activate them
@@ -30,14 +30,14 @@ if (isset($_GET['id']) && isset($_GET['u']) && isset($_GET['e']) && isset($_GET[
   $numrows = mysqli_num_rows($query);
   //Evaluate the double check
   if ($numrows == 0) {
-    header("Location: http://localhost:8080/42/camagru/problem.php?msg=activation_failure");
+    header("Location: message.php?msg=activation_failure");
     exit();
   } else if ($numrows == 1) {
-    header("Location: http://localhost:8080/42/camagru/problem.php?msg=activation_success");
+    header("Location: message.php?msg=activation_success");
     exit();
   }
 } else {
-  header('Location: http://localhost:8080/42/camagru/problem.php?msg=missing_GET_variables');
+  header('Location: message.php?msg=missing_GET_variables');
   exit();
 }
 ?>
