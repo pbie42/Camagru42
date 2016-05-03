@@ -9,7 +9,7 @@ function restrict(elem){
   } else if (elem == "username") {
     rx = /[^a-z0-9]/gi;
   }
-  tf.value.replace(rx, "");
+  tf.value = tf.value.replace(rx, "");
 }
 
 function emptyElement(x) {
@@ -34,6 +34,8 @@ function checkusername() {
 function signup() {
   var u = _("username").value;
   var e = _("email").value;
+  var f = _("firstname").value;
+  var l = _("lastname").value;
   var p1 = _("pass1").value;
   var p2 = _("pass2").value;
   var c = _("country").value;
@@ -54,11 +56,13 @@ function signup() {
           _("signupbtn").style.display = "block";
         } else {
           window.scrollTo(0, 0);
-          _("signupform").innerHTML = "OK "+u+", check your email inbox and junk mail box at "+e+" in a moment to complete the sign up process by activating your account. You will not be able to do anything on the site until you have successfully activated your account.";
+          _("signupform").innerHTML = "<h2 class='welcome_font thankyoured'>Thanks "+u+" !</h2><p class='welcome_font'>Please check your email <strong class='thankyoured'>inbox</strong> and <strong class='thankyoured'>junk mail</strong> box at <strong class='thankyoured'>"+e+"</strong> in a moment to complete the sign up process by activating your account. You will not be able to do anything on the site until you have successfully activated your account.</p>";
+          _("signupform").style.height = "250px";
+          _("login_signup").style.display = "none";
         }
       }
     }
-    ajax.send("u="+u+"&e="+e+"&p="+p1+"&c="+c);
+    ajax.send("u="+u+"&e="+e+"&p="+p1+"&c="+c+"&f="+f+"&l="+l);
   }
 }
 
