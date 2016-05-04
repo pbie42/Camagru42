@@ -25,6 +25,7 @@
     //Verify the user
     $user_ok = evalLoggedUser($db_conx,$log_id,$log_username,$log_password);
   } else if (isset($_COOKIE["id"]) && isset($_COOKIE["user"]) && isset($_COOKIE["pass"])) {
+    //TODO Finish this part in video (29:00)
 
   }
 ?>
