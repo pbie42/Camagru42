@@ -1,5 +1,4 @@
 <?php
-  session_start();
   include_once 'config/setup.php';
  ?>
 
@@ -29,7 +28,7 @@
             }
             else if ($_SESSION['logged_on_user'] == "" || $_POST['submit'] == login)
             {
-              include_once 'php_includes/login.php';
+              include_once 'login.php';
               //include_once 'php_includes/video.php';
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'php_includes/logsignerror.php';

@@ -72,7 +72,10 @@ if (isset($_POST["usernamecheck"])) {
      //End form data error handling
         //Begin insertion of data into the database
         //Has the password and apply salt
-      //Change this to something more secure!!!!!!!!!!!
+      //TODO Change this to something more secure!!!!!!!!!!!
+      //TODO need to change the activation process. Need to make sure that I don't
+      //send the password even if it is ecrypted. Should do a randStrGen activation code
+      //that will be used only for the activation process.
       $p_hash = md5($p);
       //Add user info into the database table for the main site table
       //!!!!!!!IMPORTANT!!!!! in the values section never put spaces!!!!!!
