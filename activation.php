@@ -5,7 +5,11 @@ if (isset($_GET['id']) && isset($_GET['u']) && isset($_GET['e']) && isset($_GET[
     $id = preg_replace('#[^0-9]#i', '', $_GET['id']);
 	$u = preg_replace('#[^a-z0-9]#i', '', $_GET['u']);
 	$e = mysqli_real_escape_string($db_conx, $_GET['e']);
-	$p = mysqli_real_escape_string($db_conx, $_GET['p']);
+  //Below I changed the $p to take the spaces out of what has been received
+  //The email activation was putting random spaces inside the hashed password
+  //To use urldecode I had to make sure I used urlencode when sending the email
+  $p = str_replace(' ', '', urldecode($_GET['p']));
+	//$p = mysqli_real_escape_string($db_conx, $_GET['p']);
 	// Evaluate the lengths of the incoming $_GET variable
 	if($id == "" || strlen($u) < 3 || strlen($e) < 5 || strlen($p) < 5){
 		// Log this issue into a text file and email details to yourself
