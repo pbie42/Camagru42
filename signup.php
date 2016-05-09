@@ -13,7 +13,7 @@ if (isset($_POST["usernamecheck"])) {
   $sql = "SELECT id FROM users WHERE username='$username' LIMIT 1";
   $query = mysqli_query($db_conx, $sql);
   $uname_check = mysqli_num_rows($query);
-  if (strlen($username) < 5 {
+  if (strlen($username) < 5) {
     echo '<strong style="color:#F00;">Usernames must be at least 5 characters</strong>';
     exit();
   }

@@ -8,8 +8,8 @@ if ($msg == "activation_failure") {
 } else {
   $message = $msg;
 }
+//TODO Need to customize the id tags for this page
 ?>
-<!--Need to customize the id tags for this page-->
 <!DOCTYPE html>
 <html>
   <head>

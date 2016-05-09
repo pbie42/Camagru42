@@ -336,6 +336,25 @@ button.welcome_font {
 
 /*****************************************************************************/
 /*****************************************************************************/
+/* User Page */
+
+.main_area_user {
+  height:              500px;
+  width:               350px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  text-align:          center;
+  border-radius:       10px;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          auto;
+  margin-bottom:       auto;
+  border:              1px solid;
+  border-color:        #edeeee;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
 /* Photo */
 
 #container_photo {

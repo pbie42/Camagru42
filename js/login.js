@@ -1,7 +1,8 @@
 function login() {
-  var e = _("email").value;
+  console.log("Getting to this point");
+  var u = _("username").value;
   var p = _("password").value;
-  if (e == "" || p == "") {
+  if (u == "" || p == "") {
     _("status").innerHTML = "Please fill out all of the form fields";
   } else {
     _("login_button").style.display = "none";
@@ -16,10 +17,11 @@ function login() {
         } else {
           //I can direct the user to any page I want by adding any variables
           //I want below. So as to use the php to show certain things in my index page.
+          console.log("We got to this point");
           window.location = "user.php?u="+ajax.responseText;
         }
       }
     }
-    ajax.send("e="+e+"&p="+p);
+    ajax.send("u="+u+"&p="+p);
   }
 }

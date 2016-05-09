@@ -1,4 +1,5 @@
 <?php
+  session_start();
   include_once 'config/setup.php';
  ?>
 
@@ -11,7 +12,7 @@
      <script type="text/javascript" src="js/ajax.js"></script>
      <script type="text/javascript" src="js/autoscroll.js"></script>
      <script type="text/javascript" src="js/signup.js"></script>
-
+     <script type="text/javascript" src="js/login.js"></script>
      <link rel="stylesheet" href="css/camagru.css" charset="utf-8" />
      <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
    </head>
