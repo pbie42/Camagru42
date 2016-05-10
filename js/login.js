@@ -1,5 +1,4 @@
 function login() {
-  console.log("Getting to this point");
   var u = _("username").value;
   var p = _("password").value;
   if (u == "" || p == "") {
