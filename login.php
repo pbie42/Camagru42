@@ -63,7 +63,7 @@
   <div id="login_signup">
     <h4 class="welcome_font">Don't have an Account?</h4>
     <form class="" action="index.php" method="post">
-      <button id="signup_button" class="welcome_font" type="submit" value="signup" name="submit">Sign Up</button>
+      <button id="signupbtn" class="welcome_font" type="submit" value="signup" name="submit">Sign Up</button>
     </form>
     <p id="status">
 

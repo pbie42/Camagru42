@@ -12,7 +12,7 @@
     <div id="menu">
 
 <?php
-  if ($_SESSION['logged_on_user'] != "")
+  if ($_SESSION['username'] != "")
   {
 ?>
       <input class="menu-btn" type="checkbox" id="menu-btn" />
@@ -20,7 +20,7 @@
       <ul id="menu_bottom" class="menu">
         <li class="welcome_font menuitem"><a class="" href="account.php"><?php echo htmlspecialchars($_SESSION['logged_on_user']); ?></a></li>
         <li class="welcome_font menuitem"><a href="logout.php">Username</a></li>
-        <li class="welcome_font menuitem"><a href="logout.php">Sign Out</a></li>
+        <li class="welcome_font menuitem"><a href="logout.php" onclick="window.location.reload()">Sign Out</a></li>
 <?php
   }
   else

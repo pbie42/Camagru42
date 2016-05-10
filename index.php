@@ -1,4 +1,5 @@
 <?php
+session_start();
   include_once 'config/setup.php';
  ?>
 
@@ -20,21 +21,23 @@
         <?php include_once("php_includes/header.php"); ?>
         <div id="body">
           <?php
-            if ($_SESSION['logged_on_user'] == "" && isset($_POST['submit']) && $_POST['submit'] == signup)
+            if ($_SESSION['username'] == "" && isset($_POST['submit']) && $_POST['submit'] == signup)
             {
               include_once 'signup.php';
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'logsignerror.php';
             }
-            else if ($_SESSION['logged_on_user'] == "" || $_POST['submit'] == login)
+            else if ($_SESSION['username'] == "")
             {
               include_once 'login.php';
               //include_once 'php_includes/video.php';
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'php_includes/logsignerror.php';
             }
-            elseif ($_SESSION['username'] != "") {
+            else if ($_SESSION['username'] != "") {
               echo "fuck it dog life's a risk";
+              include_once 'php_includes/video.php';
+              include_once 'php_includes/feed.php';
             }
           ?>
         </div> <!-- Body -->
