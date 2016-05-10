@@ -1,5 +1,4 @@
 <?php
-  session_start();
   include_once 'config/setup.php';
  ?>
 
@@ -33,6 +32,9 @@
               //include_once 'php_includes/video.php';
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'php_includes/logsignerror.php';
+            }
+            elseif ($_SESSION['username'] != "") {
+              echo "fuck it dog life's a risk";
             }
           ?>
         </div> <!-- Body -->

@@ -1,7 +1,7 @@
 <?php
   //If user is already logged in I header them away
   if (isset($_SESSION["username"])) {
-    header("location: user.php?u=".$_SESSION["username"]);
+    //header("location: localhost:8080/camagru/user.php?u=".$_SESSION["username"]);
     exit();
   }
 ?>
