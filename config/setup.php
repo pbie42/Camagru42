@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS useroptions (
               username VARCHAR(16) NOT NULL,
               question VARCHAR(255) NULL,
               answer VARCHAR(255) NULL,
+              temp_pass VARCHAR(255) NULL,
               PRIMARY KEY (id),
               UNIQUE KEY username (username)
             );

@@ -71,7 +71,7 @@ header {
 
 .menuitem {
   margin-right:        30px;
-  font-size:           20px;
+  font-size:           25px;
 }
 
 #header_top {
@@ -228,8 +228,6 @@ button.welcome_font {
   margin-top:          5px;
 }
 
-
-
 #login_signup {
   height:              75px;
   width:               350px;
@@ -248,7 +246,7 @@ button.welcome_font {
 /* Sign Up */
 
 .main_area_signup {
-  height:              500px;
+  height:              550px;
   width:               350px;
   background-color:    #FFFFFF;
   color:               #838383;
@@ -289,12 +287,78 @@ button.welcome_font {
   margin-top:          15px;
 }
 
+.login_input {
+  height:              30px;
+  width:               300px;
+  text-align:          center;
+  background-color:    #FAFAFA;
+  border-radius:       3px;
+  border:              1px solid;
+  border-color:        #c7c0c0;
+  margin-top:          10px;
+  font-family:         'Nunito', sans-serif;
+}
+
+#country {
+  width:               306px;
+  height:              33px;
+  font-family:         'Nunito', sans-serif;
+  color:               #838383;
+  border-radius:       3px;
+  text-indent:         133px;
+  text-align:          center !important;
+  margin-top:          10px;
+  border:              1px solid;
+  border-color:        #c7c0c0;
+  -webkit-appearance:  none;
+  -moz-appearance:     none;
+  appearance:          none;
+}
+
+option {
+  text-align:          center;
+}
+
+.signup_status {
+  width:               100%;
+}
+
+#status {
+  height:              20px;
+  width:               350px;
+  color:               #F00;
+  text-align:          center;
+  margin-left:         auto;
+  margin-right:        auto;
+  font-family:         'Nunito', sans-serif;
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
 /* Sign Up Success */
 
 .thankyoured {
   color:               rgb(117, 52, 52);
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* Password Reset */
+
+#passwordreset {
+  margin-top: 25px;
+}
+
+#forgotpassbtn {
+  width:               306px;
+  height:              36px;
+  background-color:    rgb(117, 52, 52);
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  color:               #FFFFFF;
+  padding:             2px;
+  margin-top:          5px;
 }
 
 /*****************************************************************************/

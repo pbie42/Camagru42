@@ -2,6 +2,10 @@ function _(x) {
   return document.getElementById(x);
 }
 
+function trim1 (str) {
+    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+}
+
 function camera() {
   navigator.getUserMedia = (navigator.getUserMedia ||
           navigator.webkitGetUserMedia ||
@@ -69,6 +73,7 @@ function snap(){
 function dismiss() {
   var lbBg = document.getElementById('lightBoxBg');
   var lb = document.getElementById('lightBox');
+  location.href = "index.php";
 
   lbBg.style.display = "none";
   lb.style.display = "none";

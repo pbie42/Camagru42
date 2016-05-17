@@ -1,5 +1,4 @@
-<select id="country" onfocus="emptyElement('status')">
-	<option value=""></option>
+	<option value="">Country</option>
 	<option value="AF">Afghanistan</option>
 	<option value="AX">Åland Islands</option>
 	<option value="AL">Albania</option>
@@ -249,4 +248,3 @@
 	<option value="YE">Yemen</option>
 	<option value="ZM">Zambia</option>
 	<option value="ZW">Zimbabwe</option>
-</select>

@@ -27,7 +27,10 @@ session_start();
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'logsignerror.php';
             }
-            else if ($_SESSION['username'] == "")
+            else if (isset($_POST['submit']) && $_POST['submit'] == password) {
+              include_once 'forgot_pass.php';
+            }
+            else if ($_SESSION['username'] == "" || $_POST['username'] == "")
             {
               include_once 'login.php';
               //include_once 'php_includes/video.php';
@@ -35,7 +38,6 @@ session_start();
                 include_once 'php_includes/logsignerror.php';
             }
             else if ($_SESSION['username'] != "") {
-              echo "fuck it dog life's a risk";
               include_once 'php_includes/video.php';
               include_once 'php_includes/feed.php';
             }

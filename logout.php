@@ -14,7 +14,8 @@
   if (isset($_SESSION['username'])) {
     header("location: message.php?msg=Error:_Logout_Failed");
   } else {
-    header("location: localhost:8080/42/camagru/index.php");
+    header("location: index.php");
+    echo "we gots here mang";
     exit();
   }
 ?>

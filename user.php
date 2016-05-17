@@ -61,9 +61,9 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
       <?php include_once 'php_includes/header.php'; ?>
       <div id="body">
         <div id="message_section">
-          <div class="main_area_user">
+          <div class="main_area_user welcome_font">
             <h3><?php echo $u; ?></h3>
-            <p>Is the viewer the page owner, logged in and verified? <b><?php echo $isOwner; ?></b></p>
+            <p>Is the viewer the page owner? <b><?php echo $isOwner; ?></b></p>
             <p>First Name: <?php echo $fname; ?></p>
             <p>Last Name: <?php echo $lname; ?></p>
             <p>Email: <?php echo $email; ?></p>

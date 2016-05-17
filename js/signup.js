@@ -1,6 +1,10 @@
 //Might need to put all of these between <script> tags to include at the bottom of the
 //index page if signup has been called.
 
+function trim1 (str) {
+    return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+}
+
 function restrict(elem){
   var tf = _(elem);
   var rx = new RegExp;
@@ -13,7 +17,7 @@ function restrict(elem){
 }
 
 function emptyElement(x) {
-  _(x).innerhtml = "";
+  _(x).innerHTML = "";
 }
 
 function checkusername() {
@@ -31,6 +35,20 @@ function checkusername() {
   }
 }
 
+function checkemail() {
+  var e = _("email").value;
+  if (e != "") {
+    _("emailstatus").innerHTML = 'checking...';
+    var ajax = ajaxObj("POST", "signup.php");
+    ajax.onreadystatechange = function () {
+      if (ajaxReturn(ajax) == true) {
+        _("emailstatus").innerHTML = ajax.responseText;
+      }
+    }
+    ajax.send("emailcheck="+e);
+  }
+}
+
 function signup() {
   var u = _("username").value;
   var e = _("email").value;
@@ -41,9 +59,11 @@ function signup() {
   var c = _("country").value;
   var status = _("status");
   if (u == "" || e == "" || p1 == "" || p2 == "" || c == "") {
-    status.innerHTML = "Fill out all of the form data";
+    status.innerHTML = "Please fill out all fields";
+    status.style.display = "block";
   } else if (p1 != p2) {
-    status.innerHTML = "Your password fields do not match";
+    status.innerHTML = "Your passwords do not match";
+    status.style.display = "block";
   } else {
     _("signupbtn").style.display = "none";
     //Again in this method below we can replace 'Please wait...' with gif html code
@@ -51,14 +71,17 @@ function signup() {
     var ajax = ajaxObj("POST", "signup.php");
     ajax.onreadystatechange = function() {
       if (ajaxReturn(ajax) == true) {
-        if (ajax.responseText != "signup_success") {
-          status.innerHTML = ajax.responseText;
+        var response = ajax.responseText;
+        var cleanresponse = trim1(response);
+        if (cleanresponse != "signup_success") {
+          status.innerHTML = cleanresponse;
           _("signupbtn").style.display = "block";
         } else {
           window.scrollTo(0, 0);
           _("signupform").innerHTML = "<h2 class='welcome_font thankyoured'>Thanks "+u+" !</h2><p class='welcome_font'>Please check your email <strong class='thankyoured'>inbox</strong> and <strong class='thankyoured'>junk mail</strong> box at <strong class='thankyoured'>"+e+"</strong> in a moment to complete the sign up process by activating your account. You will not be able to do anything on the site until you have successfully activated your account.</p>";
           _("signupform").style.height = "250px";
           _("login_signup").style.display = "none";
+          status.style.display = "none";
         }
       }
     }

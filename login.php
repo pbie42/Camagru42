@@ -6,6 +6,22 @@
   }
 ?>
 <?php
+if (isset($_POST["logincheck"])) {
+  include_once 'php_includes/db_conx.php';
+  $username = preg_replace('#[^a-z0-9]#i', '', $_POST['logincheck']);
+  $sql = "SELECT id FROM users WHERE username='$username' AND activated='1' LIMIT 1";
+  $query = mysqli_query($db_conx, $sql);
+  $login_check = mysqli_num_rows($query);
+  if ($login_check < 1) {
+    echo '<strong style="color:#F00;">Account not yet activated!</strong>';
+    exit();
+  }
+  else {
+    exit();
+  }
+}
+ ?>
+<?php
   if (isset($_POST["u"])) {
     //Connect to the database
     include_once 'php_includes/db_conx.php';
@@ -54,19 +70,21 @@
     <h1 id="login_logo" class="logo_font">Camagru</h1>
     <h3 class="welcome_font">Please log in to see photos<br/> from you and your friends</h3>
     <form id="login_form" action="index.php" method="post">
-      <input id="username" class="login_input" type="text" onfocus="emptyElement('status')" name="username" placeholder="Username" required><br />
-      <input id="password" class="login_input" type="password" onfocus="emptyElement('status')" name="password" placeholder="Password" required><br>
+      <!--TODO Need to clean this part up when the user hasn't activated their account-->
+      <input id="username" class="login_input" type="text" onfocus="" onblur="logincheck()" name="username" placeholder="Username" required><br />
+      <span id="lognamestatus"></span>
+      <input id="password" class="login_input" type="password" onfocus="" name="password" placeholder="Password" required><br>
       <button id="login_button" class="welcome_font" onclick="login()" type="submit" value="login" name="submit">Log In</button>
     </form>
-    <h4 id="login_forgot">Forgot your username or password?</h4>
+    <h4 id="login_forgot"><a href="forgot_pass.php">Forgot your username or password?</a></h4>
+  </div>
+  <div class="">
+    <span id="loginstatus"></span>
   </div>
   <div id="login_signup">
     <h4 class="welcome_font">Don't have an Account?</h4>
     <form class="" action="index.php" method="post">
       <button id="signupbtn" class="welcome_font" type="submit" value="signup" name="submit">Sign Up</button>
     </form>
-    <p id="status">
-
-    </p>
   </div>
 </div>

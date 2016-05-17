@@ -18,9 +18,9 @@
       <input class="menu-btn" type="checkbox" id="menu-btn" />
       <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
       <ul id="menu_bottom" class="menu">
-        <li class="welcome_font menuitem"><a class="" href="account.php"><?php echo htmlspecialchars($_SESSION['logged_on_user']); ?></a></li>
-        <li class="welcome_font menuitem"><a href="logout.php">Username</a></li>
-        <li class="welcome_font menuitem"><a href="logout.php" onclick="window.location.href= 'index.php'">Sign Out</a></li>
+        <!--<li class="welcome_font menuitem"><a class="" href="account.php"><?php echo htmlspecialchars($_SESSION['logged_on_user']); ?></a></li>-->
+        <li class="logo_font menuitem"><a href="user.php?u=<?php echo $_SESSION['username']; ?>"><?php echo $_SESSION['username']; ?></a></li>
+        <li id="logout" class="logo_font menuitem" onclick="home()"><a href="logout.php">Sign Out</a></li>
 <?php
   }
   else
@@ -33,4 +33,9 @@
 
     </div> <!-- menu -->
   </div> <!-- header_top -->
+  <script type="text/javascript">
+  function home() {
+    location.href = "index.php";
+  };
+  </script>
 </header>

@@ -22,7 +22,7 @@ if (isset($_POST["usernamecheck"])) {
     exit();
   }
   if ($uname_check < 1) {
-    echo '<strong style="color:#009900;">√</strong>';
+    echo '<strong style="color:#009900;">Username is available</strong>';
     exit();
   } else {
     echo '<strong style="color:#F00;">' . $username . ' is taken</strong>';
@@ -30,6 +30,23 @@ if (isset($_POST["usernamecheck"])) {
   }
 }
 ?>
+
+<?php
+if (isset($_POST["emailcheck"])) {
+  include_once 'php_includes/db_conx.php';
+  $email = mysqli_real_escape_string($db_conx, $_POST['e']);
+  $sql = "SELECT id FROM users WHERE email='$email' LIMIT 1";
+  $query = mysqli_query($db_conx, $sql);
+  $email_check = mysqli_num_rows($query);
+  if ($email_check < 1) {
+    echo '<strong style="color:#009900;">Unused email address</strong>';
+    exit();
+  } else {
+    echo '<strong style="color:#F00;">' . $email . ' is in use</strong>';
+  }
+}
+ ?>
+
 <?php
  //Ajax calls this REGISTRATION code to execute
  if(isset($_POST["u"])) {
@@ -73,9 +90,7 @@ if (isset($_POST["usernamecheck"])) {
         //Begin insertion of data into the database
         //Has the password and apply salt
       //TODO Change this to something more secure!!!!!!!!!!!
-      //TODO need to change the activation process. Need to make sure that I don't
-      //send the password even if it is ecrypted. Should do a randStrGen activation code
-      //that will be used only for the activation process.
+      //TODO need to change the activation process. Need to make sure that I don't send the password even if it is ecrypted. Should do a randStrGen activation code that will be used only for the activation process.
       $p_hash = md5($p);
       //Add user info into the database table for the main site table
       //!!!!!!!IMPORTANT!!!!! in the values section never put spaces!!!!!!
@@ -121,16 +136,20 @@ if (isset($_POST["usernamecheck"])) {
       <input id="username" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkusername()" onkeyup="restrict('username')" name="username" maxlength="15" placeholder="Username">
       <span id="unamestatus"></span>
       <br />
-      <input id="email" class="login_input" type="text" onfocus="emptyElement('status')" name="email" placeholder="Email"><br>
+      <input id="email" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkemail()" name="email" placeholder="Email"><br>
+      <span id="emailstatus"></span>
       <input id="firstname" class="login_input" type="text" onfocus="emptyElement('status')" name="firstname" placeholder="First Name"><br>
       <input id="lastname" class="login_input" type="text" onfocus="emptyElement('status')" name="lastname" placeholder="Last Name"><br>
       <input id="pass1" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Password"><br>
       <input id="pass2" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Verify Password"><br>
-      <?php include_once 'resources/countries.php'; ?>
-      <button id="signupbtn" class="welcome_font" onclick="signup()" type="submit" name="submit" value="signup">Sign Up</button>
-      <span id="status"></span>
+      <select id="country" onfocus="emptyElement('status')"><?php include_once 'resources/countries.php'; ?></select>
+      <button id="signupbtn" class="welcome_font" onclick="signup()" type="submit" name="submit" value="signup">Sign Up</button><br>
     </form>
   </div>
+  <div class="signup_status">
+    <span id="status"></span>
+  </div>
+
   <div id="login_signup">
     <h4 class="welcome_font">Already have an Account?</h4>
     <form class="" action="index.php" method="post">
