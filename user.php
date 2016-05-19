@@ -61,13 +61,13 @@ if ($u != $log_username && $user_ok == true) {
   //at has blocked this viewer or not
   $block_check1 = "SELECT id FROM blockedusers WHERE blocker='$u' AND blockee='$log_username' AND accepted='1' LIMIT 1";
   if (mysqli_num_rows(mysqli_query($db_conx, $block_check1)) > 0) {
-    # code...
+    $ownerBlockViewer = true;
   }
   //This part is to check if the viewer has blocked the owner of the profile
   //that they are viewing
   $block_check2 = "SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$u' LIMIT 1";
   if (mysqli_num_rows(mysqli_query($db_conx, $block_check1)) > 0) {
-    # code...
+    $viewerBlockOwner = true;
   }
 }
 ?>

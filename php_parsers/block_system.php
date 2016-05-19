@@ -31,9 +31,18 @@ if (isset($_POST['type']) && isset($_POST['blockee'])) {
       echo "blocked_ok";
       exit();
     }
-  } else if () {
-    //TODO finish this part of the video 17:40
-    # code...
+  } else if ($_POST['type'] == "unblock") {
+    if ($numrows == 0) {
+      mysqli_close($db_conx);
+      echo "You do not have this user blocked";
+      exit();
+    } else {
+      $sql = "DELETE FROM blockedusers WHERE blocker='$log_username' AND blockee='$blockee' LIMIT 1";
+      $query = mysqli_query($db_conx, $sql);
+      mysqli_close($db_conx);
+      echo "unblocked_ok";
+      exit();
+    }
   }
 }
 ?>
