@@ -48,7 +48,6 @@ if ($user_ok == true) {
 <?php
 //Email link click calls this code to execute
 
-//TODO Need to finish this part of the video at 14:38
 if (isset($_GET['u']) && isset($_GET['p'])) {
   $u = preg_replace('#[^a-z0-9]#i', '', $_GET['u']);
   $temppasshash = preg_replace('#[^a-z0-9]#i', '', $_GET['p']);
