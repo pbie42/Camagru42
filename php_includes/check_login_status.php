@@ -1,6 +1,6 @@
 <?php
   session_start();
-  include_once 'php_includes/db_conx.php';
+  include_once 'db_conx.php';
   //FIles that include this file at the very top would NOT require
   //connection to database or session_start(), be careful.
   //Initialize some vars

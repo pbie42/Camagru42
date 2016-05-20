@@ -59,14 +59,14 @@ if ($u != $log_username && $user_ok == true) {
   }
   //This next part checks if the owner of the profile that the viewer is looking
   //at has blocked this viewer or not
-  $block_check1 = "SELECT id FROM blockedusers WHERE blocker='$u' AND blockee='$log_username' AND accepted='1' LIMIT 1";
+  $block_check1 = "SELECT id FROM blockedusers WHERE blocker='$u' AND blockee='$log_username' LIMIT 1";
   if (mysqli_num_rows(mysqli_query($db_conx, $block_check1)) > 0) {
     $ownerBlockViewer = true;
   }
   //This part is to check if the viewer has blocked the owner of the profile
   //that they are viewing
   $block_check2 = "SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$u' LIMIT 1";
-  if (mysqli_num_rows(mysqli_query($db_conx, $block_check1)) > 0) {
+  if (mysqli_num_rows(mysqli_query($db_conx, $block_check2)) > 0) {
     $viewerBlockOwner = true;
   }
 }
@@ -76,19 +76,19 @@ if ($u != $log_username && $user_ok == true) {
 //The first thing we do is create two disabled buttons so anyone who is
 //not a member of the site will see the buttons as disable as well as the
 //owner of the page.
-$friend_button = '<button disabled>Request As Friend</button>';
-$block_button = '<button disabled>Block This User</button>';
+$friend_button = '<button class="request_button" disabled>Request As Friend</button>';
+$block_button = '<button class="request_button" disabled>Block This User</button>';
 //Logic for Friend Button
 if ($isFriend == true) {
-  $friend_button = '<button onclick="friendToggle(\'unfriend\',\''.$u.'\',\'friendBtn\')">Unfriend</button>';
+  $friend_button = '<button class="request_button" onclick="friendToggle(\'unfriend\',\''.$u.'\',\'friendBtn\')">Unfriend</button>';
 } else if ($user_ok == true && $u != $log_username && $ownerBlockViewer == false) {
-  $friend_button = '<button onclick="friendToggle(\'friend\',\''.$u.'\',\'friendBtn\')">Request As Friend</button>';
+  $friend_button = '<button class="request_button" onclick="friendToggle(\'friend\',\''.$u.'\',\'friendBtn\')">Request As Friend</button>';
 }
 //Logic for Block Button
 if ($viewerBlockOwner == true) {
-  $block_button = '<button onclick="blockToggle(\'unblock\',\''.$u.'\',\'blockBtn\')">Unblock User</button>';
+  $block_button = '<button class="request_button" onclick="blockToggle(\'unblock\',\''.$u.'\',\'blockBtn\')">Unblock User</button>';
 } elseif ($user_ok == true && $u != $log_username) {
-  $block_button = '<button onclick="blockToggle(\'block\',\''.$u.'\',\'blockBtn\')">Block User</button>';
+  $block_button = '<button class="request_button" onclick="blockToggle(\'block\',\''.$u.'\',\'blockBtn\')">Block User</button>';
 }
 ?>
 
@@ -101,6 +101,7 @@ if ($viewerBlockOwner == true) {
     <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="js/camagru.js"></script>
     <script type="text/javascript" src="js/ajax.js"></script>
+    <script type="text/javascript" src="js/user.js"></script>
   </head>
   <body>
     <div id="container">
@@ -118,8 +119,8 @@ if ($viewerBlockOwner == true) {
             <p>Join Date: <?php echo $joindate; ?></p>
             <p>Last Session: <?php echo $lastsession; ?></p>
             <hr />
-            <p>Friend Button: <span id="friendBtn"><?php echo $friend_button; ?></span></p>
-            <p>Block Button: <span id="blockBtn"><?php echo $block_button; ?></span></p>
+            <p><span id="friendBtn" class="userspan"><?php echo $friend_button; ?></span></p>
+            <p><span id="blockBtn" class="userspan"><?php echo $block_button; ?></span></p>
           </div>
         </div>
       </div>

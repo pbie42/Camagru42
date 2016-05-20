@@ -1,5 +1,5 @@
 <?php
-session_start();
+  include_once 'php_includes/check_login_status.php';
   include_once 'config/setup.php';
  ?>
 
@@ -21,14 +21,18 @@ session_start();
         <?php include_once("php_includes/header.php"); ?>
         <div id="body">
           <?php
-            if ($_SESSION['username'] == "" && isset($_POST['submit']) && $_POST['submit'] == signup)
+            if (isset($_POST['submit']) && $_SESSION['username'] == "" && $_POST['submit'] == signup)
             {
               include_once 'signup.php';
-              if ($_POST['username'] == "" && isset($_POST['username']))
+              if (isset($_POST['username']) && $_POST['username'] == "")
                 include_once 'logsignerror.php';
             }
             else if (isset($_POST['submit']) && $_POST['submit'] == password) {
               include_once 'forgot_pass.php';
+            }
+            else if (isset($_SESSION['username'])) {
+              include_once 'php_includes/video.php';
+              include_once 'php_includes/feed.php';
             }
             else if ($_SESSION['username'] == "" || $_POST['username'] == "")
             {
@@ -37,10 +41,8 @@ session_start();
               if ($_POST['username'] == "" && isset($_POST['username']))
                 include_once 'php_includes/logsignerror.php';
             }
-            else if ($_SESSION['username'] != "") {
-              include_once 'php_includes/video.php';
-              include_once 'php_includes/feed.php';
-            }
+
+
           ?>
         </div> <!-- Body -->
         <div class="clearfooter"></div> <!-- Clearfooter -->

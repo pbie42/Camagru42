@@ -45,7 +45,49 @@ if (isset($_POST['type']) && isset($_POST['user'])) {
       mysqli_close($db_conx);
       echo "You must first unblock $user in order to proceed";
       exit();
-    }//TODO Finish this part of video at 21:50
+    } else if ($row_count1[0] > 0 || $row_count2[0] > 0) {
+      mysqli_close($db_conx);
+      echo "You are already friends with $user.";
+      exit();
+    } else if ($row_count3[0] > 0) {
+      mysqli_close($db_conx);
+      echo "You have already sent a pending friend request to $user";
+      exit();
+    } else if ($row_count4[0] > 0) {
+      mysqli_close($db_conx);
+      echo "$user has alredy requested to be your friend. Please check your friend requests.";
+      exit();
+    } else {
+      $sql = "INSERT INTO friends(user1, user2, datemade) VALUES('$log_username','$user',now())";
+      $query = mysqli_query($db_conx, $sql);
+      mysqli_close($db_conx);
+      echo "friend_request_sent";
+      exit();
+    }
+  } else if ($_POST['type'] == "unfriend") {
+    $sql = "SELECT COUNT(id) FROM friends WHERE user1='$log_username' AND user2='$user' AND accepted='1' LIMIT 1";
+    $query = mysqli_query($db_conx, $sql);
+    $row_count1 = mysqli_fetch_row($query);
+    $sql = "SELECT COUNT(id) FROM friends WHERE user1='$user' AND user2='$log_username' AND accepted='1' LIMIT 1";
+    $query = mysqli_query($db_conx, $sql);
+    $row_count2 = mysqli_fetch_row($query);
+    if ($row_count1[0] > 0) {
+      $sql = "DELETE FROM friends WHERE user1='$log_username' AND user2='$user' AND accepted='1' LIMIT 1";
+      $query = mysqli_query($db_conx, $sql);
+      mysqli_close($db_conx);
+      echo "unfriend_ok";
+      exit();
+    } else if ($row_count2[0] > 0) {
+      $sql = "DELETE FROM friends WHERE user1='$user' AND user2='$log_username' AND accepted='1' LIMIT 1";
+      $query = mysqli_query($db_conx, $sql);
+      mysqli_close($db_conx);
+      echo "unfriend_ok";
+      exit();
+    } else {
+      mysqli_close($db_conx);
+      echo "No friendship was found between your account and $user";
+      exit();
+    }
   }
 }
 ?>

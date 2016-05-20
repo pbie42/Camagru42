@@ -1,3 +1,7 @@
+<?php
+$envelope 
+?>
+
 <header>
   <div id="header_top">
     <div id="brand">

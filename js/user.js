@@ -10,7 +10,7 @@ function friendToggle(type, user, elem) {
       if (ajax.responseText == "friend_request_sent") {
         _(elem).innerHTML = 'Ok Friend Request Sent';
       } else if (ajax.responseText == "unfriend_ok") {
-        _(elem).innerHTML = '<button onclick="friendToggle(\'friend\',\'<?php echo $u;?>\',\'friendBtn\')">Request As Friend</button>';
+        _(elem).innerHTML = '<button class="request_button" onclick="friendToggle(\'friend\',\'<?php echo $u;?>\',\'friendBtn\')">Request As Friend</button>';
       } else {
         alert(ajax.responseText);
         _(elem).innerHTML = 'Try again later';
@@ -30,9 +30,9 @@ function blockToggle(type, user, elem) {
   ajax.onreadystatechange = function () {
     if (ajaxReturn(ajax) == true) {
       if (ajax.responseText == "blocked_ok") {
-        _(elem).innerHTML = '<button onclick="blockToggle(\'unblock\',\'<?php echo $u;?>\',\'blockBtn\')">Unblock User</button>';
+        _(elem).innerHTML = '<button class="request_button" onclick="blockToggle(\'unblock\',\'<?php echo $u;?>\',\'blockBtn\')">Unblock User</button>';
       } else if (ajax.responseText == "unblocked_ok") {
-        _(elem).innerHTML = '<button onclick="blockToggle(\'block\',\'<?php echo $u;?>\',\'blockBtn\')">Block User</button>';
+        _(elem).innerHTML = '<button class="request_button" onclick="blockToggle(\'block\',\'<?php echo $u;?>\',\'blockBtn\')">Block User</button>';
       } else {
         alert(ajax.responseText);
         _(elem).innerHTML = 'Try again later';
