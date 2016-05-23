@@ -1,5 +1,20 @@
 <?php
-$envelope 
+$headerOptions = "";
+$envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php">Alerts</a></li>';
+if ($user_ok == true) {
+  $sql = "SELECT notescheck FROM users WHERE username='$log_username' LIMIT 1";
+  $query = mysqli_query($db_conx, $sql);
+  $row = mysqli_fetch_row($query);
+  $notescheck = $row[0];
+  $sql = "SELECT id FROM notifications WHERE username='$log_username' AND date_time > '$notescheck' LIMIT 1";
+  $query = mysqli_query($db_conx, $sql);
+  $numrows = mysqli_num_rows($query);
+  if ($numrows == 0) {
+    $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php">Alerts</a></li>';
+  } else {
+    $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php" style="color:white;">Alerts</a></li>';
+  }
+}
 ?>
 
 <header>
@@ -22,7 +37,7 @@ $envelope
       <input class="menu-btn" type="checkbox" id="menu-btn" />
       <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
       <ul id="menu_bottom" class="menu">
-        <!--<li class="welcome_font menuitem"><a class="" href="account.php"><?php echo htmlspecialchars($_SESSION['logged_on_user']); ?></a></li>-->
+        <?php echo $envelope; ?>
         <li class="logo_font menuitem"><a href="user.php?u=<?php echo $_SESSION['username']; ?>"><?php echo $_SESSION['username']; ?></a></li>
         <li id="logout" class="logo_font menuitem" onclick="home()"><a href="logout.php">Sign Out</a></li>
 <?php

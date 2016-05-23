@@ -91,6 +91,9 @@ if ($viewerBlockOwner == true) {
   $block_button = '<button class="request_button" onclick="blockToggle(\'block\',\''.$u.'\',\'blockBtn\')">Block User</button>';
 }
 ?>
+<?php
+//TODO Need to finish this part of the video at 14:50
+?>
 
 <!DOCTYPE html>
 <html>
@@ -118,9 +121,12 @@ if ($viewerBlockOwner == true) {
             <p>User Level: <?php echo $userlevel; ?></p>
             <p>Join Date: <?php echo $joindate; ?></p>
             <p>Last Session: <?php echo $lastsession; ?></p>
+            <p>Number of Friends: <?php echo $friend_count; ?></p>
             <hr />
             <p><span id="friendBtn" class="userspan"><?php echo $friend_button; ?></span></p>
             <p><span id="blockBtn" class="userspan"><?php echo $block_button; ?></span></p>
+            <hr />
+            <p><?php echo $friendsHTML; ?></p>
           </div>
         </div>
       </div>

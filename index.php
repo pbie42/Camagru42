@@ -1,6 +1,7 @@
 <?php
-  include_once 'php_includes/check_login_status.php';
   include_once 'config/setup.php';
+  include_once 'php_includes/check_login_status.php';
+
  ?>
 
  <!DOCTYPE html>
