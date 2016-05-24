@@ -113,7 +113,9 @@ header {
   z-index:             1;
 }
 
-
+#usericon {
+  margin-left: 3px;
+}
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -135,7 +137,6 @@ button.welcome_font {
 }
 
 .main_area {
-  height:              350px;
   width:               350px;
   background-color:    #FFFFFF;
   color:               #838383;
@@ -213,6 +214,7 @@ button.welcome_font {
 
 #login_forgot {
   margin:              0;
+  margin-bottom:       15px;
   font-size:           15px;
   font-family:         'Nunito', sans-serif;
 }
@@ -247,7 +249,6 @@ button.welcome_font {
 /* Sign Up */
 
 .main_area_signup {
-  height:              550px;
   width:               350px;
   background-color:    #FFFFFF;
   color:               #838383;
@@ -271,6 +272,7 @@ button.welcome_font {
   color:               #FFFFFF;
   padding:             2px;
   margin-top:          5px;
+  margin-bottom:       15px;
 }
 
 #signupform {
@@ -404,7 +406,6 @@ option {
 /* User Page */
 
 .main_area_user {
-  height:              500px;
   width:               350px;
   background-color:    #FFFFFF;
   color:               #838383;
@@ -646,6 +647,49 @@ option {
 
 #photo img {
   width:               inherit;
+}
+
+/*****************************************************************************/
+/*****************************************************************************/
+/* NOTIFICATIONS */
+
+#notificationtitle {
+  margin-top:          10px;
+}
+#main_area_notes_notif {
+  margin-top:          20px;
+}
+
+.user_info {
+  margin-top:          10px;
+}
+
+.acceptrejectbuttons {
+  width:               153px;
+  height:              36px;
+  background-color:    rgb(117, 52, 52);
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  color:               #FFFFFF;
+  padding:             2px;
+  margin-bottom:       10px;
+  font-size:           15px;
+}
+
+.main_area_notes {
+  width:               350px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  text-align:          center;
+  border-radius:       10px;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          auto;
+  margin-bottom:       auto;
+  z-index:             0;
+  border:              1px solid;
+  border-color:        #edeeee;
 }
 
 /*****************************************************************************/

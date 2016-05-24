@@ -1,6 +1,6 @@
 <?php
 $headerOptions = "";
-$envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php">Alerts</a></li>';
+$envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php"><img style="height:25px;width:25px;" src="resources/notify2.png" alt="" /></a></li>';
 if ($user_ok == true) {
   $sql = "SELECT notescheck FROM users WHERE username='$log_username' LIMIT 1";
   $query = mysqli_query($db_conx, $sql);
@@ -10,9 +10,9 @@ if ($user_ok == true) {
   $query = mysqli_query($db_conx, $sql);
   $numrows = mysqli_num_rows($query);
   if ($numrows == 0) {
-    $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php">Alerts</a></li>';
+    $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php"><img style="height:25px;width:25px;" src="resources/notify2.png" alt="" /></a></li>';
   } else {
-    $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php" style="color:white;">Alerts</a></li>';
+    $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php" style="color:white;"><img style="height:25px;width:25px;" src="resources/notify2.png" alt="" /></a></li>';
   }
 }
 ?>
@@ -38,8 +38,8 @@ if ($user_ok == true) {
       <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
       <ul id="menu_bottom" class="menu">
         <?php echo $envelope; ?>
-        <li class="logo_font menuitem"><a href="user.php?u=<?php echo $_SESSION['username']; ?>"><?php echo $_SESSION['username']; ?></a></li>
-        <li id="logout" class="logo_font menuitem" onclick="home()"><a href="logout.php">Sign Out</a></li>
+        <li class="logo_font menuitem"><a href="user.php?u=<?php echo $_SESSION['username']; ?>"><img id="usericon" style="height:27px;width:20px;" src="resources/user.png" alt="" /></a></li>
+        <li id="logout" class="logo_font menuitem" onclick="home()"><a href="logout.php"><img style="height:27px;width:27px;" src="resources/logout.png" alt="" /></a></li>
 <?php
   }
   else

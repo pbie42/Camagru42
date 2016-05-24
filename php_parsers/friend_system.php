@@ -107,7 +107,7 @@ if (isset($_POST['action']) && isset($_POST['reqid']) && isset($_POST['user1']))
     $sql = "SELECT COUNT(id) FROM friends WHERE user1='$log_username' AND user2='$user' AND accepted='1' LIMIT 1";
     $query = mysqli_query($db_conx, $sql);
     $row_count1 = mysqli_fetch_row($query);
-    $sql = "SELECT COUNT(id) FROM friends WHERE user1='$user' AND user2='$log_username' AND accepted='1' LIMIT 1"
+    $sql = "SELECT COUNT(id) FROM friends WHERE user1='$user' AND user2='$log_username' AND accepted='1' LIMIT 1";
     $query = mysqli_query($db_conx, $sql);
     $row_count2 = mysqli_fetch_row($query);
     if ($row_count1[0] > 0 || $row_count2[0] > 0) {
