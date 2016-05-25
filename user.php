@@ -4,7 +4,11 @@ include_once 'php_includes/check_login_status.php';
 $u = "";
 $fname = "";
 $lname = "";
+$userlevel = "";
 $email = "";
+$profile_pic = "";
+$profile_pic_btn = "";
+$avatar_form = "";
 $country = "";
 $joindate = "";
 $lastsession = "";
@@ -28,6 +32,12 @@ if ($numrows < 1) {
 $isOwner = "no";
 if ($u == $log_username && $user_ok == true) {
   $isOwner = "yes";
+  $profile_pic_btn = '<a href="#" onclick="return false;" onmousedown="toggleElement(\'avatar_form\')">Change Profile Picture</a>';
+  $avatar_form = '<form id="avatar_form" enctype="multipart/form-data" method="post" action="php_parsers/photo_system.php">';
+  $avatar_form .= '<h4 id="change_avatar"> Change your avatar</h4>';
+  $avatar_form .= '<input id="choose_avatar" type="file" name="avatar" required/>';
+  $avatar_form .= '<p><input id="change_avatar_btn" type="submit" value="Upload"/></p>';
+  $avatar_form .= '</form>';
 }
 //Get the user row from the query above
 while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
@@ -35,6 +45,7 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
   $fname = $row["firstname"];
   $lname = $row["lastname"];
   $email = $row["email"];
+  $avatar = $row["avatar"];
   $country = $row["country"];
   $userlevel = $row["userlevel"];
   $signup = $row["signup"];
@@ -42,7 +53,10 @@ while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
   $joindate = strftime("%b %d, %Y", strtotime($signup));
   $lastsession = strftime("%b %d, %Y", strtotime($lastlogin));
 }
-
+$profile_pic = '<img id="profile_avatar" src="user/'.$u.'/'.$avatar.'" alt="'.$u.'" />';
+if ($avatar == NULL) {
+  $profile_pic = '<img class="avatar" src="resources/user.png" alt="'.$user1.'" />';
+}
 //TODO Will need to customize id tags for this page as well.
 ?>
 <?php
@@ -160,6 +174,9 @@ if ($friend_count < 1) {
       <div id="body">
         <div id="message_section">
           <div class="main_area_user welcome_font">
+            <div id="profile_pic_box">
+              <?php echo $avatar_form; ?><?php echo $profile_pic; ?><?php echo $profile_pic_btn; ?>
+            </div>
             <h3><?php echo $u; ?></h3>
             <p>Is the viewer the page owner? <b><?php echo $isOwner; ?></b></p>
             <p>First Name: <?php echo $fname; ?></p>

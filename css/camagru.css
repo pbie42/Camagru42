@@ -441,12 +441,60 @@ option {
   border-color:        rgb(135, 91, 91);
 }
 
+.avatar {
+  width: 200px;
+  height: 200px;
+}
+
+#profile_pic_box > img {
+  z-index: 2000;
+}
+
+#profile_pic_box > a {
+  display:none;
+  z-index: 4000;
+  position: absolute;
+  margin-top: -30px;
+  margin-left: 75px;
+  width: 200px;
+  color:               #FFFFFF;
+  border-radius:       3px;
+  background:rgb(117, 52, 52);
+}
+
+#profile_pic_box > form {
+  display:none;
+  z-index: 3000;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  opacity:.8;
+  color:               #FFFFFF;
+  margin-left: 75px;
+  background:rgb(135, 91, 91);
+}
+
+#profile_pic_box:hover a {
+  display: block;
+}
+
+#change_avatar {
+  opacity: 1;
+}
+
+#change_avatar_btn {
+  opacity: 1;
+}
+
+#choose_avatar {
+  opacity: 1;
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
 /* Photo */
 
 #container_photo {
-
   margin:              0px auto;
   margin-top:          30px;
   width:               640px;
