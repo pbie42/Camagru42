@@ -236,6 +236,11 @@ button.welcome_font {
   margin-top:          5px;
 }
 
+#login_button:hover {
+  background-color:    rgba(88, 2, 2, 1);
+  cursor:              pointer;
+}
+
 #login_signup {
   height:              75px;
   width:               350px;
@@ -280,6 +285,10 @@ button.welcome_font {
   margin-bottom:       15px;
 }
 
+#signupbtn:hover {
+  background-color:    rgba(88, 2, 2, 1);
+  cursor:              pointer;
+}
 #signupform {
   margin-top:          0px;
 }
@@ -395,7 +404,7 @@ option {
 }
 
 #loginbtn {
-  width:               306px;
+  width:               406px;
   height:              36px;
   background-color:    rgb(117, 52, 52);
   border-color:        rgb(117, 52, 52);
@@ -404,6 +413,11 @@ option {
   color:               #FFFFFF;
   padding:             2px;
   margin-top:          5px;
+}
+
+#loginbtn:hover {
+  background-color:    rgba(88, 2, 2, 1);
+  cursor:              pointer;
 }
 
 /*****************************************************************************/
@@ -419,7 +433,7 @@ option {
   margin-left:         auto;
   margin-right:        auto;
   margin-top:          auto;
-  margin-bottom:       auto;
+  margin-bottom:       25px;;
   z-index:             0;
   border:              1px solid;
   border-color:        #edeeee;
@@ -439,6 +453,11 @@ option {
   color:               #FFFFFF;
   padding:             2px;
   margin-top:          5px;
+}
+
+.request_button:hover {
+  background-color:    rgba(88, 2, 2, 1);
+  cursor:              pointer;
 }
 
 .request_button:disabled {
@@ -475,6 +494,10 @@ option {
   cursor:              pointer;
   color:               #FFFFFF;
   background:          rgba(88, 2, 2, 1);
+}
+
+#profile_pic_box {
+  margin-top:          15px;
 }
 
 #profile_pic_box > img {
@@ -546,7 +569,6 @@ option {
 #friend_name {
   color:               rgb(117, 52, 52);
   margin:              0;
-  margin-top:          -15px;
 }
 
 /*****************************************************************************/
@@ -827,13 +849,19 @@ footer {
   font-family:         'Oswald', sans-serif;
 }
 
+#foot_div {
+  display:             flex;
+  margin-left:         20px;
+}
+
 #copyright {
   width:               100px;
   margin:              0;
+  margin-left:         5px;
 }
 
 #about {
-
+  margin:              15px;
 }
 
 /*****************************************************************************/

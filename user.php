@@ -140,7 +140,7 @@ if ($friend_count < 1) {
   //append or concatenate the username to put into a mysqli query.
   $orLogic = '';
   foreach ($all_friends as $key => $user) {
-    $orLogic .= "username='$user' OR";
+    $orLogic .= "username='$user' OR ";
   }
   $orLogic = chop($orLogic, "OR ");
   $sql = "SELECT username, avatar FROM users WHERE $orLogic";
@@ -153,7 +153,7 @@ if ($friend_count < 1) {
     } else {
       $friend_pic = 'resources/user.png';
     }
-    $friendsHTML .= '<a href="user.php?u='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"</a><p id="friend_name">'.$friend_username.'</p>';
+    $friendsHTML .= '<a href="user.php?u='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"</a><p id="friend_name">'.$friend_username.'</p><br />';
   }
 }
 ?>
@@ -193,7 +193,7 @@ if ($friend_count < 1) {
             <p><span id="blockBtn" class="userspan"><?php echo $block_button; ?></span></p>
             <hr />
             <h1 id="notificationtitle" class="welcome_font">Friends</h1>
-            <p><?php echo $friendsHTML; ?></p>
+            <?php echo $friendsHTML; ?>
           </div>
         </div>
       </div>
@@ -214,9 +214,14 @@ if ($friend_count < 1) {
         else
           fileName = e.target.value.split( '\\' ).pop();
 
-        if( fileName )
-          label.querySelector( 'span' ).innerHTML = fileName.substring(0, 10) + "...";
-        else
+        if( fileName ) {
+          var len = fileName.length;
+          var dots = '';
+          if (len > 10) {
+            dots = '...';
+          }
+          label.querySelector( 'span' ).innerHTML = fileName.substring(0, 10) + dots;
+        } else
           label.innerHTML = labelVal;
       });
       });
