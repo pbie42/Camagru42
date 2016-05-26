@@ -34,9 +34,9 @@ if ($u == $log_username && $user_ok == true) {
   $isOwner = "yes";
   $profile_pic_btn = '<a href="#" onclick="return false;" onmousedown="toggleElement(\'avatar_form\')">Change Profile Picture</a>';
   $avatar_form = '<form id="avatar_form" enctype="multipart/form-data" method="post" action="php_parsers/photo_system.php">';
-  $avatar_form .= '<h4 id="change_avatar"> Change your avatar</h4>';
-  $avatar_form .= '<input id="choose_avatar" type="file" name="avatar" required/>';
-  $avatar_form .= '<p><input id="change_avatar_btn" type="submit" value="Upload"/></p>';
+  $avatar_form .= '<h4 id="change_avatar"> Change your Profile Picture</h4>';
+  $avatar_form .= '<input id="choose_avatar" class="inputfile" type="file" name="avatar" data-multiple-caption="{count} files selected" multiple required/><label id="choose_avatar_label" for="choose_avatar"><span>Choose Photo</span></label>';
+  $avatar_form .= '<p><input id="change_avatar_btn" class="inputfile" type="submit" value="Upload"/><label id="choose_avatar_label" for="change_avatar_btn">Upload</label></p>';
   $avatar_form .= '</form>';
 }
 //Get the user row from the query above
@@ -109,7 +109,7 @@ if ($viewerBlockOwner == true) {
 //TODO Need to finish this part of the video at 14:50
 $friendsHTML = '';
 $friends_view_all_link = '';
-$sql = "SELECT COUNT(id) FROM friends WHERE user1='$u' AND accepted='1' OR user2='$user' AND accepted='1'";
+$sql = "SELECT COUNT(id) FROM friends WHERE user1='$u' AND accepted='1' OR user2='$u' AND accepted='1'";
 $query = mysqli_query($db_conx, $sql);
 $query_count = mysqli_fetch_row($query);
 $friend_count = $query_count[0];
@@ -140,8 +140,9 @@ if ($friend_count < 1) {
   //append or concatenate the username to put into a mysqli query.
   $orLogic = '';
   foreach ($all_friends as $key => $user) {
-    $orLogic .= "username='$user' OR ";
+    $orLogic .= "username='$user' OR";
   }
+  $orLogic = chop($orLogic, "OR ");
   $sql = "SELECT username, avatar FROM users WHERE $orLogic";
   $query = mysqli_query($db_conx, $sql);
   while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
@@ -152,7 +153,7 @@ if ($friend_count < 1) {
     } else {
       $friend_pic = 'resources/user.png';
     }
-    $friendsHTML .= '<a href="user.php?='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"</a>';
+    $friendsHTML .= '<a href="user.php?u='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"</a><p id="friend_name">'.$friend_username.'</p>';
   }
 }
 ?>
@@ -161,7 +162,7 @@ if ($friend_count < 1) {
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title><?php echo $u ?></title>
     <link rel="stylesheet" href="css/camagru.css" media="screen" title="no title" charset="utf-8">
     <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="js/camagru.js"></script>
@@ -177,7 +178,7 @@ if ($friend_count < 1) {
             <div id="profile_pic_box">
               <?php echo $avatar_form; ?><?php echo $profile_pic; ?><?php echo $profile_pic_btn; ?>
             </div>
-            <h3><?php echo $u; ?></h3>
+            <h3 id="user_name"><?php echo $u; ?></h3>
             <p>Is the viewer the page owner? <b><?php echo $isOwner; ?></b></p>
             <p>First Name: <?php echo $fname; ?></p>
             <p>Last Name: <?php echo $lname; ?></p>
@@ -191,11 +192,34 @@ if ($friend_count < 1) {
             <p><span id="friendBtn" class="userspan"><?php echo $friend_button; ?></span></p>
             <p><span id="blockBtn" class="userspan"><?php echo $block_button; ?></span></p>
             <hr />
+            <h1 id="notificationtitle" class="welcome_font">Friends</h1>
             <p><?php echo $friendsHTML; ?></p>
           </div>
         </div>
       </div>
       <?php include_once 'php_includes/footer.php'; ?>
     </div>
+    <script type="text/javascript">
+      var inputs = document.querySelectorAll( '.inputfile' );
+      Array.prototype.forEach.call( inputs, function( input )
+      {
+      var label	 = input.nextElementSibling,
+        labelVal = label.innerHTML;
+
+      input.addEventListener( 'change', function( e )
+      {
+        var fileName = '';
+        if( this.files && this.files.length > 1 )
+          fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+        else
+          fileName = e.target.value.split( '\\' ).pop();
+
+        if( fileName )
+          label.querySelector( 'span' ).innerHTML = fileName.substring(0, 10) + "...";
+        else
+          label.innerHTML = labelVal;
+      });
+      });
+    </script>
   </body>
 </html>
