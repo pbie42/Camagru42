@@ -106,7 +106,6 @@ if ($viewerBlockOwner == true) {
 }
 ?>
 <?php
-//TODO Need to finish this part of the video at 14:50
 $friendsHTML = '';
 $friends_view_all_link = '';
 $sql = "SELECT COUNT(id) FROM friends WHERE user1='$u' AND accepted='1' OR user2='$u' AND accepted='1'";
@@ -157,6 +156,17 @@ if ($friend_count < 1) {
   }
 }
 ?>
+<?php
+$coverpic = "";
+$sql = "SELECT filename FROM photos WHERE user='$u' ORDER BY RAND() LIMIT 1";
+$query = mysqli_query($db_conx, $sql);
+if (mysqli_num_rows($query) > 0) {
+  $row = $mysqli_fetch_row($query);
+  $filename = $row[0];
+  $coverpic = '<img src="user/'.$u.'/'.$filename.'" alt="pic" />';
+}
+?>
+
 
 <!DOCTYPE html>
 <html>
@@ -189,11 +199,15 @@ if ($friend_count < 1) {
             <p>Last Session: <?php echo $lastsession; ?></p>
             <p>Number of Friends: <?php echo $friend_count; ?></p>
             <hr />
-            <p><span id="friendBtn" class="userspan"><?php echo $friend_button; ?></span></p>
+            <p><span id="friendBtn" class="userspan"></p>
             <p><span id="blockBtn" class="userspan"><?php echo $block_button; ?></span></p>
             <hr />
             <h1 id="notificationtitle" class="welcome_font">Friends</h1>
             <?php echo $friendsHTML; ?>
+            <hr>
+            <div id="photo_showcase" onclick="window.location = 'photos.php?u=<?php echo $u; ?>';" title="view <?php echo $u; ?>&#39;s photo galleries">
+              <?php echo $coverpic; ?>
+            </div>
           </div>
         </div>
       </div>

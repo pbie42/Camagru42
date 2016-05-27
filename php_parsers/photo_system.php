@@ -1,5 +1,28 @@
 <?php
 include_once '../php_includes/check_login_status.php';
+?>
+<?php
+//TODO use this function below and figure out how to convert it for use with a feed
+if (isset($_POST["show"]) && $_POST["show"] == "galpics") {
+  $picstring = "";
+  $gallery = preg_replace('#[^a-z0-9]#i', '', $_POST["gallery"]);
+  $user = preg_replace('#[^a-z0-9]#i', '', $_POST["user"]);
+  $sql = "SELECT * FROM photos WHERE user='$user' AND gallery='$gallery' ORDER BY uploaddate ASC";
+  $query = mysqli_query($db_conx, $sql);
+  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+    $id = $row["id"];
+    $filename = $row["filename"];
+    $description = $row["description"];
+    $uploaddate = $row["uploaddate"];
+    $picstring .= "$id|$filename|$description|$uploaddate|||";
+  }
+  mysqli_close($db_conx);
+  $picstring = trim($picstring, "|||");
+  echo $picstring;
+  exit();
+}
+?>
+<?php
 if ($user_ok != true || $log_username == "") {
   exit();
 }
@@ -60,4 +83,7 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
   header("location: ../user.php?u=$log_username");
   exit();
 }
+//TODO Finish video at 20:58
 ?>
+<?php?>
+<?php?>
