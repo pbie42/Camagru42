@@ -85,5 +85,79 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
 }
 //TODO Finish video at 20:58
 ?>
-<?php?>
-<?php?>
+<?php
+if (isset($_FILES["photo"]["name"]) && isset($_POST["gallery"])) {
+  $sql = "SELECT COUNT(id) FROM photos WHERE user='$log_username'";
+  $query = mysqli_query($db_conx, $sql);
+  $row = mysqli_fetch_row($query);
+  if ($row[0] > 14) {
+    header("location: ../message.php?msg=This user has uploaded too many photos");
+    exit();
+  }
+  $gallery = preg_replace('#[^a-z 0-9,]#i', '', $_POST["gallery"]);
+  $fileName = $_FILES["photo"]["name"];
+  $fileTmpLoc = $_FILES["photo"]["tmp_name"];
+  $fileType = $_FILES["photo"]["type"];
+  $fileSize = $_FILES["photo"]["size"];
+  $fileErrorMsg = $_FILES["photo"]["error"];
+  $exploded = explode(".", $fileName);
+  $fileExt = end($exploded);
+  //We use the line below to create a unique file name for each image.
+  //That way even if two people uploaded at the exact same time there wouldnt be
+  //a problem with the time stamp we give it.
+  $db_file_name = date("DMjGisY")."".rand(1000,9999).".".$fileExt; //Will look something like WebFeb272120452013RAND.jpg
+  list($width, $height) = getimagesize($fileTmpLoc);
+  if ($width < 10 || $height < 10) {
+    header("location: ../message.php?msg=ERROR: The image provided has no dimensions");
+    exit();
+  }
+  if ($fileSize > 1048576) {
+    header("location: ../message.php?msg=ERROR: Your image file was larger than 1mb");
+    exit();
+  } else if (!preg_match("/\.(gif|jpg|png)$/i", $fileName)) {
+    header("location: ../message.php?msg=ERROR: Your image file was not a file of type jpg, gif, or png");
+    exit();
+  } elseif ($fileErrorMsg == 1) {
+    header("location: ../message.php?msg=ERROR: An unknown error occurred");
+    exit();
+  }
+  $moveResult = move_uploaded_file($fileTmpLoc, "../user/$log_username/$db_file_name");
+  if ($moveResult != true) {
+    header("location: ../message.php?msg=ERROR: File upload failed");
+    exit();
+  }
+  include_once '../php_includes/image_resize.php';
+  $wmax = 300;
+  $hmax = 300;
+  if ($width > $wmax || $height > $hmax) {
+    $target_file = "../user/$log_username/$db_file_name";
+    $resized_file = "../user/$log_username/$db_file_name";
+    image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
+  }
+  $sql = "INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())";
+  $query = mysqli_query($db_conx, $sql);
+  mysqli_close($db_conx);
+  header("location: ../photos.php?u=$log_username");
+  exit();
+}
+?>
+<?php
+if (isset($_POST["delete"]) && $_POST["id"] != "") {
+  $id = preg_replace('#[^0-9]#', '', $_POST["id"]);
+  $query = mysqli_query($db_conx, "SELECT user, filename FROM photos WHERE id='$id' LIMIT 1");
+  $row = mysqli_fetch_row($query);
+  $user = $row[0];
+  $filename = $row[1];
+  if ($user == $log_username) {
+    $picurl = "../user/$log_username/$filename";
+    if (file_exists($picurl)) {
+      unlink($picurl);
+      $sql = "DELETE FROM photos WHERE id='$id' LIMIT 1";
+      $query = mysqli_query($db_cox, $sql);
+    }
+  }
+  mysqli_close($db_conx);
+  echo "deleted_ok";
+  exit();
+}
+?>

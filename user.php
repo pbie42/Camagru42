@@ -161,9 +161,12 @@ $coverpic = "";
 $sql = "SELECT filename FROM photos WHERE user='$u' ORDER BY RAND() LIMIT 1";
 $query = mysqli_query($db_conx, $sql);
 if (mysqli_num_rows($query) > 0) {
-  $row = $mysqli_fetch_row($query);
+  $row = mysqli_fetch_row($query);
   $filename = $row[0];
   $coverpic = '<img src="user/'.$u.'/'.$filename.'" alt="pic" />';
+}
+else {
+  $coverpic = '<p>'.$u.' has not yet added any photos</p>';
 }
 ?>
 

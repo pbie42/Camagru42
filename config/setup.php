@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS blockedusers (
 CREATE TABLE IF NOT EXISTS photos (
               id INT(11) NOT NULL AUTO_INCREMENT,
               user VARCHAR(11) NOT NULL,
+              gallery VARCHAR(16) NOT NULL,
               filename VARCHAR(255) NOT NULL,
               description VARCHAR(255) NULL,
               uploaddate DATETIME NOT NULL,
