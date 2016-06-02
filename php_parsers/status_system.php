@@ -14,8 +14,17 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   }
   //Next we make sure the post is a type a or c
   if ($_POST['type'] != "a" || $_POST['type'] != "c") {
-    # code...
+    mysqli_close($db_conx);
+    echo "type_unknown";
+    exit();
   }
+  //Then we sanatize the $_POST variables that we will be given
+  $type = preg_replace('#[^a-z]#', '', $_POST['type']);
+  $account_name = preg_replace('#[^a-z0-9]#i', '', $_POST['user']);
+  $data = htmlentities($_POST['data']);
+  $data = mysqli_real_escape_string($db_conx, $data);
+  //Now we make sure the account name exists like we did in the status_reply section
+
 }
 ?>
 <?php
