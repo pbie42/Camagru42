@@ -55,7 +55,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
 function postToStatus(action,type,user,ta){
 	var data = _(ta).value;
 	if(data == ""){
-		alert("Type something first weenis");
+		alert("Type something first");
 		return false;
 	}
 	_("statusBtn").disabled = true;
@@ -80,7 +80,7 @@ function postToStatus(action,type,user,ta){
 function replyToStatus(sid,user,ta,btn){
 	var data = _(ta).value;
 	if(data == ""){
-		alert("Type something first weenis");
+		alert("Please type a reply");
 		return false;
 	}
 	_("replyBtn_"+sid).disabled = true;

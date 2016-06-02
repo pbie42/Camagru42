@@ -153,7 +153,7 @@ if (isset($_POST["delete"]) && $_POST["id"] != "") {
     if (file_exists($picurl)) {
       unlink($picurl);
       $sql = "DELETE FROM photos WHERE id='$id' LIMIT 1";
-      $query = mysqli_query($db_cox, $sql);
+      $query = mysqli_query($db_conx, $sql);
     }
   }
   mysqli_close($db_conx);

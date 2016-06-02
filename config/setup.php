@@ -6,11 +6,11 @@ include 'database.php';
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         /* set the PDO error mode to exception*/
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "CREATE DATABASE IF NOT EXISTS camagru_pbie";
+        $sql = "CREATE DATABASE IF NOT EXISTS camagru_test";
         /* use exec() because no results are returned */
         $db->exec($sql);
 
-        $sql = "USE camagru_pbie;
+        $sql = "USE camagru_test;
 CREATE TABLE IF NOT EXISTS users (
               id INT(11) NOT NULL AUTO_INCREMENT,
               username VARCHAR(16) NOT NULL,
