@@ -211,6 +211,8 @@ else {
             <div id="photo_showcase" onclick="window.location = 'photos.php?u=<?php echo $u; ?>';" title="view <?php echo $u; ?>&#39;s photo galleries">
               <?php echo $coverpic; ?>
             </div>
+            <hr>
+            <?php include_once 'template_status.php'; ?>
           </div>
         </div>
       </div>

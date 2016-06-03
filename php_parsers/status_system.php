@@ -13,7 +13,7 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
     exit();
   }
   //Next we make sure the post is a type a or c
-  if ($_POST['type'] != "a" || $_POST['type'] != "c") {
+  if ($_POST['type'] != "a" && $_POST['type'] != "c") {
     mysqli_close($db_conx);
     echo "type_unknown";
     exit();
