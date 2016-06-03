@@ -62,12 +62,19 @@ function postToStatus(action,type,user,ta){
 	var ajax = ajaxObj("POST", "php_parsers/status_system.php");
 	ajax.onreadystatechange = function() {
 		if(ajaxReturn(ajax) == true) {
+			//TODO delete this after debugging
+			var test = ajax.responseText;
+			console.log(action);
+			console.log(type);
+			console.log(user);
+			console.log(ta);
+			console.log(test);
 			var datArray = ajax.responseText.split("|");
 			if(datArray[0] == "post_ok"){
 				var sid = datArray[1];
 				data = data.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br />").replace(/\r/g,"<br />");
 				var currentHTML = _("statusarea").innerHTML;
-				_("statusarea").innerHTML = '<div id="status_'+sid+'" class="status_boxes"><div><b>Posted by you just now:</b> <span id="sdb_'+sid+'"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''+sid+'\',\'status_'+sid+'\');" title="DELETE THIS STATUS AND ITS REPLIES">delete status</a></span><br />'+data+'</div></div><textarea id="replytext_'+sid+'" class="replytext" onkeyup="statusMax(this,250)" placeholder="write a comment here"></textarea><button id="replyBtn_'+sid+'" onclick="replyToStatus('+sid+',\'<?php echo $u; ?>\',\'replytext_'+sid+'\',this)">Reply</button>'+currentHTML;
+				_("statusarea").innerHTML = '<div id="status_'+sid+'" class="status_boxes"><div><b>'+user+':</b> <span id="sdb_'+sid+'"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''+sid+'\',\'status_'+sid+'\');" title="DELETE THIS STATUS AND ITS REPLIES">delete status</a></span><br />'+data+'</div></div><textarea id="replytext_'+sid+'" class="replytext" onkeyup="statusMax(this,250)" placeholder="write a comment here"></textarea><button id="replyBtn_'+sid+'" onclick="replyToStatus('+sid+',\'<?php echo $u; ?>\',\'replytext_'+sid+'\',this)">Reply</button>'+currentHTML;
 				_("statusBtn").disabled = false;
 				_(ta).value = "";
 			} else {
