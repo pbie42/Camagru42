@@ -103,6 +103,7 @@ function postToStatus(action,type,user,ta){
 	}
 	ajax.send("action="+action+"&type="+type+"&user="+user+"&data="+data);
 }
+//TODO START HERE!!!! need to make the same thing as enterPostStatus but for replying to a status
 function enterPostStatus(e){
 	var keycode = e.keyCode;
 	console.log(keycode);
