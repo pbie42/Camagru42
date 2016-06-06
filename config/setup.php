@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS notifications (
             );
 CREATE TABLE IF NOT EXISTS status (
               id INT(11) NOT NULL AUTO_INCREMENT,
-              osid INT(11) NOT NULL,
+              osid INT(11) NULL,
               account_name VARCHAR(16) NOT NULL,
               author VARCHAR(16) NOT NULL,
               type ENUM('a','b','c') NOT NULL,

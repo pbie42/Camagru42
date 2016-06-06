@@ -36,27 +36,8 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   //We then insert the status post into the database
   $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$account_name','$log_username','$type','$data',now())";
   //TODO THIS IS WHERE THE QUERY IS NOT HAPPENING!!!!
-  echo $sql;
-  echo "  |  ";
   $query = mysqli_query($db_conx, $sql);
-  if ($query) {
-    echo "ohhhh yeahhhhh";
-  } else {
-    echo "fuck homie";
-    echo "  |  ";
-    echo $account_name;
-    echo "  |  ";
-    echo $log_username;
-    echo "  |  ";
-    echo $type;
-    echo "  |  ";
-    echo $data;
-    echo "  |  ";
-  }
   $id = mysqli_insert_id($db_conx);
-  if ($id) {
-    echo "correct";
-  }
   mysqli_query($db_conx, "UPDATE status SET osid='$id' WHERE id='$id' LIMIT 1");
   //Then we count posts of type a for the person posting and evalute the count.
   $sql = "SELECT COUNT(id) FROM status WHERE author='$log_username' AND type='a'";

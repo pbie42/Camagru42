@@ -1,3 +1,4 @@
+<!-- TODO Make it so comment id's are linked to photos uploaded rather than the conversations having unique id's themselves. -->
 <div id="feed_section">
   <div class="main_feed_area">
     <div class="postheader">
