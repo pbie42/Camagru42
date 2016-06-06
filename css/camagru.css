@@ -764,6 +764,19 @@ option {
   font-size:           15px;
 }
 
+.textbox {
+  border:             none;
+  resize:             none;
+  width:              300px;
+}
+
+.statusBtn {
+  display: none;
+}
+
+.replyBtn {
+}
+
 #feed_section {
   margin-top:          10px
 
