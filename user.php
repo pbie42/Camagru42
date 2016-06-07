@@ -212,7 +212,10 @@ else {
               <?php echo $coverpic; ?>
             </div>
             <hr>
-            <?php include_once 'template_status.php'; ?>
+            <div id="template_status">
+              <?php include_once 'template_status.php'; ?>
+            </div>
+
           </div>
         </div>
       </div>

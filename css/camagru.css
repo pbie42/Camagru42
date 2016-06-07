@@ -748,8 +748,10 @@ option {
   margin-left:         10px;
 }
 
-.comment {
-
+.commentmade {
+width:                 300px;
+margin-left:           5px;
+margin-bottom:         15px;
 }
 
 .add_comments {
@@ -773,15 +775,37 @@ option {
 }
 
 .textbox {
-  border:             none;
-  resize:             none;
-  width:              300px;
+  border:              none;
+  resize:              none;
+  width:               300px;
+  margin-left:         20px;
 }
 
 .statusBtn {
+  display:             none;
 }
 
 .replyBtn {
+}
+
+.status_plus_delete {
+  display: flex;
+}
+
+.status_boxes {
+  height: auto;
+}
+
+#statusui {
+  text-align:          center;
+}
+
+textarea::-webkit-input-placeholder {
+  font-size:           15px;
+}
+
+#template_status {
+  text-align: left;
 }
 
 #feed_section {

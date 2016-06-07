@@ -2,10 +2,10 @@
 $status_ui = "";
 $statuslist = "";
 if($isOwner == "yes"){
-	$status_ui = '<textarea id="statustext" class="textbox" onkeyup="statusMax(this,25)" onkeydown="enterPostStatus(event)" placeholder="What&#39;s new with you '.$u.'?"></textarea>';
+	$status_ui = '<textarea id="statustext" class="textbox" onkeyup="statusMax(this,25)" onkeydown="enterPostStatus(event)" placeholder="Add a comment?"></textarea>';
 	$status_ui .= '<button id="statusBtn" class="statusBtn" onclick="postToStatus(\'status_post\',\'a\',\''.$u.'\',\'statustext\')">Post</button>';
 } else if($isFriend == true && $log_username != $u){
-	$status_ui = '<textarea id="statustext" class="textbox" onkeyup="statusMax(this,250)" onkeydown="enterPostStatus(event)" placeholder="Hi '.$log_username.', say something to '.$u.'"></textarea>';
+	$status_ui = '<textarea id="statustext" class="textbox" onkeyup="statusMax(this,250)" onkeydown="enterPostStatus(event)" placeholder="Comment on '.$u.'&#39;s photo?"></textarea>';
 	$status_ui .= '<button id="statusBtn" class="statusBtn" onclick="postToStatus(\'status_post\',\'c\',\''.$u.'\',\'statustext\')">Post</button>';
 }
 ?><?php
@@ -23,7 +23,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
 	$data = stripslashes($data);
 	$statusDeleteButton = '';
 	if($author == $log_username || $account_name == $log_username ){
-		$statusDeleteButton = '<span id="sdb_'.$statusid.'"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''.$statusid.'\',\'status_'.$statusid.'\');" title="DELETE THIS STATUS AND ITS REPLIES">delete status</a></span> &nbsp; &nbsp;';
+		$statusDeleteButton = '<span id="sdb_'.$statusid.'" class="username"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''.$statusid.'\',\'status_'.$statusid.'\');" title="DELETE THIS STATUS AND ITS REPLIES">X</a></span> &nbsp; &nbsp;';
 	}
 	// GATHER UP ANY STATUS REPLIES
 	$status_replies = "";
@@ -69,9 +69,9 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
 		$convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
 		$convertedTime = ($timeAgoObject -> convert_datetime($postdate));
 		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
-		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a> '.$when.':</b> '.$statusDeleteButton.' <br />'.$data.'</div>'.$status_replies.'</div>';
+		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a> '.$when.':</b> '.$data.' <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
 		if($isFriend == true || $log_username == $u){
-	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" placeholder="reply here"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
+	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
 	}
 }
 ?>
@@ -94,10 +94,10 @@ function postToStatus(action,type,user,ta){
 				data = data.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br />").replace(/\r/g,"<br />");
 				var currentHTML = _("statusarea").innerHTML;
 				if (user == "<?php echo $log_username ?>") {
-					_("statusarea").innerHTML = '<div id="status_'+sid+'" class="status_boxes"><div><b><span class="username">'+user+':</span></b> <span id="sdb_'+sid+'"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''+sid+'\',\'status_'+sid+'\');" title="DELETE THIS STATUS AND ITS REPLIES">delete status</a></span><br />'+data+'</div></div><textarea id="replytext_'+sid+'" class="textbox" onkeyup="statusMax(this,250)" placeholder="write a comment here"></textarea><button id="replyBtn_'+sid+'" class="replyBtn" onclick="replyToStatus('+sid+',\'<?php echo $u; ?>\',\'replytext_'+sid+'\',this)">Reply</button>'+currentHTML;
+					_("statusarea").innerHTML = '<div id="status_'+sid+'" class="status_boxes"><div><b><span class="username">'+user+':</span></b> <span id="sdb_'+sid+'"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''+sid+'\',\'status_'+sid+'\');" title="DELETE THIS STATUS AND ITS REPLIES">delete status</a></span><br />'+data+'</div></div><textarea id="replytext_'+sid+'" class="textbox" onkeyup="statusMax(this,250)" placeholder="Add a reply?"></textarea><button id="replyBtn_'+sid+'" class="replyBtn" onclick="replyToStatus('+sid+',\'<?php echo $u; ?>\',\'replytext_'+sid+'\',this)">Reply</button>'+currentHTML;
 				} else {
 					var logged_user = "<?php echo $log_username ?>";
-					_("statusarea").innerHTML = '<div id="status_'+sid+'" class="status_boxes"><div><b><span class="username">'+logged_user+':</span></b> <span id="sdb_'+sid+'"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''+sid+'\',\'status_'+sid+'\');" title="DELETE THIS STATUS AND ITS REPLIES">delete status</a></span><br />'+data+'</div></div><textarea id="replytext_'+sid+'" class="textbox" onkeyup="statusMax(this,250)" placeholder="write a comment here"></textarea><button id="replyBtn_'+sid+'" class="replyBtn" onclick="replyToStatus('+sid+',\'<?php echo $u; ?>\',\'replytext_'+sid+'\',this)">Reply</button>'+currentHTML;
+					_("statusarea").innerHTML = '<div id="status_'+sid+'" class="status_boxes"><div><b><span class="username">'+logged_user+':</span></b> <span id="sdb_'+sid+'"><a href="#" onclick="return false;" onmousedown="deleteStatus(\''+sid+'\',\'status_'+sid+'\');" title="DELETE THIS STATUS AND ITS REPLIES">delete status</a></span><br />'+data+'</div></div><textarea id="replytext_'+sid+'" class="textbox" onkeyup="statusMax(this,250)" placeholder="Add a reply?"></textarea><button id="replyBtn_'+sid+'" class="replyBtn" onclick="replyToStatus('+sid+',\'<?php echo $u; ?>\',\'replytext_'+sid+'\',this)">Reply</button>'+currentHTML;
 				}
 				_("statusBtn").disabled = false;
 				_(ta).value = "";
@@ -134,7 +134,7 @@ function replyToStatus(sid,user,ta,btn){
 			if(datArray[0] == "reply_ok"){
 				var rid = datArray[1];
 				data = data.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br />").replace(/\r/g,"<br />");
-				_("status_"+sid).innerHTML += '<div id="reply_'+rid+'" class="reply_boxes"><div><b>Reply by you just now:</b><span id="srdb_'+rid+'"><a href="#" onclick="return false;" onmousedown="deleteReply(\''+rid+'\',\'reply_'+rid+'\');" title="DELETE THIS COMMENT">remove</a></span><br />'+data+'</div></div>';
+				_("status_"+sid).innerHTML += '<div id="reply_'+rid+'" class="reply_boxes"><div><b>Reply by you just now:</b><span id="srdb_'+rid+'"><a href="#" onclick="return false;" onmousedown="deleteReply(\''+rid+'\',\'reply_'+rid+'\');" title="DELETE THIS COMMENT">remove</a></span>'+data+'</div></div>';
 				_("replyBtn_"+sid).disabled = false;
 				_(ta).value = "";
 			} else {
