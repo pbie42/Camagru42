@@ -749,9 +749,7 @@ option {
 }
 
 .commentmade {
-width:                 300px;
-margin-left:           5px;
-margin-bottom:         15px;
+width:                 315px;
 }
 
 .add_comments {
@@ -793,7 +791,10 @@ margin-bottom:         15px;
 }
 
 .status_boxes {
-  height: auto;
+  height:              auto;
+  display:             flex;
+  margin-left:         10px;
+  margin-bottom:       5px;
 }
 
 #statusui {
@@ -954,6 +955,7 @@ header .menu-icon {
   cursor:               pointer;
   display:              inline-block;
   float:                right;
+  width:                50px;
   padding:              28px 20px;
   position:             relative;
   user-select:          none;

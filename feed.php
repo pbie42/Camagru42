@@ -11,6 +11,9 @@
         <h4>1 day ago</h4>
       </div>
     </div>
+    <div id="template_status">
+      <?php include_once 'template_status.php'; ?>
+    </div>
 
     <div id="photo" class="photo">
       <img src="resources/apero.JPG" alt="" />

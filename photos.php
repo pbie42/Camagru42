@@ -16,7 +16,7 @@ if ($u == $log_username && $user_ok == true) {
   $photo_form = '<form id="photo_form" enctype="multipart/form-data" method="post" action="php_parsers/photo_system.php">';
   $photo_form .= '<h3>Hi '.$u.', add a new photo into one of your galleries</h3>';
   $photo_form .= '<b>Choose Gallery</b> ';
-  $photo_form .= '<select name="gallery" requred';
+  $photo_form .= '<select name="gallery" required';
   $photo_form .= '<option value=""></option>';
   $photo_form .= '<option value="Myself">Myself</option>';
   $photo_form .= '<option value="Family">Family</option>';
