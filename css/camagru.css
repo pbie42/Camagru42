@@ -224,6 +224,14 @@ button.welcome_font {
   font-family:         'Nunito', sans-serif;
 }
 
+#login_forgot:hover {
+  margin:              0;
+  margin-bottom:       15px;
+  font-size:           15px;
+  color:               #535353;
+  font-family:         'Nunito', sans-serif;
+}
+
 #login_button {
   width:               306px;
   height:              36px;
@@ -771,7 +779,6 @@ option {
 }
 
 .statusBtn {
-  display: none;
 }
 
 .replyBtn {
