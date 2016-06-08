@@ -12,4 +12,7 @@
 //     the photos section of the database. I need to have the loop cycle through each
 //     row in the order of the uploaddate and use that information to display each
 //     photo.
+
+//  6. Should probably leave all the galleries as they are and make a brand new thing
+//     for the feed. Make sure to go back into my photos files to clean up the changes I've done
 ?>
