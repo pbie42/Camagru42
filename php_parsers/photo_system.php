@@ -83,18 +83,19 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
   header("location: ../user.php?u=$log_username");
   exit();
 }
-//TODO Finish video at 20:58
 ?>
 <?php
-if (isset($_FILES["photo"]["name"]) && isset($_POST["gallery"])) {
+if (isset($_FILES["photo"]["name"])) {
   $sql = "SELECT COUNT(id) FROM photos WHERE user='$log_username'";
   $query = mysqli_query($db_conx, $sql);
   $row = mysqli_fetch_row($query);
+  //TODO get rid of this part below when I make the feed.
   if ($row[0] > 14) {
     header("location: ../message.php?msg=This user has uploaded too many photos");
     exit();
   }
-  $gallery = preg_replace('#[^a-z 0-9,]#i', '', $_POST["gallery"]);
+  //$gallery = preg_replace('#[^a-z 0-9,]#i', '', $_POST["gallery"]);
+  $gallery = $log_username;
   $fileName = $_FILES["photo"]["name"];
   $fileTmpLoc = $_FILES["photo"]["tmp_name"];
   $fileType = $_FILES["photo"]["type"];
@@ -137,7 +138,8 @@ if (isset($_FILES["photo"]["name"]) && isset($_POST["gallery"])) {
   $sql = "INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())";
   $query = mysqli_query($db_conx, $sql);
   mysqli_close($db_conx);
-  header("location: ../photos.php?u=$log_username");
+  //header("location: ../photos.php?u=$log_username");
+  header("location: ../index.php");
   exit();
 }
 ?>

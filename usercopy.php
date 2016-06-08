@@ -173,10 +173,10 @@ else {
 
 
           <div class="main_area_user welcome_font">
-            <div id="photo_showcase" onclick="window.location = 'photos.php?u=<?php echo $u; ?>';" title="view <?php echo $u; ?>&#39;s photo galleries">
+            <!--<div id="photo_showcase" onclick="window.location = 'photos.php?u=<?php echo $u; ?>';" title="view <?php echo $u; ?>&#39;s photo galleries">
               <?php echo $coverpic; ?>
             </div>
-            <hr>
+            <hr>-->
             <div id="template_status">
               <?php include_once 'template_status.php'; ?>
             </div>

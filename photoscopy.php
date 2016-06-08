@@ -1,13 +1,13 @@
 <?php
 include_once 'php_includes/check_login_status.php';
 //Need to make sure the _GET "u" is set and then we need to sanitize it
-$u = "";
-if (isset($_GET["u"])) {
-  $u = preg_replace('#[^a-z0-9]#i', '', $_GET['u']);
-} else {
-  header("location: index.php");
-  exit();
-}
+$u = $log_username;
+//if (isset($_GET["u"])) {
+//  $u = preg_replace('#[^a-z0-9]#i', '', $_GET['u']);
+//} else {
+//  header("location: index.php");
+//  exit();
+//}
 $photo_form = "";
 //We check to see if the viewer is the account owner
 $isOwner = "no";
@@ -44,31 +44,15 @@ if (mysqli_num_rows($query) < 1) {
   }
 }
 ?>
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <link rel="stylesheet" href="css/camagru.css" media="screen" title="no title" charset="utf-8">
-    <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="js/camagru.js"></script>
-    <script type="text/javascript" src="js/ajax.js"></script>
-    <script type="text/javascript" src="js/photos.js"></script>
-  </head>
-  <body>
-    <div id="container">
-      <?php include_once 'php_includes/header.php'; ?>
-      <div id="body">
-        <div id="message_section">
+        <div id="photos_section">
           <div class="main_area_notes welcome_font">
             <div id="photo_form">
               <?php echo $photo_form; ?>
-            </div>
+            </div><!--<div id="galleries">
             <h2 id="section_title"><?php echo $u; ?>&#39;s Photo Galleries</h2>
-            <div id="galleries">
+
               <?php echo $gallery_list; ?>
-            </div>
+            </div> -->
             <div id="photos">
 
             </div>
@@ -80,9 +64,6 @@ if (mysqli_num_rows($query) < 1) {
             </p>
           </div>
         </div>
-      </div>
-      <?php include_once 'php_includes/footer.php'; ?>
-    </div>
     <script type="text/javascript">
     function showGallery(gallery,user) {
       _("galleries").style.display = "none";
