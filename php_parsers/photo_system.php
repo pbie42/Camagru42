@@ -89,6 +89,22 @@ if (isset($_FILES["photo"]["name"])) {
   $sql = "SELECT COUNT(id) FROM photos WHERE user='$log_username'";
   $query = mysqli_query($db_conx, $sql);
   $row = mysqli_fetch_row($query);
+  $testcomment = $_POST["comment"];
+  if (strlen($testcomment) < 1) {
+    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())";
+    $query = mysqli_query($db_conx, $sql);
+    $id = mysqli_insert_id($db_conx);
+    mysqli_query($db_conx, "UPDATE status SET osid='$id' WHERE id='$id' LIMIT 1");
+  } else {
+    $comment = htmlentities($_POST['comment']);
+    $comment = mysqli_real_escape_string($db_conx, $comment);
+    $anothertestcomment = "fuckin a homie";
+    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())";
+    $query = mysqli_query($db_conx, $sql);
+    $id = mysqli_insert_id($db_conx);
+    mysqli_query($db_conx, "UPDATE status SET osid='$id' WHERE id='$id' LIMIT 1");
+  }
+
   //TODO get rid of this part below when I make the feed.
   if ($row[0] > 14) {
     header("location: ../message.php?msg=This user has uploaded too many photos");
@@ -122,7 +138,10 @@ if (isset($_FILES["photo"]["name"])) {
     header("location: ../message.php?msg=ERROR: An unknown error occurred");
     exit();
   }
-  $moveResult = move_uploaded_file($fileTmpLoc, "../user/$log_username/$db_file_name");
+  if ($moveResult = move_uploaded_file($fileTmpLoc, "../user/$log_username/$db_file_name")) {
+    copy("../user/$log_username/$db_file_name", "../user/all/$db_file_name");
+  }
+
   if ($moveResult != true) {
     header("location: ../message.php?msg=ERROR: File upload failed");
     exit();
@@ -133,6 +152,9 @@ if (isset($_FILES["photo"]["name"])) {
   if ($width > $wmax || $height > $hmax) {
     $target_file = "../user/$log_username/$db_file_name";
     $resized_file = "../user/$log_username/$db_file_name";
+    image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
+    $target_file = "../user/all/$db_file_name";
+    $resized_file = "../user/all/$db_file_name";
     image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
   }
   $sql = "INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())";

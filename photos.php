@@ -17,6 +17,8 @@ if ($u == $log_username && $user_ok == true) {
   $photo_form .= '<h3>Hi '.$u.', add a new photo into one of your galleries</h3>';
   $photo_form .= ' &nbsp; &nbsp; &nbsp; <b>Choose Photo:</b> ';
   $photo_form .= '<input type="file" name="photo" accept="image/*" required />';
+  $photo_form .= '<br /><b>Add a comment</b>';
+  $photo_form .= '<input id="comment_input" type="text" name="comment" />';
   $photo_form .= '<p><input type="submit" value="Upload Photo Now" /></p>';
   $photo_form .= '</form>';
 }

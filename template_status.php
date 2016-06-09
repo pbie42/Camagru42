@@ -56,8 +56,8 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
 				$convertedTime = ($timeAgoObject -> convert_datetime($replypostdate));
 				$whenreply = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
 				$status_replies .= '<div id="reply_'.$statusreplyid.'" class="reply_boxes"><div><b><a href="user.php?u='.$replyauthor.'"><span class="username">'.$replyauthor.'</span></a> '.$whenreply.':</b> '.$replyDeleteButton.'<br />'.$replydata.'</div></div>';
-	      }
-    	}
+	    }
+    }
 		include_once 'classes/time_ago.php';
 		$timeAgoObject = new convertToAgo;
 		$now = time();
@@ -71,9 +71,9 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
 		$convertedTime = ($timeAgoObject -> convert_datetime($postdate));
 		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
 		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a> '.$when.':</b> '.$data.' <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
-		//if($isFriend == true || $log_username == $u){
-	    //$statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
-	//}
+		if($isFriend == true || $log_username == $u){
+	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
+		}
 }
 ?>
 <script>

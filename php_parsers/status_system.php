@@ -20,7 +20,7 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   }
   //Then we sanatize the $_POST variables that we will be given
   $type = preg_replace('#[^a-z]#', '', $_POST['type']);
-  $account_name = preg_replace('#[^a-z0-9]#i', '', $_POST['user']);
+  $account_name = preg_replace('#[^a-z0-9 ]#i', '', $_POST['user']);
   //As with the status_reply section below we are using htmlentites to prevent malicious code.
   $data = htmlentities($_POST['data']);
   $data = mysqli_real_escape_string($db_conx, $data);
@@ -69,7 +69,7 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
     array_push($friends, $row["user2"]);
   }
   for ($i=0; $i < count($friends); $i++) {
-    $froemd = $friends[$i];
+    $friend = $friends[$i];
     $app = "Status Post";
     $note = $log_username.' posted on: <br /><a href="user.php?u='.$account_name.'#status_'.$id.'">'.$account_name.'&#39;s Profile</a>';
     mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
