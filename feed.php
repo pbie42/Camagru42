@@ -29,7 +29,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   if ($username != $log_username && $user_ok == true) {
     //This part below is to see if the person viewing the profile is logged in and to
     //see if they are friends already with that person
-    $friend_check = "SELECT id FROM friends WHERE user1='$log_username' AND user2='$username' AND accepted='1' OR user1='$u' AND user2='$log_username' AND accepted='1' LIMIT 1";
+    $friend_check = "SELECT id FROM friends WHERE user1='$log_username' AND user2='$username' AND accepted='1' OR user1='$username' AND user2='$log_username' AND accepted='1' LIMIT 1";
     if (mysqli_num_rows(mysqli_query($db_conx, $friend_check)) > 0) {
       $isFriend = true;
     }
@@ -118,7 +118,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
   		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a>: '.$data.' </b> <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
   		if($isFriend == true || $log_username == $username){
-  	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
+  	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event,'.$statusid.',\''.$log_username.'\',\'replytext_'.$statusid.'\',this)" placeholder="Add a comment..."></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
   		}
   }
   $feedstring .= '<div id="message_section">
@@ -135,6 +135,9 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
       </div>
       <div class="post_photo">
         <img src="user/all/'.$filename.'" />
+      </div>
+      <div class="post_likes">
+
       </div>
       <div id="statusarea">
         '.$statuslist.'
@@ -169,6 +172,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     <script type="text/javascript">
     function replyToStatus(sid,user,ta,btn){
     	var data = _(ta).value;
+      console.log(data);
     	if(data == ""){
     		alert("Please type a reply");
     		return false;
@@ -191,15 +195,11 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     	}
     	ajax.send("action=status_reply&sid="+sid+"&user="+user+"&data="+data);
     }
-    function enterReplyStatus(e) {
+    //replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)
+    function enterReplyStatus(e,sid,user,ta,btn) {
     	var keycode = e.keyCode;
-    	console.log(keycode);
     	if (keycode == 13) {
-    		var sid = "<?php echo $statusid ?>";
-    		var user = "<?php echo $username ?>";
-    		var ta = "replytext_<?php echo $statusid ?>";
-    		var btn = "this";
-    		console.log("we are in enter reply");
+
     		replyToStatus(sid, user, ta, btn);
     	}
     }

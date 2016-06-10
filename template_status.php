@@ -72,7 +72,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
 		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
 		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a> '.$when.':</b> '.$data.' <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
 		if($isFriend == true || $log_username == $u){
-	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
+	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event, this)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
 		}
 }
 ?>
@@ -124,6 +124,7 @@ function enterPostStatus(e){
 //replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)
 function replyToStatus(sid,user,ta,btn){
 	var data = _(ta).value;
+	console.log(data);
 	if(data == ""){
 		alert("Please type a reply");
 		return false;
@@ -181,6 +182,20 @@ function deleteReply(replyid,replybox){
 		}
 	}
 	ajax.send("action=delete_reply&replyid="+replyid);
+}
+function enterReplyStatus(e, btn) {
+	var keycode = e.keyCode;
+	console.log(keycode);
+	if (keycode == 13) {
+		var sid = "<?php echo $statusid ?>";
+		var user = "<?php echo $u ?>";
+		var taextra = "<?php echo $statusid ?>"
+		var ta = "replytext_"+taextra;
+		console.log(ta);
+		var data = _(ta).value;
+		console.log(data);
+		replyToStatus(sid, user, ta, btn);
+	}
 }
 function statusMax(field, maxlimit) {
 	if (field.value.length > maxlimit){

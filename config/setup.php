@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS photos (
               filename VARCHAR(255) NOT NULL,
               description VARCHAR(255) NULL,
               uploaddate DATETIME NOT NULL,
+              likes INT(11) NOT NULL DEFAULT 0,
               PRIMARY KEY (id)
             );
 CREATE TABLE IF NOT EXISTS notifications (
