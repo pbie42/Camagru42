@@ -749,6 +749,7 @@ option {
 
 .commentmade {
 width:                 315px;
+margin-bottom:         10px;
 }
 
 .add_comments {
@@ -783,6 +784,7 @@ width:                 315px;
 }
 
 .replyBtn {
+  display:             none;
 }
 
 .status_plus_delete {
@@ -791,9 +793,26 @@ width:                 315px;
 
 .status_boxes {
   height:              auto;
-  display:             flex;
+  display:             block;
+  text-align:          left;
   margin-left:         10px;
   margin-bottom:       5px;
+  width:               300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reply_boxes {
+  height:              auto;
+  display:             block;
+  text-align:          left;
+  margin-left:         0px;
+  margin-bottom:       5px;
+  width:               300px;
+}
+
+.status_length {
+  width:               310px;
 }
 
 #statusui {
@@ -802,6 +821,11 @@ width:                 315px;
 
 textarea::-webkit-input-placeholder {
   font-size:           15px;
+}
+
+#statusarea {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #template_status {

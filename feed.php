@@ -1,15 +1,52 @@
 <?php
 include_once 'php_includes/check_login_status.php';
+$u = "";
+if (isset($_SESSION["username"])) {
+  $u = preg_replace('#[^a-z0-9]#i', '', $_SESSION['username']);
+}
 ?>
+
 <?php
 $feedstring = "";
-$sql = "SELECT * FROM photos ORDER BY uploaddate ASC";
+$sql = "SELECT * FROM photos ORDER BY uploaddate DESC";
 $query = mysqli_query($db_conx, $sql);
+$i = 0;
+$countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos");
+$countrow = mysqli_fetch_row($countquery);
+$count = $countrow[0];
+$rowquery = mysqli_query($db_conx, "SELECT * FROM photos");
+$rowcount = mysqli_num_rows($rowquery);
 while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   $photoid = $row["id"];
   $username = $row["user"];
   $filename = $row["filename"];
   $uploaddate = $row["uploaddate"];
+
+  //The part below is to deal with blocking checks
+  $isFriend = false;
+  $ownerBlockViewer = false;
+  $viewerBlockOwner = false;
+  if ($username != $log_username && $user_ok == true) {
+    //This part below is to see if the person viewing the profile is logged in and to
+    //see if they are friends already with that person
+    $friend_check = "SELECT id FROM friends WHERE user1='$log_username' AND user2='$username' AND accepted='1' OR user1='$u' AND user2='$log_username' AND accepted='1' LIMIT 1";
+    if (mysqli_num_rows(mysqli_query($db_conx, $friend_check)) > 0) {
+      $isFriend = true;
+    }
+    //This next part checks if the owner of the profile that the viewer is looking
+    //at has blocked this viewer or not
+    $block_check1 = "SELECT id FROM blockedusers WHERE blocker='$username' AND blockee='$log_username' LIMIT 1";
+    if (mysqli_num_rows(mysqli_query($db_conx, $block_check1)) > 0) {
+      $ownerBlockViewer = true;
+    }
+    //This part is to check if the viewer has blocked the owner of the profile
+    //that they are viewing
+    $block_check2 = "SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$username' LIMIT 1";
+    if (mysqli_num_rows(mysqli_query($db_conx, $block_check2)) > 0) {
+      $viewerBlockOwner = true;
+    }
+  }
+
   include_once 'classes/time_ago.php';
   $timeAgoObject = new convertToAgo;
   $now = time();
@@ -22,11 +59,13 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   $convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
   $convertedTime = ($timeAgoObject -> convert_datetime($uploaddate));
   $whenpost = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
-  $sql = "SELECT * FROM status WHERE osid='$photoid' AND account_name='$username' AND type='a' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $statusnumrows = mysqli_num_rows($query);
-  while ($rowcomm = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-    $statusid = $rowcomm["id"];
+  $sql1 = "SELECT * FROM status WHERE osid='$photoid' AND account_name='$username' AND type='a' LIMIT 1";
+  $query1 = mysqli_query($db_conx, $sql1);
+  $statusnumrows = mysqli_num_rows($query1);
+  while ($rowcomm = mysqli_fetch_array($query1, MYSQLI_ASSOC)) {
+    ++$i;
+    $statusid = $rowcomm["osid"];
+    $statuslist = "";
     $account_name = $rowcomm["account_name"];
     $author = $rowcomm["author"];
     $postdate = $rowcomm["postdate"];
@@ -48,7 +87,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   				$replydata = stripslashes($replydata);
   				$replyDeleteButton = '';
   				if($replyauthor == $log_username || $account_name == $log_username ){
-  					$replyDeleteButton = '<span id="srdb_'.$statusreplyid.'" class="username"><a href="#" onclick="return false;" onmousedown="deleteReply(\''.$statusreplyid.'\',\'reply_'.$statusreplyid.'\');" title="DELETE THIS COMMENT">X</a></span>';
+  					$replyDeleteButton = '<span id="srdb_'.$statusreplyid.'" class="username replyDeleteButton"><a href="#" onclick="return false;" onmousedown="deleteReply(\''.$statusreplyid.'\',\'reply_'.$statusreplyid.'\');" title="DELETE THIS COMMENT">X</a></span>';
   				}
   				include_once 'classes/time_ago.php';
   				$timeAgoObject = new convertToAgo;
@@ -62,7 +101,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   				$convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
   				$convertedTime = ($timeAgoObject -> convert_datetime($replypostdate));
   				$whenreply = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
-  				$status_replies .= '<div id="reply_'.$statusreplyid.'" class="reply_boxes"><div><b><a href="user.php?u='.$replyauthor.'"><span class="username">'.$replyauthor.'</span></a> '.$whenreply.':</b> '.$replyDeleteButton.'<br />'.$replydata.'</div></div>';
+  				$status_replies .= '<div id="reply_'.$statusreplyid.'" class="reply_boxes"><div class="status_plus_delete"><div class="status_length"><b><a href="user.php?u='.$replyauthor.'"><span class="username">'.$replyauthor.'</span></a> '.$whenreply.': '.$replydata.'</b></div> '.$replyDeleteButton.'</div></div>';
   	    }
       }
       include_once 'classes/time_ago.php';
@@ -77,12 +116,34 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   		$convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
   		$convertedTime = ($timeAgoObject -> convert_datetime($postdate));
   		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
-  		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a> '.$when.':</b> '.$data.' <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
+  		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a>: '.$data.' </b> <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
   		if($isFriend == true || $log_username == $username){
-  	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
+  	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event)" placeholder="Add a reply?"></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
   		}
   }
-  $feedstring .= '<div id="message_section"><div class="main_feed_area welcome_font"><div class=""><img src="user/all/'.$filename.'" /></div></div></div>';
+  $feedstring .= '<div id="message_section">
+    <div id="post_'.$photoid.'" class="main_feed_area welcome_font">
+      <div class="postheader">
+        <div class="feed_username">
+          <a href="user.php?u='.$author.'">
+            <h4 class="username">'.$username.'</h4>
+          </a>
+        </div>
+        <div class="feed_date">
+          <h4>'.$whenpost.'</h4>
+        </div>
+      </div>
+      <div class="post_photo">
+        <img src="user/all/'.$filename.'" />
+      </div>
+      <div id="statusarea">
+        '.$statuslist.'
+      </div>
+      <div id="statusui">
+        '.$status_ui.'
+      </div>
+    </div>
+  </div>';
 }
 ?>
 
@@ -101,29 +162,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     <div id="container">
       <?php include_once 'php_includes/header.php'; ?>
       <div id="body">
-        <div id="message_section">
-          <div id="post_<?php echo $photoid ?>" class="main_feed_area welcome_font">
-            <div class="postheader">
-              <div class="feed_username">
-                <a href="#">
-                  <h4 class="username"><?php echo $username; ?></h4>
-                </a>
-              </div>
-              <div class="feed_date">
-                <h4><?php echo $whenpost ?></h4>
-              </div>
-            </div>
-            <div class="post_photo">
-              <img src="user/all/ThuJun917285120161479.png" />
-            </div>
-            <div id="statusarea">
-              <?php echo $statuslist; ?>
-            </div>
-            <div id="statusui">
-              <?php echo $status_ui; ?>
-            </div>
-          </div>
-        </div>
+        <?php echo $feedstring; ?>
       </div>
       <?php include_once 'php_includes/footer.php'; ?>
     </div>
@@ -142,7 +181,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     			if(datArray[0] == "reply_ok"){
     				var rid = datArray[1];
     				data = data.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br />").replace(/\r/g,"<br />");
-    				_("status_"+sid).innerHTML += '<div id="reply_'+rid+'" class="reply_boxes"><div><b>Reply by you just now:</b><span id="srdb_'+rid+'"><a href="#" onclick="return false;" onmousedown="deleteReply(\''+rid+'\',\'reply_'+rid+'\');" title="DELETE THIS COMMENT">X</a></span>'+data+'</div></div>';
+    				_("status_"+sid).innerHTML += '<div id="reply_'+rid+'" class="reply_boxes"><div class="status_plus_delete"><div class="status_length"><span class="username"><b>'+user+':</b></span> '+data+'</div><span id="srdb_'+rid+'" class="username replyDeleteButton"><a href="#" onclick="return false;" onmousedown="deleteReply(\''+rid+'\',\'reply_'+rid+'\');" title="DELETE THIS COMMENT">X</a></span></div></div>';
     				_("replyBtn_"+sid).disabled = false;
     				_(ta).value = "";
     			} else {
@@ -151,6 +190,18 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     		}
     	}
     	ajax.send("action=status_reply&sid="+sid+"&user="+user+"&data="+data);
+    }
+    function enterReplyStatus(e) {
+    	var keycode = e.keyCode;
+    	console.log(keycode);
+    	if (keycode == 13) {
+    		var sid = "<?php echo $statusid ?>";
+    		var user = "<?php echo $username ?>";
+    		var ta = "replytext_<?php echo $statusid ?>";
+    		var btn = "this";
+    		console.log("we are in enter reply");
+    		replyToStatus(sid, user, ta, btn);
+    	}
     }
     function deleteReply(replyid,replybox){
     	var conf = confirm("Press OK to confirm deletion of this reply");

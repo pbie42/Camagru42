@@ -121,6 +121,7 @@ function enterPostStatus(e){
       postToStatus(action, type, username, 'statustext');
     }
 }
+//replyToStatus('.$statusid.',\''.$u.'\',\'replytext_'.$statusid.'\',this)
 function replyToStatus(sid,user,ta,btn){
 	var data = _(ta).value;
 	if(data == ""){

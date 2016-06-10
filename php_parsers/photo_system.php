@@ -89,21 +89,6 @@ if (isset($_FILES["photo"]["name"])) {
   $sql = "SELECT COUNT(id) FROM photos WHERE user='$log_username'";
   $query = mysqli_query($db_conx, $sql);
   $row = mysqli_fetch_row($query);
-  $testcomment = $_POST["comment"];
-  if (strlen($testcomment) < 1) {
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$id' WHERE id='$id' LIMIT 1");
-  } else {
-    $comment = htmlentities($_POST['comment']);
-    $comment = mysqli_real_escape_string($db_conx, $comment);
-    $anothertestcomment = "fuckin a homie";
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$id' WHERE id='$id' LIMIT 1");
-  }
 
   //TODO get rid of this part below when I make the feed.
   if ($row[0] > 14) {
@@ -159,9 +144,28 @@ if (isset($_FILES["photo"]["name"])) {
   }
   $sql = "INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())";
   $query = mysqli_query($db_conx, $sql);
-  mysqli_close($db_conx);
+  $sql = "SELECT id FROM photos WHERE filename='$db_file_name'";
+  $query = mysqli_query($db_conx, $sql);
+  $row = mysqli_fetch_array($query);
+  $realid = $row["id"];
+  $testcomment = $_POST["comment"];
+  if (strlen($testcomment) < 1) {
+    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())";
+    $query = mysqli_query($db_conx, $sql);
+    $id = mysqli_insert_id($db_conx);
+    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
+  } else {
+    $comment = htmlentities($_POST['comment']);
+    $comment = mysqli_real_escape_string($db_conx, $comment);
+    $anothertestcomment = "fuckin a homie";
+    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())";
+    $query = mysqli_query($db_conx, $sql);
+    $id = mysqli_insert_id($db_conx);
+    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
+  }
   //header("location: ../photos.php?u=$log_username");
-  header("location: ../index.php");
+  //header("location: ../index.php");
+  header("location: ../message.php?msg='$realid'");
   exit();
 }
 ?>
