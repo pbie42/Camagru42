@@ -14,10 +14,14 @@ $isOwner = "no";
 if ($u == $log_username && $user_ok == true) {
   $isOwner = "yes";
   $photo_form = '<form id="photo_form" enctype="multipart/form-data" method="post" action="php_parsers/photo_system.php">';
-  $photo_form .= '<h3>Hi '.$u.', add a new photo into one of your galleries</h3>';
-  $photo_form .= ' &nbsp; &nbsp; &nbsp; <b>Choose Photo:</b> ';
-  $photo_form .= '<input type="file" name="photo" accept="image/*" required />';
-  $photo_form .= '<p><input type="submit" value="Upload Photo Now" /></p>';
+  $photo_form .= '<h3>Hi <span class="username">'.$u.'</span>! <br />Add a photo from your computer to your feed?</h3>';
+  //$photo_form .= ' &nbsp; &nbsp; &nbsp; <b>Choose Photo:</b> ';
+  //$photo_form .= '<input type="file" name="photo" accept="image/*" required />';
+  $photo_form .= '<input id="choose_photo" class="inputfile" type="file" name="photo" data-multiple-caption="{count} files selected" multiple required/><label id="choose_photo_label" for="choose_photo"><span>Choose Photo</span></label>';
+  $photo_form .= '<br /><br /><b>Add a comment</b>';
+  $photo_form .= '<input id="comment_input" type="text" name="comment" /><br />';
+  //$photo_form .= '<p><input type="submit" value="Upload Photo Now" /></p>';
+  $photo_form .= '<p><input id="change_photo_btn" class="inputfile" type="submit" value="Upload"/><label id="choose_photo_label" for="change_photo_btn">Upload</label></p>';
   $photo_form .= '</form>';
 }
 //Select the user galleries
@@ -45,7 +49,7 @@ if (mysqli_num_rows($query) < 1) {
 }
 ?>
         <div id="photos_section">
-          <div class="main_area_notes welcome_font">
+          <div class="main_area_photo welcome_font">
             <div id="photo_form">
               <?php echo $photo_form; ?>
             </div><!--<div id="galleries">
@@ -59,9 +63,6 @@ if (mysqli_num_rows($query) < 1) {
             <div id="picbox">
 
             </div>
-            <p>
-              These photos belong to <a href="user.php?u=<?php echo $u; ?>"><?php echo $u; ?></a>
-            </p>
           </div>
         </div>
     <script type="text/javascript">
@@ -123,6 +124,31 @@ if (mysqli_num_rows($query) < 1) {
       }
       ajax.send("delete=photo&id="+id);
     }
+    var inputs = document.querySelectorAll( '.inputfile' );
+    Array.prototype.forEach.call( inputs, function( input )
+    {
+    var label	 = input.nextElementSibling,
+      labelVal = label.innerHTML;
+
+    input.addEventListener( 'change', function( e )
+    {
+      var fileName = '';
+      if( this.files && this.files.length > 1 )
+        fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+      else
+        fileName = e.target.value.split( '\\' ).pop();
+
+      if( fileName ) {
+        var len = fileName.length;
+        var dots = '';
+        if (len > 10) {
+          dots = '...';
+        }
+        label.querySelector( 'span' ).innerHTML = fileName.substring(0, 10) + dots;
+      } else
+        label.innerHTML = labelVal;
+    });
+    });
     </script>
   </body>
 </html>

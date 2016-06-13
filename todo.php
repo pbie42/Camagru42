@@ -15,7 +15,7 @@
 //     the photos section of the database. I need to have the loop cycle through each
 //     row in the order of the uploaddate and use that information to display each
 //     photo. It must take the file name and search for it in the /all folder I have made
-//     under the /user folder that holds all of the user photos 
+//     under the /user folder that holds all of the user photos
 
 //  6. Should probably leave all the galleries as they are and make a brand new thing
 //     for the feed. Make sure to go back into my photos files to clean up the changes I've done
@@ -23,4 +23,6 @@
 //  7. Need to make a fresh feed page. The access to this page will have be done using a check
 //     system with the home button. If a user is not logged in the home button will header them
 //     them to the login screen, otherwise if they are logged in it header them to the feed.
+
+//TODO Comment deletion system is not working for some reason.
 ?>

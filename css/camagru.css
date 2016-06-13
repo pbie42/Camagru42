@@ -583,6 +583,36 @@ option {
 /*****************************************************************************/
 /* Photo */
 
+.main_area_photo {
+  width:               350px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  text-align:          center;
+  border-radius:       10px;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          auto;
+  margin-bottom:       20px;;
+  z-index:             0;
+  border:              1px solid;
+  border-color:        #edeeee;
+}
+
+#choose_photo_label {
+  width:               300px !important;
+  border-radius:       3px;
+  margin-left:         auto;
+  margin-right:        auto;
+  background-color:    rgb(117, 52, 52);
+}
+
+#choose_photo_label:hover {
+  border-radius:       3px;
+  margin-left:         auto;
+  margin-right:        auto;
+  background-color:    rgb(75, 7, 7);
+}
+
 #container_photo {
   margin:              0px auto;
   margin-top:          30px;
@@ -601,14 +631,16 @@ option {
 #snapdiv {
   margin-left:         auto;
   margin-right:        auto;
+  margin-bottom:       20px;
   width:               612px;
-  display: none;
+  display:             none;
 }
 
 #addphotodiv {
   margin-left:         auto;
   margin-right:        auto;
   width:               310px;
+  margin-bottom:       20px;
 }
 
 #addphoto {
@@ -855,7 +887,7 @@ textarea::-webkit-input-placeholder {
 
 #comment_input {
   resize: both;
-  width: 300px;
+  width: 294px;
 }
 
 /*****************************************************************************/

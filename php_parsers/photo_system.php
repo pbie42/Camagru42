@@ -164,8 +164,7 @@ if (isset($_FILES["photo"]["name"])) {
     mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
   }
   //header("location: ../photos.php?u=$log_username");
-  //header("location: ../index.php");
-  header("location: ../message.php?msg='$realid'");
+  header("location: ../feed.php");
   exit();
 }
 ?>

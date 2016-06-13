@@ -114,8 +114,8 @@ if (isset($_POST['action']) && $_POST['action'] == "status_reply") {
   $query = mysqli_query($db_conx, $sql);
   while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     $participant = $row["author"];
-    $app = "Status Reply";
-    $note = $log_username.' commented here:<br /><a href="user.php?u='.$account_name.'#status_'.$osid.'">Click here to view the conversation</a>';
+    $app = "Post Comment";
+    $note = '<span class="username">'.$log_username.'</span> commented here:<br /><a href="feed.php#post_'.$osid.'">Click here to view the conversation</a>';
     mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$participant','$log_username','$app','$note',now())");
   }
   mysqli_close($db_conx);

@@ -1,14 +1,10 @@
 <?php
 include_once 'php_includes/check_login_status.php';
-$u = "";
-if (isset($_SESSION["username"])) {
-  $u = preg_replace('#[^a-z0-9]#i', '', $_SESSION['username']);
-}
 ?>
 
 <?php
 $feedstring = "";
-$sql = "SELECT * FROM photos ORDER BY uploaddate DESC";
+$sql = "SELECT * FROM photos WHERE user='$u' ORDER BY uploaddate DESC";
 $query = mysqli_query($db_conx, $sql);
 $i = 0;
 $countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos");
@@ -149,28 +145,8 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   </div>';
 }
 ?>
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title><?php echo $u ?></title>
-    <link rel="stylesheet" href="css/camagru.css" media="screen" title="no title" charset="utf-8">
-    <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="js/camagru.js"></script>
-    <script type="text/javascript" src="js/ajax.js"></script>
-    <script type="text/javascript" src="js/user.js"></script>
-  </head>
-  <body>
-
-    <div id="container">
-      <?php include_once 'php_includes/header.php'; ?>
-      <div id="body">
-        <?php include_once 'php_includes/video.php'; ?>
         <?php echo $feedstring; ?>
-      </div>
-      <?php include_once 'php_includes/footer.php'; ?>
-    </div>
+
     <script type="text/javascript">
     function replyToStatus(sid,user,ta,btn){
     	var data = _(ta).value;
@@ -229,5 +205,3 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     	}
     }
     </script>
-  </body>
-</html>

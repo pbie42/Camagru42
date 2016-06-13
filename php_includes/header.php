@@ -20,12 +20,32 @@ if ($user_ok == true) {
 <header>
   <div id="header_top">
     <div id="brand">
-      <a href="index.php">
-        <h1 class="logo_font">Camagru</h1>
-      </a>
-      <a href="index.php">
-        <img id="logo_header" src="resources/retrocam.png" alt="" />
-      </a>
+      <?php
+        if (isset($_SESSION['username'])) {
+        ?>
+        <a href="feed.php">
+          <h1 class="logo_font">Camagru</h1>
+        </a>
+        <a href="feed.php">
+          <img id="logo_header" src="resources/retrocam.png" alt="" />
+        </a>
+      <?php
+        } else {
+      ?>
+        <a href="feed.php">
+          <h1 class="logo_font">Camagru</h1>
+        </a>
+        <a href="feed.php">
+          <img id="logo_header" src="resources/retrocam.png" alt="" />
+        </a>
+      <?php
+        }
+      ?>
+
+
+
+
+
     </div> <!-- brand -->
 
     <div id="menu">

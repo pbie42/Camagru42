@@ -18,7 +18,7 @@ if ($numrows < 1) {
     $note = $row["note"];
     $date_time = $row["date_time"];
     $date_time = strftime("%b %d, %Y", strtotime($date_time));
-    $notification_list .= "<p><a href='user.php?u=$initiator'>$initiator</a> | $app<br />$note</p>";
+    $notification_list .= "<p><a href='user.php?u=$initiator'><span class='username'>$initiator</span></a> made a $app<br />$note</p>";
   }
 }
 mysqli_query($db_conx, "UPDATE users SET notescheck=now() WHERE username='$log_username' LIMIT 1");
