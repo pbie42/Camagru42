@@ -5,6 +5,14 @@ if ($user_ok != true || $log_username == "") {
 }
 ?>
 <?php
+if (isset($_POST['photoid']) && isset($_POST['liker']) && isset($_POST['username'])) {
+  $photoid = preg_replace('#[^0-9]#', '', $_POST['photoid']);
+  $liker = preg_replace('#[^a-z0-9 ]#i', '', $_POST['liker']);
+  $username = preg_replace('#[^a-z0-9 ]#i', '', $_POST['username']);
+  //TODO START HERE!! Adding a like to a photo
+}
+?>
+<?php
 if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   //Make sure the post data is not empty
   if (strlen($_POST['data']) < 1) {
@@ -35,7 +43,6 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   }
   //We then insert the status post into the database
   $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$account_name','$log_username','$type','$data',now())";
-  //TODO THIS IS WHERE THE QUERY IS NOT HAPPENING!!!!
   $query = mysqli_query($db_conx, $sql);
   $id = mysqli_insert_id($db_conx);
   mysqli_query($db_conx, "UPDATE status SET osid='$id' WHERE id='$id' LIMIT 1");

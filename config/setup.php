@@ -85,13 +85,10 @@ CREATE TABLE IF NOT EXISTS status (
             );
 CREATE TABLE IF NOT EXISTS likes (
               id INT(11) NOT NULL AUTO_INCREMENT,
+              osid INT(11) NULL,
               username VARCHAR(16) NOT NULL,
               liker VARCHAR(16) NOT NULL,
               likes INT(11) NULL,
-              date_time_like DATETIME NOT NULL,
-              commentor VARCHAR(16) NOT NULL,
-              comment VARCHAR(255) NULL,
-              date_time_comment DATETIME NOT NULL,
               PRIMARY KEY (id)
             );";
         $db->exec($sql);

@@ -21,6 +21,7 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   $username = $row["user"];
   $filename = $row["filename"];
   $uploaddate = $row["uploaddate"];
+  $likes = $row["likes"];
 
   //The part below is to deal with blocking checks
   $isFriend = false;
@@ -137,7 +138,8 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
         <img src="user/all/'.$filename.'" />
       </div>
       <div class="post_likes">
-
+        <img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\')" src="resources/likeempty.png" />
+        <h4 id="like_number" class="number_likes">'.$likes.' likes</h4>
       </div>
       <div id="statusarea">
         '.$statuslist.'
@@ -227,6 +229,21 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     		alert(maxlimit+" maximum character limit reached");
     		field.value = field.value.substring(0, maxlimit);
     	}
+    }
+    function likeStatus(photoid,liker,username,likes) {
+      var ajax = ajaxObj("POST", "php_parsers/status_system.php");
+      var numlike = likes + 1;
+    	ajax.onreadystatechange = function() {
+    		if(ajaxReturn(ajax) == true) {
+    			if(ajax.responseText == "like_ok"){
+    				_("like_button").src = 'resources/likefull.png';
+            _("like_number").innerHTML = numlikes+" likes";
+    			} else {
+    				alert(ajax.responseText);
+    			}
+    		}
+    	}
+    	ajax.send("photoid="+photoid+"&liker="+like+"&username="+username);
     }
     </script>
   </body>
