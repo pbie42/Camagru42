@@ -22,7 +22,14 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   $filename = $row["filename"];
   $uploaddate = $row["uploaddate"];
   $likes = $row["likes"];
-
+  $likesbutton = "";
+  $likesql = "SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1";
+  $likesquery = mysqli_query($db_conx, $likesql);
+  if (mysqli_num_rows($likesquery) < 1) {
+    $likesbutton = '<img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'like\')" src="resources/likeempty.png" />';
+  } else {
+    $likesbutton = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'unlike\')" src="resources/likefull.png" />';
+  }
   //The part below is to deal with blocking checks
   $isFriend = false;
   $ownerBlockViewer = false;
@@ -138,7 +145,9 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
         <img src="user/all/'.$filename.'" />
       </div>
       <div class="post_likes">
-        <img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\')" src="resources/likeempty.png" />
+        <div id="like_button_div">
+          '.$likesbutton.'
+        </div>
         <h4 id="like_number" class="number_likes">'.$likes.' likes</h4>
       </div>
       <div id="statusarea">
@@ -230,20 +239,36 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     		field.value = field.value.substring(0, maxlimit);
     	}
     }
-    function likeStatus(photoid,liker,username,likes) {
+    function likeStatus(photoid,liker,username,likes,action) {
       var ajax = ajaxObj("POST", "php_parsers/status_system.php");
-      var numlike = likes + 1;
+      var numlike = parseInt(likes) + 1;
+      console.log("liked");
     	ajax.onreadystatechange = function() {
     		if(ajaxReturn(ajax) == true) {
     			if(ajax.responseText == "like_ok"){
-    				_("like_button").src = 'resources/likefull.png';
-            _("like_number").innerHTML = numlikes+" likes";
+    				_("like_button_div").innerHTML = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''+photoid+'\',\''+liker+'\',\''+username+'\',\''+numlike+'\',\'unlike\')" src="resources/likefull.png" />';
+            _("like_number").innerHTML = numlike+" likes";
     			} else {
     				alert(ajax.responseText);
     			}
     		}
     	}
-    	ajax.send("photoid="+photoid+"&liker="+like+"&username="+username);
+    	ajax.send("photoid="+photoid+"&liker="+liker+"&username="+username+"&action="+action);
+    }
+    function unlikeStatus(photoid,liker,username,likes,action) {
+      var ajax = ajaxObj("POST", "php_parsers/status_system.php");
+      var numlike = likes - 1;
+    	ajax.onreadystatechange = function() {
+    		if(ajaxReturn(ajax) == true) {
+    			if(ajax.responseText == "unlike_ok"){
+            _("like_number").innerHTML = numlike+" likes";
+            _("like_button_div").innerHTML = '<img id="like_button" class="likebutton" onclick="likeStatus(\''+photoid+'\',\''+liker+'\',\''+username+'\',\''+numlike+'\',\'like\')" src="resources/likeempty.png" />';
+    			} else {
+    				alert(ajax.responseText);
+    			}
+    		}
+    	}
+    	ajax.send("photoid="+photoid+"&liker="+liker+"&username="+username+"&action="+action);
     }
     </script>
   </body>

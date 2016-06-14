@@ -5,11 +5,26 @@ if ($user_ok != true || $log_username == "") {
 }
 ?>
 <?php
-if (isset($_POST['photoid']) && isset($_POST['liker']) && isset($_POST['username'])) {
+if (isset($_POST['photoid']) && isset($_POST['liker']) && isset($_POST['username']) && isset($_POST['action'])) {
   $photoid = preg_replace('#[^0-9]#', '', $_POST['photoid']);
   $liker = preg_replace('#[^a-z0-9 ]#i', '', $_POST['liker']);
   $username = preg_replace('#[^a-z0-9 ]#i', '', $_POST['username']);
-  //TODO START HERE!! Adding a like to a photo
+  if ($_POST['action'] == "like") {
+    $sqllike = "INSERT INTO likes(osid, username, liker, likes) VALUES('$photoid','$username','$liker',1)";
+    $querylike = mysqli_query($db_conx, $sqllike);
+    $sqlphotolike = "UPDATE photos SET likes=likes+1 WHERE id='$photoid'";
+    $queryphotolike = mysqli_query($db_conx, $sqlphotolike);
+    echo "like_ok";
+  } else if ($_POST['action'] == "unlike") {
+    $sqlunlike = "DELETE FROM likes WHERE osid='$photoid' AND liker='$liker'";
+    $queryunlike = mysqli_query($db_conx, $sqlunlike);
+    $sqlphotounlike = "UPDATE photos SET likes=likes-1 WHERE id='$photoid'";
+    $queryphotounlike = mysqli_query($db_conx, $sqlphotounlike);
+    echo "unlike_ok";
+  }
+  //TODO Set notification for when your photo is liked
+  mysqli_close($db_conx);
+  exit();
 }
 ?>
 <?php
