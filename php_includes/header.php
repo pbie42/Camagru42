@@ -21,7 +21,8 @@ if ($user_ok == true) {
   <div id="header_top">
     <div id="brand">
       <?php
-        if (isset($_SESSION['username'])) {
+        include_once 'php_includes/check_login_status.php';
+        if ($user_ok == true || $log_username != "") {
         ?>
         <a href="feed.php">
           <h1 class="logo_font">Camagru</h1>
@@ -32,10 +33,10 @@ if ($user_ok == true) {
       <?php
         } else {
       ?>
-        <a href="feed.php">
+        <a href="index.php">
           <h1 class="logo_font">Camagru</h1>
         </a>
-        <a href="feed.php">
+        <a href="index.php">
           <img id="logo_header" src="resources/retrocam.png" alt="" />
         </a>
       <?php

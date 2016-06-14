@@ -163,6 +163,21 @@ if (isset($_FILES["photo"]["name"])) {
     $id = mysqli_insert_id($db_conx);
     mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
   }
+  $friends = array();
+  $fquery = mysqli_query($db_conx, "SELECT user1 FROM friends WHERE user2='$log_username' AND accepted='1'");
+  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
+    array_push($friends, $frow["user1"]);
+  }
+  $fquery = mysqli_query($db_conx, "SELECT user2 FROM friends WHERE user1='$log_username' AND accepted='1'");
+  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
+    array_push($friends, $frow["user2"]);
+  }
+  for ($i=0; $i < count($friends); $i++) {
+    $friend = $friends[$i];
+    $app = "Post";
+    $note = '<span class="username">'.$log_username.'</span> made a new post!<br /><a href="feed.php#post_'.$realid.'">Click here to view the post</a>';
+    mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
+  }
   //header("location: ../photos.php?u=$log_username");
   header("location: ../feed.php");
   exit();

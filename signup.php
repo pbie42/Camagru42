@@ -1,7 +1,9 @@
 <?php
 //session_start();
 //If user is logged in, header them away
-if (isset($_SESSION["username"])) {
+include_once 'php_includes/check_login_status.php';
+if ($user_ok == true || $log_username != "") {
+  header("location: feed.php");
   exit();
 }
 ?>
@@ -126,34 +128,60 @@ if (isset($_POST["emailcheck"])) {
    exit();
  }
 ?>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Camagru</title>
+    <script type="text/javascript" src="js/camagru.js"></script>
+    <script type="text/javascript" src="js/ajax.js"></script>
+    <script type="text/javascript" src="js/autoscroll.js"></script>
+    <script type="text/javascript" src="js/signup.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/user.js"></script>
+    <link rel="stylesheet" href="css/camagru.css" charset="utf-8" />
+    <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div id="container">
+       <?php include_once("php_includes/header.php"); ?>
+       <div id="body">
+        <div id="signup_section">
+          <div id="signupform" class="main_area_signup">
+            <h1 class="welcome_font">Welcome to</h1>
+            <h1 id="login_logo" class="logo_font">Camagru</h1>
+            <h3 id="signup_welcome" class="welcome_font">Please sign up to see photos<br/> from you and your friends</h3>
+            <form name="signupform" id="signupform" onsubmit="return false;" action="index.php" method="post">
+              <input id="username" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkusername()" onkeyup="restrict('username')" name="username" maxlength="15" placeholder="Username">
+              <span id="unamestatus"></span>
+              <br />
+              <input id="email" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkemail()" name="email" placeholder="Email"><br>
+              <span id="emailstatus"></span>
+              <input id="firstname" class="login_input" type="text" onfocus="emptyElement('status')" name="firstname" placeholder="First Name"><br>
+              <input id="lastname" class="login_input" type="text" onfocus="emptyElement('status')" name="lastname" placeholder="Last Name"><br>
+              <input id="pass1" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Password"><br>
+              <input id="pass2" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Verify Password"><br>
+              <select id="country" onfocus="emptyElement('status')"><?php include_once 'resources/countries.php'; ?></select>
+              <button id="signupbtn" class="welcome_font" onclick="signup()" type="submit" name="submit" value="signup">Sign Up</button><br>
+            </form>
+          </div>
+          <div class="signup_status">
+            <span id="status"></span>
+          </div>
 
-<div id="signup_section">
-  <div id="signupform" class="main_area_signup">
-    <h1 class="welcome_font">Welcome to</h1>
-    <h1 id="login_logo" class="logo_font">Camagru</h1>
-    <h3 id="signup_welcome" class="welcome_font">Please sign up to see photos<br/> from you and your friends</h3>
-    <form name="signupform" id="signupform" onsubmit="return false;" action="index.php" method="post">
-      <input id="username" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkusername()" onkeyup="restrict('username')" name="username" maxlength="15" placeholder="Username">
-      <span id="unamestatus"></span>
-      <br />
-      <input id="email" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkemail()" name="email" placeholder="Email"><br>
-      <span id="emailstatus"></span>
-      <input id="firstname" class="login_input" type="text" onfocus="emptyElement('status')" name="firstname" placeholder="First Name"><br>
-      <input id="lastname" class="login_input" type="text" onfocus="emptyElement('status')" name="lastname" placeholder="Last Name"><br>
-      <input id="pass1" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Password"><br>
-      <input id="pass2" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Verify Password"><br>
-      <select id="country" onfocus="emptyElement('status')"><?php include_once 'resources/countries.php'; ?></select>
-      <button id="signupbtn" class="welcome_font" onclick="signup()" type="submit" name="submit" value="signup">Sign Up</button><br>
-    </form>
-  </div>
-  <div class="signup_status">
-    <span id="status"></span>
-  </div>
+          <div id="login_signup">
+            <h4 class="welcome_font">Already have an Account?</h4>
+            <form class="" action="index.php" method="post">
+              <button id="login_button" class="welcome_font" type="submit"  name="submit" value="login">Log In</button>
+            </form>
+          </div>
+        </div>
 
-  <div id="login_signup">
-    <h4 class="welcome_font">Already have an Account?</h4>
-    <form class="" action="index.php" method="post">
-      <button id="login_button" class="welcome_font" type="submit"  name="submit" value="login">Log In</button>
-    </form>
-  </div>
-</div>
+       </div> <!-- Body -->
+
+
+    </div> <!-- Body Container -->
+    <script>
+
+    </script>
+  </body>
+</html>

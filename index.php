@@ -1,7 +1,10 @@
 <?php
   include_once 'config/setup.php';
   include_once 'php_includes/check_login_status.php';
-
+  if ($user_ok == true || $log_username != "") {
+    header("location: feed.php");
+    exit();
+  }
  ?>
 
  <!DOCTYPE html>
@@ -23,37 +26,13 @@
         <?php include_once("php_includes/header.php"); ?>
         <div id="body">
           <?php
-            if (isset($_POST['submit']) && $_SESSION['username'] == "" && $_POST['submit'] == signup)
-            {
-              include_once 'signup.php';
-              if (isset($_POST['username']) && $_POST['username'] == "")
-                include_once 'logsignerror.php';
-            }
-            else if (isset($_POST['submit']) && $_POST['submit'] == password) {
-              include_once 'forgot_pass.php';
-            }
-            else if (isset($_SESSION['username'])) {
-              include_once 'php_includes/video.php';
-              include_once 'usercopy.php';
-            }
-            else if ($_SESSION['username'] == "" || $_POST['username'] == "")
-            {
-              include_once 'login.php';
-              //include_once 'php_includes/video.php';
-              if ($_POST['username'] == "" && isset($_POST['username']))
-                include_once 'php_includes/logsignerror.php';
-            }
+            include_once 'login.php';
 
 
           ?>
         </div> <!-- Body -->
-        <div class="clearfooter"></div> <!-- Clearfooter -->
-        <?php
-            if ($_SESSION['logged_on_user'] == "")
-            {
-              include_once ('php_includes/footer.php');
-            }
-         ?>
+
+
      </div> <!-- Body Container -->
      <script>
 

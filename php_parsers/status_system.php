@@ -14,12 +14,17 @@ if (isset($_POST['photoid']) && isset($_POST['liker']) && isset($_POST['username
     $querylike = mysqli_query($db_conx, $sqllike);
     $sqlphotolike = "UPDATE photos SET likes=likes+1 WHERE id='$photoid'";
     $queryphotolike = mysqli_query($db_conx, $sqlphotolike);
+    $app = "Post Like";
+    $note = '<span class="username">'.$liker.'</span> liked your post!<br /><a href="feed.php#post_'.$photoid.'">Click here to view the post</a>';
+    mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$username','$liker','$app','$note',now())");
     echo "like_ok";
   } else if ($_POST['action'] == "unlike") {
     $sqlunlike = "DELETE FROM likes WHERE osid='$photoid' AND liker='$liker'";
     $queryunlike = mysqli_query($db_conx, $sqlunlike);
     $sqlphotounlike = "UPDATE photos SET likes=likes-1 WHERE id='$photoid'";
     $queryphotounlike = mysqli_query($db_conx, $sqlphotounlike);
+    $app = "Post Like";
+    mysqli_query($db_conx, "DELETE FROM notifications WHERE username='$username' AND initiator='$liker' AND app='$app'");
     echo "unlike_ok";
   }
   //TODO Set notification for when your photo is liked
@@ -140,6 +145,27 @@ if (isset($_POST['action']) && $_POST['action'] == "status_reply") {
     $note = '<span class="username">'.$log_username.'</span> commented here:<br /><a href="feed.php#post_'.$osid.'">Click here to view the conversation</a>';
     mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$participant','$log_username','$app','$note',now())");
   }
+  $nsql = "SELECT user FROM photos WHERE id='$osid' LIMIT 1";
+  $nquery = mysqli_query($db_conx, $nsql);
+  while ($nrow = mysqli_fetch_array($nquery, MYSQLI_ASSOC)) {
+    $tonotify = $nrow["user"];
+  }
+  if ($tonotify != $log_username) {
+    $asql = "SELECT email FROM users WHERE username='$tonotify' LIMIT 1";
+    $aquery = mysqli_query($db_conx, $asql);
+    while ($arow = mysqli_fetch_array($aquery, MYSQLI_ASSOC)) {
+      $e = $arow["email"];
+    }
+    $to = "$e";
+    $from = "pbiecamagru42@gmail.com";
+    $subject = "Camagru Notification PLEASE DO NOT RESPOND";
+    $message = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Camagru Message</title><link href="https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa" rel="stylesheet" type="text/css"></head><body style="margin:0px; font-family:"Nunito", sans-serif;"><div style="padding:10px; background:rgb(117, 52, 52); font-size:24px; color:#CCC;"><span style="font-family:"Damion", cursive; font-size:30px;">Camagru </span><a href="http://localhost:8080/camagru/index.php"></a>Account Notification</div><div style="padding:24px; font-size:17px;">Hello '.$tonotify.',<br /><br /> '.$log_username.' has just commented on your post! Please log into our site and check your notifications page to see the update! Thank you!<br /><br /><br /><br /></b></div></body></html>';
+    $headers = "From: $from\n";
+    $headers .= "MIME-Version: 1.0\n";
+    $headers .= "Content-type: text/html; charset=iso-8859-1\n";
+    mail($to, $subject, $message, $headers);
+  }
+
   mysqli_close($db_conx);
   echo "reply_ok|$id";
   exit();
