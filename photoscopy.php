@@ -22,6 +22,7 @@ if ($u == $log_username && $user_ok == true) {
   $photo_form .= '<input id="comment_input" type="text" name="comment" /><br />';
   //$photo_form .= '<p><input type="submit" value="Upload Photo Now" /></p>';
   $photo_form .= '<p><input id="change_photo_btn" class="inputfile" type="submit" value="Upload"/><label id="choose_photo_label" for="change_photo_btn">Upload</label></p>';
+  $photo_form .= '<p><input id="nevermind_photo_btn" class="inputfile" /><label id="choose_photo_label" for="nevermind_photo_btn" onclick="backToPhotoMenu()">Nevermind...</label></p>';
   $photo_form .= '</form>';
 }
 //Select the user galleries
@@ -123,6 +124,11 @@ if (mysqli_num_rows($query) < 1) {
         }
       }
       ajax.send("delete=photo&id="+id);
+    }
+    function backToPhotoMenu() {
+      _("snapdiv").style.display = "block";
+      _("container_photo").style.display = "block";
+      _("photos_section").style.display = "none";
     }
     var inputs = document.querySelectorAll( '.inputfile' );
     Array.prototype.forEach.call( inputs, function( input )

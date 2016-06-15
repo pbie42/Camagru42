@@ -62,9 +62,13 @@ function snap(){
   function startLightBox () {
     var lbBg = document.getElementById('lightBoxBg');
     var lb = document.getElementById('lightBox');
+    var mv = document.getElementById('myVideo');
+    var sd = document.getElementById('snapdiv');
 
     lbBg.style.display = "block";
     lb.style.display = "block";
+    mv.style.display = "none";
+    sd.style.display = "none";
   };
   //Wait 50 milliseconds; this is to allow the webcam to capture some video
   setTimeout(function () {
@@ -75,17 +79,21 @@ function snap(){
 
     //Draw the video frame to the canvas
     canvas.getContext('2d').drawImage(video, 0, 0);
-  }, 50);
+  }, 100);
 }, function (){console.warn("Error getting audio stream from getUserMedia")});
 };
 
 function dismiss() {
   var lbBg = document.getElementById('lightBoxBg');
   var lb = document.getElementById('lightBox');
-  location.href = "index.php";
+  var mv = document.getElementById('myVideo');
+  var sd = document.getElementById('snapdiv');
+  //location.href = "index.php";
 
   lbBg.style.display = "none";
   lb.style.display = "none";
+  mv.style.display = "block";
+  sd.style.display = "block";
 }
 
 function addPhoto () {
@@ -96,7 +104,7 @@ function addPhoto () {
   camera();
   apd.style.display = "none";
   cp.style.display = "block";
-  sd.style.display = "flex";
+  sd.style.display = "block";
 }
 
 function dismissPhoto () {

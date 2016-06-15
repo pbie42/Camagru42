@@ -128,10 +128,10 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   $likesbutton = "";
   $likesql = "SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1";
   $likesquery = mysqli_query($db_conx, $likesql);
-  if (mysqli_num_rows($likesquery) < 1) {
-    $likesbutton = '<img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'like\')" src="resources/likeempty.png" />';
-  } else {
+  if ($likesquery && (mysqli_num_rows($likesquery) > 0)) {
     $likesbutton = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'unlike\')" src="resources/likefull.png" />';
+  } else {
+    $likesbutton = '<img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'like\')" src="resources/likeempty.png" />';
   }
   $feedstring .= '<div id="message_section">
     <div id="post_'.$photoid.'" class="main_feed_area welcome_font">

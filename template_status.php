@@ -1,4 +1,15 @@
 <?php
+include_once 'php_includes/check_login_status.php';
+$u = "";
+if (isset($_SESSION["username"])) {
+  $u = preg_replace('#[^a-z0-9]#i', '', $_SESSION['username']);
+}
+if ($user_ok != true || $log_username == "") {
+  header("location: index.php");
+  exit();
+}
+?>
+<?php
 $status_ui = "";
 $statuslist = "";
 if($isOwner == "yes"){

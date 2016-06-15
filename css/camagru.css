@@ -55,7 +55,7 @@ label {
 /* HEADER */
 
 header {
-  width:               105%;
+  width:               100%;
   height:              75px;
   padding:             0;
 }
@@ -80,7 +80,7 @@ header {
 }
 
 #header_top {
-  width:               102%;
+  width:               100%;
   height:              75px;
   background-color:    rgb(117, 52, 52);
   display:             flex;
@@ -157,7 +157,7 @@ button.welcome_font {
 
 #body {
   width:               100%;
-  padding:             10px;
+  padding:             0px;
   padding-bottom:      50px;
   background-color:    #FAFAFA;
 }
@@ -616,8 +616,17 @@ option {
 #container_photo {
   margin:              0px auto;
   margin-top:          30px;
-  width:               640px;
-  height:              480px;
+  width:               360px;
+  height:              270px;
+  border:              10px #333 solid;
+  display: none;
+}
+
+#container_snap {
+  margin:              0px auto;
+  margin-top:          30px;
+  width:               360px;
+  height:              270px;
   border:              10px #333 solid;
   display: none;
 }
@@ -631,8 +640,9 @@ option {
 #snapdiv {
   margin-left:         auto;
   margin-right:        auto;
+  text-align:          center;
   margin-bottom:       20px;
-  width:               612px;
+  width:               350px;
   display:             none;
 }
 
@@ -648,13 +658,22 @@ option {
   margin-left:         auto;
 }
 
+#myVideo {
+  height: 270px;
+  width:  360px;
+}
+
 .acceptdecline {
+  display: block;
   justify-content:     center;
   text-align:          center;
   margin-left:         auto;
   margin-right:        auto;
   margin-top:          8px;
-  width:               620px;
+  width:               320px;
+  height: auto;
+  position:            relative;
+  z-index:             2;
 }
 
 .snapbutton {
@@ -668,12 +687,18 @@ option {
   padding:             2px;
   margin-top:          5px;
   font-size:           20px;
+  z-index:             2;
+}
+
+.snapbutton:hover {
+  background-color:    rgba(88, 2, 2, 1);
+  cursor:              pointer;
 }
 
 #myCanvas {
-  width:               640px;
-  height:              480px;
-  margin-top:          5px;
+  width:               360px;
+  height:              270px;
+  margin-top:          25px;
   background-color:    none;
   position:            relative;
   z-index:             1;
@@ -688,6 +713,7 @@ option {
   height:              100%;
   width:               100%;
   background-color:    black;
+  z-index:             1;
 }
 
 #lightBox {
@@ -712,7 +738,7 @@ option {
   margin-right:        auto;
   margin-top:          auto;
   margin-bottom:       25px;;
-  z-index:             0;
+  z-index:             -1;
   border:              1px solid;
   border-color:        #edeeee;
 }
@@ -955,7 +981,7 @@ textarea::-webkit-input-placeholder {
 /* FOOTER */
 
 footer {
-  width:               102%;
+  width:               100%;
   height:              50px;
   background:          none;
   position:            absolute;

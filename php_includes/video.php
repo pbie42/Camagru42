@@ -1,4 +1,4 @@
-<div id="lightBoxBg">
+<div id="lightBoxBg" onclick="dismiss()">
 
 </div>
 <div id="addphotodiv" onclick="addPhoto()">
@@ -10,11 +10,10 @@
     </video>
 
     <div id="lightBox">
-      <canvas id="myCanvas" width="700" height="700"></canvas>
+      <canvas id="myCanvas" width="360" height="360"></canvas>
       <div class="acceptdecline">
         <button class="snapbutton" type="button" name="button">Use it!</button>
         <button class="snapbutton" onclick="dismiss()" type="button" name="button">No thanks!</button>
-
       </div>
 
     </div>
