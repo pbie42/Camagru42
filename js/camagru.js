@@ -59,6 +59,15 @@ function snap(){
   //Get the canvas element
   var canvas = document.getElementById('myCanvas');
 
+  var canvas2 = document.getElementById("myCanvas2");
+  var ctx = canvas2.getContext("2d");
+  var canvasLeft = canvas2.offsetLeft;
+  var canvasTop = canvas2.offsetTop;
+  console.log("canvasLeft2");
+  console.log("canvasTop2");
+    console.log(canvasLeft);
+    console.log(canvasTop);
+
   function startLightBox () {
     var lbBg = document.getElementById('lightBoxBg');
     var lb = document.getElementById('lightBox');

@@ -659,8 +659,21 @@ option {
 }
 
 #myVideo {
-  height: 270px;
-  width:  360px;
+  height:              270px;
+  width:               360px;
+}
+
+#toolbox {
+  height:              175px;
+  width:               380;
+  margin-top:          5px;
+  overflow-x:          scroll;
+  display:             flex;
+}
+
+.mask {
+  max-height:          150px;
+  max-width:           150px;
 }
 
 .acceptdecline {
@@ -671,7 +684,7 @@ option {
   margin-right:        auto;
   margin-top:          8px;
   width:               320px;
-  height: auto;
+  height:              auto;
   position:            relative;
   z-index:             2;
 }
@@ -702,6 +715,15 @@ option {
   background-color:    none;
   position:            relative;
   z-index:             1;
+}
+
+#myCanvas2 {
+  width:               360px;
+  height:              270px;
+  margin-top:          -273px;
+  background-color:    none;
+  position:            absolute;
+  z-index:             3;
 }
 
 #lightBoxBg {
