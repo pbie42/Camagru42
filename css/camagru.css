@@ -711,7 +711,7 @@ option {
 #myCanvas {
   width:               360px;
   height:              270px;
-  margin-top:          25px;
+  margin-top:          21px;
   background-color:    none;
   position:            relative;
   z-index:             1;
@@ -719,8 +719,8 @@ option {
 
 #myCanvas2 {
   width:               360px;
-  height:              270px;
-  margin-top:          -273px;
+  height:              271px;
+  margin-top:          -274px;
   background-color:    none;
   position:            absolute;
   z-index:             3;

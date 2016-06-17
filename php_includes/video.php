@@ -8,9 +8,10 @@
 <div id="container_photo">
     <video id="myVideo" autoplay="true" id="videoElement">
     </video>
-    <canvas id="myCanvas2" width="360" height="270"></canvas>
+    <canvas id="myCanvas2" width="360" height="271" ondrop="add_img(event)" ondragover="event.preventDefault()"></canvas>
     <div id="lightBox">
-      <canvas id="myCanvas" width="360" height="360"></canvas>
+      <canvas id="myCanvas" width="360" height="270"></canvas>
+
       <div class="acceptdecline">
         <button class="snapbutton" type="button" name="button">Use it!</button>
         <button class="snapbutton" onclick="dismiss()" type="button" name="button">No thanks!</button>
@@ -26,8 +27,8 @@
   <div id="toolbox">
     <?php
       $i = 0;
-      while (++$i < 44) {
-        echo 	'<img id="img_'.$i.'" class="mask" src="masks/'.$i.'.png" draggable="true" onmouseover="camagru(\''.$i.'\')"></img>';
+      while (++$i < 50) {
+        echo 	'<img id="img_'.$i.'" class="mask" src="masks/'.$i.'.png" draggable="true" ondragstart="select_img(event)"></img>';
       }
     ?>
   </div>
@@ -91,11 +92,133 @@ function camagru(imgno) {
       console.log(dropY);
       // draw the drag image at the drop coordinates
 
-      if (ctx.drawImage(dropElement, dropX, dropY)) {
-        console.log("supposedly it worked");
-      }
-      console.log(dropElement);
+      ctx.drawImage(dropElement, dropX, dropY)
+
+
   }
 }
+
+var obj = [];
+var dragonce = false;
+var canvas = document.getElementById("myCanvas2");
+var ctx = canvas.getContext("2d");
+var width = 360;
+var height = 270;
+//function moveIt() {
+
+
+var dragok = false;
+
+function select_img(e)
+{
+	console.log(e.target.src);
+	e.dataTransfer.setData("text", e.target.src);
+}
+
+function add_img(e)
+{
+	e.preventDefault();
+	init_drag(e.dataTransfer.getData("text"));
+}
+
+function init_drag(img_src)
+{
+	var tmp;
+
+	tmp = {img: new Image(), size: 0, dragok: false, x: 50, y: 50};
+	tmp.img.src = img_src;
+	tmp.size = tmp.img.width > 150 ? 150 / tmp.img.width : 1;
+	obj.push(tmp);
+	canvas.onmousedown = myDown;
+	canvas.onmouseup = myUp;
+	canvas.ondblclick = myZoomIn;
+	canvas.oncontextmenu = myZoomOut;
+	canvas.onmousemove = myMove;
+}
+
+function draw()
+{
+	ctx.clearRect(0, 0, width, height);
+	obj.forEach(function(item, i)
+	{
+		ctx.drawImage(item.img, item.x - item.img.width * item.size / 2, item.y - item.img.height
+			* item.size / 2, item.img.width * item.size, item.img.height * item.size);
+	});
+}
+
+function myMove(e)
+{
+	var curs = false;
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas.offsetLeft && e.pageX > item.x - 50 +
+			canvas.offsetLeft && e.pageY < item.y + 50 + canvas.offsetTop &&
+			e.pageY > item.y - 50 + canvas.offsetTop)
+			curs = true;
+		canvas.style.cursor = curs ? 'pointer' : 'default';
+		if (item.dragok)
+		{
+			item.x = e.pageX - canvas.offsetLeft;
+			item.y = e.pageY - canvas.offsetTop;
+		}
+	});
+}
+
+function myZoomIn(e)
+{
+	e.preventDefault();
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas.offsetLeft && e.pageX > item.x - 50 +
+			canvas.offsetLeft && e.pageY < item.y + 50 + canvas.offsetTop &&
+			e.pageY > item.y - 50 + canvas.offsetTop)
+			item.size *= 1.2;
+	});
+}
+
+function myZoomOut(e)
+{
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas.offsetLeft && e.pageX > item.x - 50 +
+			canvas.offsetLeft && e.pageY < item.y + 50 + canvas.offsetTop &&
+			e.pageY > item.y - 50 + canvas.offsetTop)
+			item.size /= 1.2;
+	});
+	e.preventDefault();
+}
+
+function myDown(e)
+{
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas.offsetLeft && e.pageX > item.x - 50 +
+			canvas.offsetLeft && e.pageY < item.y + 50 + canvas.offsetTop &&
+			e.pageY > item.y - 50 + canvas.offsetTop)
+		{
+			if (e.button == 0 && !dragonce)
+			{
+				dragonce = true;
+				item.dragok = true;
+			}
+			if (e.button == 1)
+				obj.splice(i, 1);
+		}
+	});
+}
+
+function myUp()
+{
+	obj.forEach(function(item, i)
+	{
+		item.dragok = false;
+	});
+	dragonce = false;
+	canvas.style.cursor = 'default';
+}
+
+
+setInterval(draw, 10);
+
 
 </script>

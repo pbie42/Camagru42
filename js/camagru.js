@@ -73,7 +73,10 @@ function snap(){
     var lb = document.getElementById('lightBox');
     var mv = document.getElementById('myVideo');
     var sd = document.getElementById('snapdiv');
+    var myC2 = document.getElementById('myCanvas2');
 
+    myC2.style.zIndex = 4;
+    myC2.style.marginTop = 0;
     lbBg.style.display = "block";
     lb.style.display = "block";
     mv.style.display = "none";
@@ -98,6 +101,10 @@ function dismiss() {
   var mv = document.getElementById('myVideo');
   var sd = document.getElementById('snapdiv');
   //location.href = "index.php";
+  var myC2 = document.getElementById('myCanvas2');
+
+  myC2.style.zIndex = "";
+  myC2.style.marginTop = "";
 
   lbBg.style.display = "none";
   lb.style.display = "none";
@@ -109,7 +116,7 @@ function addPhoto () {
   var apd = document.getElementById('addphotodiv');
   var cp = document.getElementById('container_photo');
   var sd = document.getElementById('snapdiv');
-
+  console.log("This working?");
   camera();
   apd.style.display = "none";
   cp.style.display = "block";

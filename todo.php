@@ -26,3 +26,4 @@
 
 //TODO Comment deletion system is not working for some reason.
 ?>
+onmouseover="camagru(\''.$i.'\')"
