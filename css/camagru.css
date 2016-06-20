@@ -613,15 +613,6 @@ option {
   background-color:    rgb(75, 7, 7);
 }
 
-#container_photo {
-  margin:              0px auto;
-  margin-top:          30px;
-  width:               360px;
-  height:              270px;
-  border:              10px #333 solid;
-  display: none;
-}
-
 #container_snap {
   margin:              0px auto;
   margin-top:          30px;
@@ -631,11 +622,6 @@ option {
   display: none;
 }
 
-#videoElement {
-  width:               500px;
-  height:              375px;
-  background-color:    #666;
-}
 
 #snapdiv {
   margin-left:         auto;
@@ -656,11 +642,6 @@ option {
 #addphoto {
   margin-left:         auto;
   margin-left:         auto;
-}
-
-#myVideo {
-  height:              270px;
-  width:               360px;
 }
 
 #toolbox {
@@ -708,22 +689,46 @@ option {
   cursor:              pointer;
 }
 
+#container_photo {
+  margin:              0px auto;
+  margin-top:          30px;
+  width:               640px;
+  height:              480px;
+  border:              10px #333 solid;
+  display: none;
+}
+
+#myVideo {
+  height:              480px;
+  width:               640px;
+}
+
 #myCanvas {
-  width:               360px;
-  height:              270px;
-  margin-top:          21px;
+  width:               640px;
+  height:              480px;
+  margin-top:          -20px;
   background-color:    none;
   position:            relative;
   z-index:             1;
 }
 
 #myCanvas2 {
-  width:               360px;
-  height:              271px;
-  margin-top:          -274px;
+  width:               640px;
+  height:              480px;
+  top:          115px;
   background-color:    none;
-  position:            absolute;
+  display: block;
+  position:            absolute;;
   z-index:             3;
+}
+
+#myCanvas3 {
+  width:               640px;
+  height:              480px;
+  margin-top:          -35px;
+  background-color:    none;
+  position:            relative;
+  z-index:             1;
 }
 
 #lightBoxBg {

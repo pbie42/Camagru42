@@ -63,10 +63,6 @@ function snap(){
   var ctx = canvas2.getContext("2d");
   var canvasLeft = canvas2.offsetLeft;
   var canvasTop = canvas2.offsetTop;
-  console.log("canvasLeft2");
-  console.log("canvasTop2");
-    console.log(canvasLeft);
-    console.log(canvasTop);
 
   function startLightBox () {
     var lbBg = document.getElementById('lightBoxBg');
@@ -74,7 +70,10 @@ function snap(){
     var mv = document.getElementById('myVideo');
     var sd = document.getElementById('snapdiv');
     var myC2 = document.getElementById('myCanvas2');
+    var myC = document.getElementById('myCanvas');
 
+    myC.style.display= "none";
+    myC2.style.display = "none";
     myC2.style.zIndex = 4;
     myC2.style.marginTop = 0;
     lbBg.style.display = "block";
@@ -91,6 +90,14 @@ function snap(){
 
     //Draw the video frame to the canvas
     canvas.getContext('2d').drawImage(video, 0, 0);
+    var myC2 = document.getElementById('myCanvas2');
+    var can3 = document.getElementById('myCanvas3');
+    can3.width = video.videoWidth;
+    can3.height = video.videoHeight;
+    var ctx3 = can3.getContext('2d');
+
+    ctx3.drawImage(canvas, 0, 0);
+    ctx3.drawImage(myC2, 0, 0);
   }, 100);
 }, function (){console.warn("Error getting audio stream from getUserMedia")});
 };
@@ -102,9 +109,13 @@ function dismiss() {
   var sd = document.getElementById('snapdiv');
   //location.href = "index.php";
   var myC2 = document.getElementById('myCanvas2');
+  var myC = document.getElementById('myCanvas');
 
+  myC.style.display = "";
+  myC2.style.display = "";
   myC2.style.zIndex = "";
   myC2.style.marginTop = "";
+  myC2.style.position = "absolute";
 
   lbBg.style.display = "none";
   lb.style.display = "none";

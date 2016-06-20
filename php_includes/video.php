@@ -8,10 +8,10 @@
 <div id="container_photo">
     <video id="myVideo" autoplay="true" id="videoElement">
     </video>
-    <canvas id="myCanvas2" width="360" height="271" ondrop="add_img(event)" ondragover="event.preventDefault()"></canvas>
+    <canvas id="myCanvas2" width="640" height="480" ondrop="add_img(event)" ondragover="event.preventDefault()"></canvas>
     <div id="lightBox">
-      <canvas id="myCanvas" width="360" height="270"></canvas>
-
+      <canvas id="myCanvas" width="640" height="480"></canvas>
+      <canvas id="myCanvas3" width="640" height="480"></canvas>
       <div class="acceptdecline">
         <button class="snapbutton" type="button" name="button">Use it!</button>
         <button class="snapbutton" onclick="dismiss()" type="button" name="button">No thanks!</button>
@@ -102,8 +102,8 @@ var obj = [];
 var dragonce = false;
 var canvas = document.getElementById("myCanvas2");
 var ctx = canvas.getContext("2d");
-var width = 360;
-var height = 270;
+var width = 640;
+var height = 480;
 //function moveIt() {
 
 
@@ -125,7 +125,7 @@ function init_drag(img_src)
 {
 	var tmp;
 
-	tmp = {img: new Image(), size: 0, dragok: false, x: 50, y: 50};
+	tmp = {img: new Image(), size: 0, dragok: false, x: 250, y: 250};
 	tmp.img.src = img_src;
 	tmp.size = tmp.img.width > 150 ? 150 / tmp.img.width : 1;
 	obj.push(tmp);

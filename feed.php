@@ -26,6 +26,9 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   $filename = $row["filename"];
   $uploaddate = $row["uploaddate"];
   $likes = $row["likes"];
+  if ($likes == "") {
+    $likes = 0;
+  }
   //The part below is to deal with blocking checks
   $isFriend = false;
   $ownerBlockViewer = false;
@@ -189,7 +192,6 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     <script type="text/javascript">
     function replyToStatus(sid,user,ta,btn){
     	var data = _(ta).value;
-      console.log(data);
     	if(data == ""){
     		alert("Please type a reply");
     		return false;
@@ -246,16 +248,12 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     function likeStatus(photoid,liker,username,likes,action) {
       var ajax = ajaxObj("POST", "php_parsers/status_system.php");
       var numlike = parseInt(likes) + 1;
-      console.log("liked");
-      console.log(action);
-      console.log(photoid);
     	ajax.onreadystatechange = function() {
     		if(ajaxReturn(ajax) == true) {
     			if(ajax.responseText == "like_ok"){
             console.log("we are getting here");
     				_("like_button_div_"+photoid).innerHTML = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''+photoid+'\',\''+liker+'\',\''+username+'\',\''+numlike+'\',\'unlike\')" src="resources/likefull.png" />';
             _("like_number_"+photoid).innerHTML = numlike+" likes";
-            console.log("What about here?");
     			} else {
     				alert(ajax.responseText);
     			}
@@ -267,9 +265,6 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
       var ajax = ajaxObj("POST", "php_parsers/status_system.php");
       var numlike = likes - 1;
       var div = "like_button_div_";
-      console.log("unliked");
-      console.log(action);
-      console.log(photoid);
     	ajax.onreadystatechange = function() {
     		if(ajaxReturn(ajax) == true) {
     			if(ajax.responseText == "unlike_ok"){
