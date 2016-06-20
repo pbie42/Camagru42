@@ -85,6 +85,24 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
 }
 ?>
 <?php
+//TODO START HERE!! Need to put camagru image into DB as well as change size
+if (isset($_POST['cam']) && $_POST['cam'] != "") {
+  $gallery = "log_username";
+  $cam = $_POST['cam'];
+	if (isset($_POST['cam1']))
+		$cam = implode('', array($cam, $_POST['cam1']));
+	list($type, $cam) = explode(';', $cam);
+	list(, $cam) = explode(',', $cam);
+	$cam = imagecreatefromstring(base64_decode($cam));
+	$fileExt = "png";
+  $db_file_name = date("DMjGisY")."".rand(1000,9999).".".$fileExt;
+	$photo_path = '../user/all/'.$db_file_name.'';
+	imagepng($cam, $photo_path);
+  header("location: ../feed.php");
+  exit();
+}
+?>
+<?php
 if (isset($_FILES["photo"]["name"])) {
   $sql = "SELECT COUNT(id) FROM photos WHERE user='$log_username'";
   $query = mysqli_query($db_conx, $sql);

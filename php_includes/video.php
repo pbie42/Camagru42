@@ -13,7 +13,10 @@
       <canvas id="myCanvas" width="640" height="480"></canvas>
       <canvas id="myCanvas3" width="640" height="480"></canvas>
       <div class="acceptdecline">
-        <button class="snapbutton" type="button" name="button">Use it!</button>
+        <form id="pic_form" action="php_parsers/photo_system.php" method="post">
+          <input type="text" class="snapcomment" name="comment" placeholder=" Add a comment about this photo?" />
+        </form>
+        <button class="snapbutton" onclick="screenshot()" type="button" name="button">Use it!</button>
         <button class="snapbutton" onclick="dismiss()" type="button" name="button">No thanks!</button>
       </div>
 
@@ -101,9 +104,12 @@ function camagru(imgno) {
 var obj = [];
 var dragonce = false;
 var canvas = document.getElementById("myCanvas2");
+var camagru = document.getElementById('myCanvas3');
+var video = document.querySelector("#myVideo");
 var ctx = canvas.getContext("2d");
 var width = 640;
 var height = 480;
+var myphoto = false;
 //function moveIt() {
 
 
@@ -127,7 +133,7 @@ function init_drag(img_src)
 
 	tmp = {img: new Image(), size: 0, dragok: false, x: 250, y: 250};
 	tmp.img.src = img_src;
-	tmp.size = tmp.img.width > 150 ? 150 / tmp.img.width : 1;
+	tmp.size = tmp.img.width > 250 ? 250 / tmp.img.width : 1;
 	obj.push(tmp);
 	canvas.onmousedown = myDown;
 	canvas.onmouseup = myUp;
@@ -217,6 +223,27 @@ function myUp()
 	canvas.style.cursor = 'default';
 }
 
+function screenshot()
+{
+	var pic_form = document.querySelector('#pic_form');
+	var data, post;
+
+	if (!obj[0])
+		return ;
+
+	data = camagru.toDataURL('image/png');
+
+	if (data.length > 500000)
+	{
+		post = '<input class="camagru_data" type="text" name="cam" value="'+data.substr(0, 500000)
+			+'"></input><input class="camagru_data" type="text" name="cam1" value="'+data.slice(500000)
+			+'"></input>';
+	}
+	else
+		post = '<input class="camagru_data" type="text" name="cam" value="'+data+'"></input>';
+	pic_form.innerHTML += post;
+	pic_form.submit();
+}
 
 setInterval(draw, 10);
 
