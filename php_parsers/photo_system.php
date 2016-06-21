@@ -87,7 +87,7 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
 <?php
 //TODO START HERE!! Need to put camagru image into DB as well as change size
 if (isset($_POST['cam']) && $_POST['cam'] != "") {
-  $gallery = "log_username";
+  $gallery = $log_username;
   $cam = $_POST['cam'];
 	if (isset($_POST['cam1']))
 		$cam = implode('', array($cam, $_POST['cam1']));
@@ -115,14 +115,14 @@ if (isset($_POST['cam']) && $_POST['cam'] != "") {
   $query = mysqli_query($db_conx, $sql);
   $row = mysqli_fetch_array($query);
   $realid = $row["id"];
-  $testcomment = $_POST["comment"];
+  $testcomment = $_POST['comment_camagru'];
   if (strlen($testcomment) < 1) {
     $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())";
     $query = mysqli_query($db_conx, $sql);
     $id = mysqli_insert_id($db_conx);
     mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
   } else {
-    $comment = htmlentities($_POST['comment']);
+    $comment = htmlentities($_POST['comment_camagru']);
     $comment = mysqli_real_escape_string($db_conx, $comment);
     $anothertestcomment = "fuckin a homie";
     $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())";

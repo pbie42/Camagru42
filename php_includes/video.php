@@ -14,7 +14,7 @@
       <canvas id="myCanvas3" width="640" height="480"></canvas>
       <div class="acceptdecline">
         <form id="pic_form" action="php_parsers/photo_system.php" method="post">
-          <input type="text" class="snapcomment" name="comment" placeholder=" Add a comment about this photo?" />
+          <input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" />
         </form>
         <button class="snapbutton" onclick="screenshot()" type="button" name="button">Use it!</button>
         <button class="snapbutton" onclick="dismiss()" type="button" name="button">No thanks!</button>
@@ -226,6 +226,8 @@ function myUp()
 function screenshot()
 {
 	var pic_form = document.querySelector('#pic_form');
+  var comment = document.getElementById('snap_comment').value;
+  console.log(comment);
 	var data, post;
 
 	if (!obj[0])
@@ -233,6 +235,7 @@ function screenshot()
 
 	data = camagru.toDataURL('image/png');
 
+  var comment_post = '<input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" value="'+comment+'" />';
 	if (data.length > 500000)
 	{
 		post = '<input class="camagru_data" type="text" name="cam" value="'+data.substr(0, 500000)
@@ -241,7 +244,7 @@ function screenshot()
 	}
 	else
 		post = '<input class="camagru_data" type="text" name="cam" value="'+data+'"></input>';
-	pic_form.innerHTML += post;
+	pic_form.innerHTML = comment_post + post;
 	pic_form.submit();
 }
 

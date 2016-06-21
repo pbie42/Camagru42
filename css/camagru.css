@@ -743,7 +743,7 @@ option {
 #myCanvas3 {
   width:               640px;
   height:              480px;
-  margin-top:          -35px;
+  top:          0px;
   background-color:    none;
   position:            relative;
   z-index:             1;
@@ -763,7 +763,7 @@ option {
 
 #lightBox {
   position:            absolute;
-  top:                 7%;
+  top:                 115px;
   margin-left:         auto;
   margin-right:        auto;
   display:             none;
