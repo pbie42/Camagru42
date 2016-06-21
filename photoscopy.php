@@ -49,15 +49,15 @@ if (mysqli_num_rows($query) < 1) {
   }
 }
 ?>
+
         <div id="photos_section">
           <div class="main_area_photo welcome_font">
-            <div id="photo_form">
-              <?php echo $photo_form; ?>
-            </div><!--<div id="galleries">
-            <h2 id="section_title"><?php echo $u; ?>&#39;s Photo Galleries</h2>
+            <div id="drop-target">
+              <div id="photo_form">
+                <?php echo $photo_form; ?>
+              </div>
+            </div>
 
-              <?php echo $gallery_list; ?>
-            </div> -->
             <div id="photos">
 
             </div>
@@ -65,6 +65,25 @@ if (mysqli_num_rows($query) < 1) {
 
             </div>
           </div>
+        </div>
+        <div id="container_upload" width="640" height="480">
+          <canvas id="myUploadCanvas" width="640"></canvas>
+          <canvas id="myUploadCanvas2" ondrop="add_img2(event)" ondragover="event.preventDefault()"></canvas>
+        </div>
+        <div id="acceptdeclineupload">
+          <div id="toolbox">
+            <?php
+              $i = 0;
+              while (++$i < 50) {
+                echo 	'<img id="img_'.$i.'" class="mask" src="masks/'.$i.'.png" draggable="true" ondragstart="select_img2(event)"></img>';
+              }
+            ?>
+          </div>
+          <form id="pic_form" action="php_parsers/photo_system.php" method="post">
+            <input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" />
+          </form>
+          <button class="snapbutton" onclick="screenshot()" type="button" name="button">Use it!</button>
+          <button class="snapbutton" onclick="dismissupload()" type="button" name="button">No thanks!</button>
         </div>
     <script type="text/javascript">
     function showGallery(gallery,user) {
@@ -155,6 +174,227 @@ if (mysqli_num_rows($query) < 1) {
         label.innerHTML = labelVal;
     });
     });
+
+var MAX_WIDTH = 640;
+function render(src){
+	var image = new Image();
+	image.onload = function(){
+		var canvas = document.getElementById("myUploadCanvas");
+		if(image.width > MAX_WIDTH) {
+			image.height *= MAX_WIDTH / image.width;
+			image.width = MAX_WIDTH;
+		}
+    console.log(image.height);
+    console.log(image.width);
+    var containerwidth = image.width;
+    var containerheight = image.height;
+    var realheight = containerheight - 1;
+    _("container_upload").style.display = "block";
+    _("container_upload").style.height = realheight + "px";
+    _("container_upload").style.width = containerwidth + "px";
+    _("acceptdeclineupload").style.display = "block";
+    _("photos_section").style.display = "none";
+
+    var width = _("container_upload").style.width;
+    var height = _("container_upload").style.height;
+    console.log(height);
+    console.log(width);
+
+    _("myUploadCanvas").style.height = image.height;
+    _("myUploadCanvas").style.width = image.width;
+    _("myUploadCanvas2").style.height = containerheight + "px";
+    _("myUploadCanvas2").style.width = containerwidth + "px";
+		var ctx = canvas.getContext("2d");
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		canvas.width = image.width;
+		canvas.height = image.height;
+		ctx.drawImage(image, 0, 0, image.width, image.height);
+	};
+	image.src = src;
+}
+function loadImage(src){
+	//	Prevent any non-image file type from being read.
+	if(!src.type.match(/image.*/)){
+		console.log("The dropped file is not an image: ", src.type);
+		return;
+	}
+
+	//	Create our FileReader and run the results through the render function.
+	var reader = new FileReader();
+	reader.onload = function(e){
+		render(e.target.result);
+	};
+	reader.readAsDataURL(src);
+}
+var target = document.getElementById("drop-target");
+target.addEventListener("dragover", function(e){e.preventDefault();}, true);
+target.addEventListener("drop", function(e){
+	e.preventDefault();
+	loadImage(e.dataTransfer.files[0]);
+}, true);
+function dismissupload() {
+
+  _("container_upload").style.display = "none";
+  _("acceptdeclineupload").style.display = "none";
+  _("photos_section").style.display = "block";
+
+}
+var obj = [];
+var dragonce = false;
+var canvas2 = document.getElementById("myUploadCanvas2");
+var camagru = document.getElementById('myCanvas3');
+var video = document.querySelector("#myVideo");
+var ctx = canvas2.getContext("2d");
+var width = 640;
+var height = 480;
+var myphoto = false;
+//function moveIt() {
+
+
+var dragok = false;
+
+function select_img2(e)
+{
+	console.log(e.target.src);
+	e.dataTransfer.setData("text", e.target.src);
+}
+
+function add_img2(e)
+{
+  console.log("We are getting here");
+	e.preventDefault();
+	init_drag2(e.dataTransfer.getData("text"));
+}
+
+function init_drag2(img_src)
+{
+	var tmp;
+  console.log("init_drag2");
+	tmp = {img: new Image(), size: 0, dragok: false, x: 0, y: 0};
+	tmp.img.src = img_src;
+	tmp.size = tmp.img.width > 150 ? 150 / tmp.img.width : 1;
+	obj.push(tmp);
+  console.log("init_drag2 getting here");
+	canvas2.onmousedown = myDown2;
+	canvas2.onmouseup = myUp2;
+	canvas2.ondblclick = myZoomIn2;
+	canvas2.oncontextmenu = myZoomOut2;
+	canvas2.onmousemove = myMove2;
+}
+
+function draw2()
+{
+  console.log("draw2");
+	ctx.clearRect(0, 0, width, height);
+	obj.forEach(function(item, i)
+	{
+		ctx.drawImage(item.img, item.x - item.img.width * item.size / 2, item.y - item.img.height
+			* item.size / 2, item.img.width * item.size, item.img.height * item.size);
+	});
+}
+
+function myMove2(e)
+{
+  console.log("myMove2");
+	var curs = false;
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
+			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
+			e.pageY > item.y - 50 + canvas2.offsetTop)
+			curs = true;
+		canvas2.style.cursor = curs ? 'pointer' : 'default';
+		if (item.dragok)
+		{
+			item.x = e.pageX - canvas2.offsetLeft;
+			item.y = e.pageY - canvas2.offsetTop;
+		}
+	});
+}
+
+function myZoomIn2(e)
+{
+  console.log("myZoomIn2");
+	e.preventDefault();
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
+			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
+			e.pageY > item.y - 50 + canvas2.offsetTop)
+			item.size *= 1.2;
+	});
+}
+
+function myZoomOut2(e)
+{
+  console.log("myZoomOut2");
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
+			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
+			e.pageY > item.y - 50 + canvas2.offsetTop)
+			item.size /= 1.2;
+	});
+	e.preventDefault();
+}
+
+function myDown2(e)
+{
+  console.log("myDown2");
+	obj.forEach(function(item, i)
+	{
+		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
+			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
+			e.pageY > item.y - 50 + canvas2.offsetTop)
+		{
+			if (e.button == 0 && !dragonce)
+			{
+				dragonce = true;
+				item.dragok = true;
+			}
+			if (e.button == 1)
+				obj.splice(i, 1);
+		}
+	});
+}
+
+function myUp2()
+{
+  console.log("myUp2");
+	obj.forEach(function(item, i)
+	{
+		item.dragok = false;
+	});
+	dragonce = false;
+	canvas2.style.cursor = 'default';
+}
+
+function screenshot2()
+{
+	var pic_form = document.querySelector('#pic_form');
+  var comment = document.getElementById('snap_comment').value;
+  console.log(comment);
+	var data, post;
+
+	if (!obj[0])
+		return ;
+
+	data = camagru.toDataURL('image/png');
+
+  var comment_post = '<input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" value="'+comment+'" />';
+	if (data.length > 500000)
+	{
+		post = '<input class="camagru_data" type="text" name="cam" value="'+data.substr(0, 500000)
+			+'"></input><input class="camagru_data" type="text" name="cam1" value="'+data.slice(500000)
+			+'"></input>';
+	}
+	else
+		post = '<input class="camagru_data" type="text" name="cam" value="'+data+'"></input>';
+	pic_form.innerHTML = comment_post + post;
+	pic_form.submit();
+}
+
+setInterval(draw2, 10);
     </script>
   </body>
 </html>

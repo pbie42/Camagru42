@@ -670,6 +670,19 @@ option {
   z-index:             2;
 }
 
+#acceptdeclineupload {
+  display: none;
+  justify-content:     center;
+  text-align:          center;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          8px;
+  width:               320px;
+  height:              auto;
+  position:            relative;
+  z-index:             2;
+}
+
 .snapbutton {
   width:               306px;
   height:              36px;
@@ -687,6 +700,18 @@ option {
 .snapbutton:hover {
   background-color:    rgba(88, 2, 2, 1);
   cursor:              pointer;
+}
+
+#button_upload {
+  display: none;
+}
+
+#container_upload {
+  margin:              0px auto;
+  margin-top:          30px;
+  width:               640px;
+  border:              10px #333 solid;
+  display:             none;
 }
 
 #container_photo {
@@ -719,6 +744,19 @@ option {
 #myVideo {
   height:              480px;
   width:               640px;
+}
+
+#myUploadCanvas {
+  z-index: 1;
+}
+
+#myUploadCanvas2 {
+  top:          115px;
+  margin-left: 250px;
+  background-color:    none;
+  display: block;
+  position:            absolute;;
+  z-index:             4;
 }
 
 #myCanvas {

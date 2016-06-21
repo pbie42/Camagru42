@@ -40,6 +40,7 @@
 function addPhotoMenu() {
   _("snapdiv").style.display = "none";
   _("container_photo").style.display = "none";
+  //_("container_upload").style.display = "block";
   _("photos_section").style.display = "block";
 }
 function camagru(imgno) {
@@ -107,8 +108,8 @@ var canvas = document.getElementById("myCanvas2");
 var camagru = document.getElementById('myCanvas3');
 var video = document.querySelector("#myVideo");
 var ctx = canvas.getContext("2d");
-var width = 640;
-var height = 480;
+var width = 200;
+var height = 200;
 var myphoto = false;
 //function moveIt() {
 
@@ -196,6 +197,7 @@ function myZoomOut(e)
 
 function myDown(e)
 {
+  console.log("myDown");
 	obj.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas.offsetLeft && e.pageX > item.x - 50 +
