@@ -174,18 +174,16 @@ if (mysqli_num_rows($query) < 1) {
         label.innerHTML = labelVal;
     });
     });
-
-var MAX_WIDTH = 640;
+var height2;
+var MAX_WIDTH = 300;
 function render(src){
 	var image = new Image();
 	image.onload = function(){
-		var canvas = document.getElementById("myUploadCanvas");
+		var canvas3 = document.getElementById("myUploadCanvas");
 		if(image.width > MAX_WIDTH) {
 			image.height *= MAX_WIDTH / image.width;
 			image.width = MAX_WIDTH;
 		}
-    console.log(image.height);
-    console.log(image.width);
     var containerwidth = image.width;
     var containerheight = image.height;
     var realheight = containerheight - 1;
@@ -202,13 +200,13 @@ function render(src){
 
     _("myUploadCanvas").style.height = image.height;
     _("myUploadCanvas").style.width = image.width;
-    _("myUploadCanvas2").style.height = containerheight + "px";
-    _("myUploadCanvas2").style.width = containerwidth + "px";
-		var ctx = canvas.getContext("2d");
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		canvas.width = image.width;
-		canvas.height = image.height;
-		ctx.drawImage(image, 0, 0, image.width, image.height);
+    height2 = containerheight;
+    //_("myUploadCanvas2").style.width = containerwidth + "px";
+		var ctx3 = canvas3.getContext("2d");
+		ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
+		canvas3.width = image.width;
+		canvas3.height = image.height;
+		ctx3.drawImage(image, 0, 0, image.width, image.height);
 	};
 	image.src = src;
 }
@@ -239,14 +237,20 @@ function dismissupload() {
   _("photos_section").style.display = "block";
 
 }
-var obj = [];
+var obj2 = [];
 var dragonce = false;
 var canvas2 = document.getElementById("myUploadCanvas2");
-var camagru = document.getElementById('myCanvas3');
-var video = document.querySelector("#myVideo");
-var ctx = canvas2.getContext("2d");
-var width = 640;
-var height = 480;
+//var camagru = document.getElementById('myCanvas3');
+//var video = document.querySelector("#myVideo");
+var ctx2 = canvas2.getContext("2d");
+var width2 = _("myUploadCanvas").width;
+var ogheight = _("myUploadCanvas").height;
+var height2 = ogheight + ogheight;
+var test = _("myUploadCanvas2").width;
+console.log("width is");
+console.log(width2);
+console.log("height is");
+console.log(height2);
 var myphoto = false;
 //function moveIt() {
 
@@ -270,10 +274,10 @@ function init_drag2(img_src)
 {
 	var tmp;
   console.log("init_drag2");
-	tmp = {img: new Image(), size: 0, dragok: false, x: 0, y: 0};
+	tmp = {img: new Image(), size: 0, dragok: false, x: 50, y: 50};
 	tmp.img.src = img_src;
 	tmp.size = tmp.img.width > 150 ? 150 / tmp.img.width : 1;
-	obj.push(tmp);
+	obj2.push(tmp);
   console.log("init_drag2 getting here");
 	canvas2.onmousedown = myDown2;
 	canvas2.onmouseup = myUp2;
@@ -284,11 +288,10 @@ function init_drag2(img_src)
 
 function draw2()
 {
-  console.log("draw2");
-	ctx.clearRect(0, 0, width, height);
-	obj.forEach(function(item, i)
+	ctx2.clearRect(0, 0, width2, height2);
+	obj2.forEach(function(item, i)
 	{
-		ctx.drawImage(item.img, item.x - item.img.width * item.size / 2, item.y - item.img.height
+		ctx2.drawImage(item.img, item.x - item.img.width * item.size / 2, item.y - item.img.height
 			* item.size / 2, item.img.width * item.size, item.img.height * item.size);
 	});
 }
@@ -297,7 +300,7 @@ function myMove2(e)
 {
   console.log("myMove2");
 	var curs = false;
-	obj.forEach(function(item, i)
+	obj2.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
 			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
@@ -316,7 +319,7 @@ function myZoomIn2(e)
 {
   console.log("myZoomIn2");
 	e.preventDefault();
-	obj.forEach(function(item, i)
+	obj2.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
 			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
@@ -328,7 +331,7 @@ function myZoomIn2(e)
 function myZoomOut2(e)
 {
   console.log("myZoomOut2");
-	obj.forEach(function(item, i)
+	obj2.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
 			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
@@ -341,7 +344,7 @@ function myZoomOut2(e)
 function myDown2(e)
 {
   console.log("myDown2");
-	obj.forEach(function(item, i)
+	obj2.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
 			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
@@ -353,7 +356,7 @@ function myDown2(e)
 				item.dragok = true;
 			}
 			if (e.button == 1)
-				obj.splice(i, 1);
+				obj2.splice(i, 1);
 		}
 	});
 }
@@ -361,7 +364,7 @@ function myDown2(e)
 function myUp2()
 {
   console.log("myUp2");
-	obj.forEach(function(item, i)
+	obj2.forEach(function(item, i)
 	{
 		item.dragok = false;
 	});

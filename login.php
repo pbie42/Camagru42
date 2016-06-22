@@ -1,8 +1,10 @@
 <?php
 
   //If user is already logged in I header them away
-include_once 'php_includes/check_login_status.php';
-
+  if (isset($_SESSION["username"])) {
+    //header("location: localhost:8080/camagru/user.php?u=".$_SESSION["username"]);
+    exit();
+  }
 ?>
 <?php
 if (isset($_POST["logincheck"])) {
@@ -82,7 +84,7 @@ if (isset($_POST["logincheck"])) {
   </div>
   <div id="login_signup">
     <h4 class="welcome_font">Don't have an Account?</h4>
-    <form class="" action="signup.php" method="post">
+    <form class="" action="index.php" method="post">
       <button id="signupbtn" class="welcome_font" type="submit" value="signup" name="submit">Sign Up</button>
     </form>
   </div>

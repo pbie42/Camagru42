@@ -83,85 +83,18 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
   header("location: ../user.php?u=$log_username");
   exit();
 }
+//TODO Finish video at 20:58
 ?>
 <?php
-//TODO START HERE!! Need to put camagru image into DB as well as change size
-if (isset($_POST['cam']) && $_POST['cam'] != "") {
-  $gallery = $log_username;
-  $cam = $_POST['cam'];
-	if (isset($_POST['cam1']))
-		$cam = implode('', array($cam, $_POST['cam1']));
-	list($type, $cam) = explode(';', $cam);
-	list(, $cam) = explode(',', $cam);
-	$cam = imagecreatefromstring(base64_decode($cam));
-	$fileExt = "png";
-  $db_file_name = date("DMjGisY")."".rand(1000,9999).".".$fileExt;
-	$photo_path = "../user/all/$db_file_name";
-	imagepng($cam, $photo_path);
-  $photo_path_user = "../user/$log_username/$db_file_name";
-  imagepng($cam, $photo_path_user);
-  include_once '../php_includes/image_resize.php';
-  $target_file = "../user/$log_username/$db_file_name";
-  $resized_file = "../user/$log_username/$db_file_name";
-  $target_file_all = "../user/all/$db_file_name";
-  $resized_file_all = "../user/all/$db_file_name";
-  $wmax = 300;
-  $hmax = 300;
-  image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
-  image_resize($target_file_all, $resized_file_all, $wmax, $hmax, $fileExt);
-  $sql = "INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())";
-  $query = mysqli_query($db_conx, $sql);
-  $sql = "SELECT id FROM photos WHERE filename='$db_file_name'";
-  $query = mysqli_query($db_conx, $sql);
-  $row = mysqli_fetch_array($query);
-  $realid = $row["id"];
-  $testcomment = $_POST['comment_camagru'];
-  if (strlen($testcomment) < 1) {
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
-  } else {
-    $comment = htmlentities($_POST['comment_camagru']);
-    $comment = mysqli_real_escape_string($db_conx, $comment);
-    $anothertestcomment = "fuckin a homie";
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
-  }
-  $friends = array();
-  $fquery = mysqli_query($db_conx, "SELECT user1 FROM friends WHERE user2='$log_username' AND accepted='1'");
-  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
-    array_push($friends, $frow["user1"]);
-  }
-  $fquery = mysqli_query($db_conx, "SELECT user2 FROM friends WHERE user1='$log_username' AND accepted='1'");
-  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
-    array_push($friends, $frow["user2"]);
-  }
-  for ($i=0; $i < count($friends); $i++) {
-    $friend = $friends[$i];
-    $app = "Post";
-    $note = '<span class="username">'.$log_username.'</span> made a new post!<br /><a href="feed.php#post_'.$realid.'">Click here to view the post</a>';
-    mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
-  }
-  header("location: ../feed.php");
-  exit();
-}
-?>
-<?php
-if (isset($_FILES["photo"]["name"])) {
+if (isset($_FILES["photo"]["name"]) && isset($_POST["gallery"])) {
   $sql = "SELECT COUNT(id) FROM photos WHERE user='$log_username'";
   $query = mysqli_query($db_conx, $sql);
   $row = mysqli_fetch_row($query);
-
-  //TODO get rid of this part below when I make the feed.
   if ($row[0] > 14) {
     header("location: ../message.php?msg=This user has uploaded too many photos");
     exit();
   }
-  //$gallery = preg_replace('#[^a-z 0-9,]#i', '', $_POST["gallery"]);
-  $gallery = $log_username;
+  $gallery = preg_replace('#[^a-z 0-9,]#i', '', $_POST["gallery"]);
   $fileName = $_FILES["photo"]["name"];
   $fileTmpLoc = $_FILES["photo"]["tmp_name"];
   $fileType = $_FILES["photo"]["type"];
@@ -188,10 +121,7 @@ if (isset($_FILES["photo"]["name"])) {
     header("location: ../message.php?msg=ERROR: An unknown error occurred");
     exit();
   }
-  if ($moveResult = move_uploaded_file($fileTmpLoc, "../user/$log_username/$db_file_name")) {
-    copy("../user/$log_username/$db_file_name", "../user/all/$db_file_name");
-  }
-
+  $moveResult = move_uploaded_file($fileTmpLoc, "../user/$log_username/$db_file_name");
   if ($moveResult != true) {
     header("location: ../message.php?msg=ERROR: File upload failed");
     exit();
@@ -203,48 +133,11 @@ if (isset($_FILES["photo"]["name"])) {
     $target_file = "../user/$log_username/$db_file_name";
     $resized_file = "../user/$log_username/$db_file_name";
     image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
-    $target_file = "../user/all/$db_file_name";
-    $resized_file = "../user/all/$db_file_name";
-    image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
   }
   $sql = "INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())";
   $query = mysqli_query($db_conx, $sql);
-  $sql = "SELECT id FROM photos WHERE filename='$db_file_name'";
-  $query = mysqli_query($db_conx, $sql);
-  $row = mysqli_fetch_array($query);
-  $realid = $row["id"];
-  $testcomment = $_POST["comment"];
-  if (strlen($testcomment) < 1) {
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
-  } else {
-    $comment = htmlentities($_POST['comment']);
-    $comment = mysqli_real_escape_string($db_conx, $comment);
-    $anothertestcomment = "fuckin a homie";
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
-  }
-  $friends = array();
-  $fquery = mysqli_query($db_conx, "SELECT user1 FROM friends WHERE user2='$log_username' AND accepted='1'");
-  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
-    array_push($friends, $frow["user1"]);
-  }
-  $fquery = mysqli_query($db_conx, "SELECT user2 FROM friends WHERE user1='$log_username' AND accepted='1'");
-  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
-    array_push($friends, $frow["user2"]);
-  }
-  for ($i=0; $i < count($friends); $i++) {
-    $friend = $friends[$i];
-    $app = "Post";
-    $note = '<span class="username">'.$log_username.'</span> made a new post!<br /><a href="feed.php#post_'.$realid.'">Click here to view the post</a>';
-    mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
-  }
-  //header("location: ../photos.php?u=$log_username");
-  header("location: ../feed.php");
+  mysqli_close($db_conx);
+  header("location: ../photos.php?u=$log_username");
   exit();
 }
 ?>

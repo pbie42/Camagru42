@@ -152,7 +152,7 @@ if ($friend_count < 1) {
     } else {
       $friend_pic = 'resources/user.png';
     }
-    $friendsHTML .= '<a href="user.php?u='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"></a><p id="friend_name">'.$friend_username.'</p><br />';
+    $friendsHTML .= '<a href="user.php?u='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"</a><p id="friend_name">'.$friend_username.'</p><br />';
   }
 }
 ?>
@@ -202,18 +202,18 @@ else {
             <p>Last Session: <?php echo $lastsession; ?></p>
             <p>Number of Friends: <?php echo $friend_count; ?></p>
             <hr />
-            <p><span id="friendBtn" class="userspan"><?php echo $friend_button; ?></p>
+            <p><span id="friendBtn" class="userspan"></p>
             <p><span id="blockBtn" class="userspan"><?php echo $block_button; ?></span></p>
             <hr />
             <h1 id="notificationtitle" class="welcome_font">Friends</h1>
             <?php echo $friendsHTML; ?>
             <hr>
             <div id="photo_showcase" onclick="window.location = 'photos.php?u=<?php echo $u; ?>';" title="view <?php echo $u; ?>&#39;s photo galleries">
-
+              <?php echo $coverpic; ?>
             </div>
-
+            <hr>
+            <?php include_once 'template_status.php'; ?>
           </div>
-          <?php include_once 'feeduser.php'; ?>
         </div>
       </div>
       <?php include_once 'php_includes/footer.php'; ?>

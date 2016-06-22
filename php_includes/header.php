@@ -20,33 +20,12 @@ if ($user_ok == true) {
 <header>
   <div id="header_top">
     <div id="brand">
-      <?php
-        include_once 'php_includes/check_login_status.php';
-        if ($user_ok == true || $log_username != "") {
-        ?>
-        <a href="feed.php">
-          <h1 class="logo_font">Camagru</h1>
-        </a>
-        <a href="feed.php">
-          <img id="logo_header" src="resources/retrocam.png" alt="" />
-        </a>
-      <?php
-        } else {
-      ?>
-        <a href="index.php">
-          <h1 class="logo_font">Camagru</h1>
-        </a>
-        <a href="index.php">
-          <img id="logo_header" src="resources/retrocam.png" alt="" />
-        </a>
-      <?php
-        }
-      ?>
-
-
-
-
-
+      <a href="index.php">
+        <h1 class="logo_font">Camagru</h1>
+      </a>
+      <a href="index.php">
+        <img id="logo_header" src="resources/retrocam.png" alt="" />
+      </a>
     </div> <!-- brand -->
 
     <div id="menu">
