@@ -17,6 +17,10 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   $username = $row["user"];
   $filename = $row["filename"];
   $uploaddate = $row["uploaddate"];
+  $likes = $row["likes"];
+  if ($likes == "") {
+    $likes = 0;
+  }
 
   //The part below is to deal with blocking checks
   $isFriend = false;
@@ -117,6 +121,14 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
   	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event,'.$statusid.',\''.$log_username.'\',\'replytext_'.$statusid.'\',this)" placeholder="Add a comment..."></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
   		}
   }
+  $likesbutton = "";
+  $likesql = "SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1";
+  $likesquery = mysqli_query($db_conx, $likesql);
+  if ($likesquery && (mysqli_num_rows($likesquery) > 0)) {
+    $likesbutton = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'unlike\')" src="resources/likefull.png" />';
+  } else {
+    $likesbutton = '<img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'like\')" src="resources/likeempty.png" />';
+  }
   $feedstring .= '<div id="message_section">
     <div id="post_'.$photoid.'" class="main_feed_area welcome_font">
       <div class="postheader">
@@ -133,7 +145,10 @@ while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
         <img src="user/all/'.$filename.'" />
       </div>
       <div class="post_likes">
-
+        <div id="like_button_div_'.$photoid.'">
+          '.$likesbutton.'
+        </div>
+        <h4 id="like_number_'.$photoid.'" class="number_likes">'.$likes.' likes</h4>
       </div>
       <div id="statusarea">
         '.$statuslist.'

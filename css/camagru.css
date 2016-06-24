@@ -55,7 +55,7 @@ label {
 /* HEADER */
 
 header {
-  width:               105%;
+  width:               100%;
   height:              75px;
   padding:             0;
 }
@@ -80,7 +80,7 @@ header {
 }
 
 #header_top {
-  width:               102%;
+  width:               100%;
   height:              75px;
   background-color:    rgb(117, 52, 52);
   display:             flex;
@@ -157,7 +157,7 @@ button.welcome_font {
 
 #body {
   width:               100%;
-  padding:             10px;
+  padding:             0px;
   padding-bottom:      50px;
   background-color:    #FAFAFA;
 }
@@ -221,6 +221,14 @@ button.welcome_font {
   margin:              0;
   margin-bottom:       15px;
   font-size:           15px;
+  font-family:         'Nunito', sans-serif;
+}
+
+#login_forgot:hover {
+  margin:              0;
+  margin-bottom:       15px;
+  font-size:           15px;
+  color:               #535353;
   font-family:         'Nunito', sans-serif;
 }
 
@@ -575,32 +583,60 @@ option {
 /*****************************************************************************/
 /* Photo */
 
-#container_photo {
+.main_area_photo {
+  width:               350px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  text-align:          center;
+  border-radius:       10px;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          auto;
+  margin-bottom:       20px;;
+  z-index:             0;
+  border:              1px solid;
+  border-color:        #edeeee;
+}
+
+#choose_photo_label {
+  width:               300px !important;
+  border-radius:       3px;
+  margin-left:         auto;
+  margin-right:        auto;
+  background-color:    rgb(117, 52, 52);
+}
+
+#choose_photo_label:hover {
+  border-radius:       3px;
+  margin-left:         auto;
+  margin-right:        auto;
+  background-color:    rgb(75, 7, 7);
+}
+
+#container_snap {
   margin:              0px auto;
   margin-top:          30px;
-  width:               640px;
-  height:              480px;
+  width:               360px;
+  height:              270px;
   border:              10px #333 solid;
   display: none;
 }
 
-#videoElement {
-  width:               500px;
-  height:              375px;
-  background-color:    #666;
-}
 
 #snapdiv {
   margin-left:         auto;
   margin-right:        auto;
-  width:               612px;
-  display: none;
+  text-align:          center;
+  margin-bottom:       20px;
+  width:               350px;
+  display:             none;
 }
 
 #addphotodiv {
   margin-left:         auto;
   margin-right:        auto;
   width:               310px;
+  margin-bottom:       20px;
 }
 
 #addphoto {
@@ -608,13 +644,31 @@ option {
   margin-left:         auto;
 }
 
+#toolbox {
+  height:              175px;
+  width:               380;
+  margin-top:          5px;
+  overflow-x:          scroll;
+  display:             flex;
+}
+
+
+.mask {
+  max-height:          150px;
+  max-width:           150px;
+}
+
 .acceptdecline {
+  display: block;
   justify-content:     center;
   text-align:          center;
   margin-left:         auto;
   margin-right:        auto;
   margin-top:          8px;
-  width:               620px;
+  width:               320px;
+  height:              auto;
+  position:            relative;
+  z-index:             2;
 }
 
 .snapbutton {
@@ -628,12 +682,140 @@ option {
   padding:             2px;
   margin-top:          5px;
   font-size:           20px;
+  z-index:             2;
+}
+
+.bottombutton {
+  margin-bottom:       10px;
+}
+
+.snapbutton:hover {
+  background-color:    rgba(88, 2, 2, 1);
+  cursor:              pointer;
+}
+
+.addphotobutton {
+  width:               306px;
+  height:              36px;
+  background-color:    rgb(117, 52, 52);
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  color:               #FFFFFF;
+  padding:             2px;
+  margin-top:          20px;
+  font-size:           20px;
+  z-index:             2;
+}
+
+#pleaseaddphoto {
+  display:             none;
+  color:               #FFFFFF;
+  font-size:           20px;
+}
+
+#feeduser {
+  display:             none;
+}
+
+#uploadcamagru {
+  display:             none;
+  color:               rgb(117, 52, 52);
+}
+
+#container_photo {
+  margin:              0px auto;
+  margin-top:          30px;
+  width:               640px;
+  height:              480px;
+  border:              10px #333 solid;
+  display: none;
+}
+
+.camagru_data {
+  display:             none;
+}
+
+.snapcomment {
+  width:               306px;
+  height:              36px;
+  background-color:    #FFFFFF;
+  color:               #838383;
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  padding:             0;
+  margin-top:          5px;
+  font-size:           20px;
+  z-index:             2;
+}
+
+#acceptdeclineupload {
+  display: none;
+  justify-content:     center;
+  text-align:          center;
+  margin-left:         auto;
+  margin-right:        auto;
+  margin-top:          8px;
+  width:               320px;
+  height:              auto;
+  position:            relative;
+  z-index:             2;
+}
+
+#container_upload {
+  margin:              0px auto;
+  margin-top:          30px;
+  width:               640px;
+  border:              10px #333 solid;
+  display:             none;
+}
+
+#myUploadCanvas {
+  z-index: 1;
+}
+
+#myUploadCanvas2 {
+  top:                 115px;
+  background-color:    none;
+  display: block;
+
+  position:            absolute;;
+  z-index:             4;
+}
+
+#myUploadCanvas3 {
+  display: none;
+}
+
+#myVideo {
+  height:              480px;
+  width:               640px;
 }
 
 #myCanvas {
   width:               640px;
   height:              480px;
-  margin-top:          5px;
+  margin-top:          -20px;
+  background-color:    none;
+  position:            relative;
+  z-index:             1;
+}
+
+#myCanvas2 {
+  width:               640px;
+  height:              480px;
+  top:                 115px;
+  background-color:    none;
+  display:             block;
+  position:            absolute;;
+  z-index:             3;
+}
+
+#myCanvas3 {
+  width:               640px;
+  height:              480px;
+  top:                 0px;
   background-color:    none;
   position:            relative;
   z-index:             1;
@@ -648,11 +830,12 @@ option {
   height:              100%;
   width:               100%;
   background-color:    black;
+  z-index:             1;
 }
 
 #lightBox {
   position:            absolute;
-  top:                 7%;
+  top:                 115px;
   margin-left:         auto;
   margin-right:        auto;
   display:             none;
@@ -663,32 +846,29 @@ option {
 /* FEED */
 
 .main_feed_area {
-  height:              auto;
-  width:               600px;
+  width:               350px;
   background-color:    #FFFFFF;
   color:               #838383;
-  border-radius:       0px;
+  text-align:          center;
+  border-radius:       10px;
   margin-left:         auto;
   margin-right:        auto;
-  margin-top:          20px;
-  margin-bottom:       100px;
+  margin-top:          auto;
+  margin-bottom:       25px;;
+  z-index:             -1;
   border:              1px solid;
   border-color:        #edeeee;
-  font-family:        'Nunito', sans-serif;
-
 }
 
 .feed_username {
   text-align:          left;
   width:               50%;
-  padding-left:        15px;
   padding-top:         5px;
 }
 
 .feed_date {
   width:               50%;
   text-align:          right;
-  padding-right:       15px;
   padding-top:         5px;
 }
 
@@ -706,7 +886,9 @@ option {
 }
 
 .postheader {
-  width:               100%;
+  width:               300px;
+  margin-left:         auto;
+  margin-right:        auto;
   display:             flex;
 }
 
@@ -727,6 +909,23 @@ option {
   margin-top:          16px;
 }
 
+.post_likes {
+  text-align:          left;
+  display:             flex;
+}
+
+.likebutton {
+  margin-left:         25px;
+  height:              20px;
+  width:               20px;
+}
+
+.number_likes {
+  width:               100px;
+  margin:              0;
+  margin-left:         10px;
+}
+
 .username {
   color:               rgb(117, 52, 52);
 }
@@ -740,8 +939,9 @@ option {
   margin-left:         10px;
 }
 
-.comment {
-
+.commentmade {
+width:                 315px;
+margin-bottom:         10px;
 }
 
 .add_comments {
@@ -765,16 +965,63 @@ option {
 }
 
 .textbox {
-  border:             none;
-  resize:             none;
-  width:              300px;
+  border:              none;
+  resize:              none;
+  width:               300px;
+  margin-left:         20px;
 }
 
 .statusBtn {
-  display: none;
+  display:             none;
 }
 
 .replyBtn {
+  display:             none;
+}
+
+.status_plus_delete {
+  display: flex;
+}
+
+.status_boxes {
+  height:              auto;
+  display:             block;
+  text-align:          left;
+  margin-left:         10px;
+  margin-bottom:       5px;
+  width:               300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reply_boxes {
+  height:              auto;
+  display:             block;
+  text-align:          left;
+  margin-left:         0px;
+  margin-bottom:       5px;
+  width:               300px;
+}
+
+.status_length {
+  width:               310px;
+}
+
+#statusui {
+  text-align:          center;
+}
+
+textarea::-webkit-input-placeholder {
+  font-size:           15px;
+}
+
+#statusarea {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#template_status {
+  text-align: left;
 }
 
 #feed_section {
@@ -789,6 +1036,18 @@ option {
 
 #photo img {
   width:               inherit;
+}
+
+#photos_section {
+  display:             none;
+  position:            relative;
+  width:               100%;
+  height:              100%;
+}
+
+#comment_input {
+  resize: both;
+  width: 294px;
 }
 
 /*****************************************************************************/
@@ -839,7 +1098,7 @@ option {
 /* FOOTER */
 
 footer {
-  width:               102%;
+  width:               100%;
   height:              50px;
   background:          none;
   position:            absolute;
@@ -923,6 +1182,7 @@ header .menu-icon {
   cursor:               pointer;
   display:              inline-block;
   float:                right;
+  width:                50px;
   padding:              28px 20px;
   position:             relative;
   user-select:          none;

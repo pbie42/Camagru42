@@ -54,7 +54,6 @@ $profile_pic = '<img id="profile_avatar" src="user/'.$u.'/'.$avatar.'" alt="'.$u
 if ($avatar == NULL) {
   $profile_pic = '<img class="avatar" src="resources/user.png" alt="'.$user1.'" />';
 }
-//TODO Will need to customize id tags for this page as well.
 ?>
 <?php
 //The part below is to deal with blocking checks

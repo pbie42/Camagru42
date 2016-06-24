@@ -1,7 +1,9 @@
 <?php
 //session_start();
 //If user is logged in, header them away
-if (isset($_SESSION["username"])) {
+include_once 'php_includes/check_login_status.php';
+if ($user_ok == true || $log_username != "") {
+  header("location: feed.php");
   exit();
 }
 ?>
@@ -91,11 +93,13 @@ if (isset($_POST["emailcheck"])) {
         //Has the password and apply salt
       //TODO Change this to something more secure!!!!!!!!!!!
       //TODO need to change the activation process. Need to make sure that I don't send the password even if it is ecrypted. Should do a randStrGen activation code that will be used only for the activation process.
-      $p_hash = md5($p);
+      //$p_hash = md5($p);
+      $p_hash = hash('whirlpool', $_POST['p']);
       //Add user info into the database table for the main site table
       //!!!!!!!IMPORTANT!!!!! in the values section never put spaces!!!!!!
-      $sql = "INSERT INTO users (username, firstname, lastname, email, password, country, ip, signup, lastlogin, notescheck)
-		        VALUES('$u','$f','$l','$e','$p_hash','$c','$ip',now(),now(),now())";
+      $token = date("DMjGisY")."".rand(1000,9999);
+      $sql = "INSERT INTO users (username, firstname, lastname, email, password, country, ip, signup, lastlogin, notescheck, token)
+		        VALUES('$u','$f','$l','$e','$p_hash','$c','$ip',now(),now(),now(),'$token')";
       $query = mysqli_query($db_conx, $sql);
       if (false===$query) {
         echo mysqli_error($db_conx);
@@ -115,7 +119,7 @@ if (isset($_POST["emailcheck"])) {
       $to = "$e";
       $from = "pbiecamagru42@gmail.com";
       $subject = "Camagru Account Activation PLEASE DO NOT RESPOND";
-      $message = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Camagru Message</title><link href="https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa" rel="stylesheet" type="text/css"></head><body style="margin:0px; font-family:"Nunito", sans-serif;"><div style="padding:10px; background:rgb(117, 52, 52); font-size:24px; color:#CCC;"><span style="font-family:"Damion", cursive; font-size:30px;">Camagru </span><a href="http://localhost:8080/camagru/index.php"></a>Account Activation</div><div style="padding:24px; font-size:17px;">Hello '.$u.',<br /><br />Click the link below to activate your account when ready:<br /><br /><a href="http://localhost:8080/camagru/activation.php?id='.$uid.'&u='.$u.'&e='.$e.'&p='.urlencode($p_hash).'">Click here to activate your account now</a><br /><br />Login after successful activation using your:<br />* Username: <b>'.$u.'</b></div></body></html>';
+      $message = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Camagru Message</title><link href="https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa" rel="stylesheet" type="text/css"></head><body style="margin:0px; font-family:"Nunito", sans-serif;"><div style="padding:10px; background:rgb(117, 52, 52); font-size:24px; color:#CCC;"><span style="font-family:"Damion", cursive; font-size:30px;">Camagru </span><a href="http://localhost:8080/camagru/index.php"></a>Account Activation</div><div style="padding:24px; font-size:17px;">Hello '.$u.',<br /><br />Click the link below to activate your account when ready:<br /><br /><a href="http://localhost:8080/camagru/activation.php?id='.$uid.'&u='.$u.'&e='.$e.'&p='.urlencode($token).'">Click here to activate your account now</a><br /><br />Login after successful activation using your:<br />* Username: <b>'.$u.'</b></div></body></html>';
       $headers = "From: $from\n";
       $headers .= "MIME-Version: 1.0\n";
       $headers .= "Content-type: text/html; charset=iso-8859-1\n";
@@ -126,34 +130,60 @@ if (isset($_POST["emailcheck"])) {
    exit();
  }
 ?>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Camagru</title>
+    <script type="text/javascript" src="js/camagru.js"></script>
+    <script type="text/javascript" src="js/ajax.js"></script>
+    <script type="text/javascript" src="js/autoscroll.js"></script>
+    <script type="text/javascript" src="js/signup.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/user.js"></script>
+    <link rel="stylesheet" href="css/camagru.css" charset="utf-8" />
+    <link href='https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div id="container">
+       <?php include_once("php_includes/header.php"); ?>
+       <div id="body">
+        <div id="signup_section">
+          <div id="signupform" class="main_area_signup">
+            <h1 class="welcome_font">Welcome to</h1>
+            <h1 id="login_logo" class="logo_font">Camagru</h1>
+            <h3 id="signup_welcome" class="welcome_font">Please sign up to see photos<br/> from you and your friends</h3>
+            <form name="signupform" id="signupform" onsubmit="return false;" action="index.php" method="post">
+              <input id="username" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkusername()" onkeyup="restrict('username')" name="username" maxlength="15" placeholder="Username">
+              <span id="unamestatus"></span>
+              <br />
+              <input id="email" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkemail()" name="email" placeholder="Email"><br>
+              <span id="emailstatus"></span>
+              <input id="firstname" class="login_input" type="text" onfocus="emptyElement('status')" name="firstname" placeholder="First Name"><br>
+              <input id="lastname" class="login_input" type="text" onfocus="emptyElement('status')" name="lastname" placeholder="Last Name"><br>
+              <input id="pass1" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Password"><br>
+              <input id="pass2" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Verify Password"><br>
+              <select id="country" onfocus="emptyElement('status')"><?php include_once 'resources/countries.php'; ?></select>
+              <button id="signupbtn" class="welcome_font" onclick="signup()" type="submit" name="submit" value="signup">Sign Up</button><br>
+            </form>
+          </div>
+          <div class="signup_status">
+            <span id="status"></span>
+          </div>
 
-<div id="signup_section">
-  <div id="signupform" class="main_area_signup">
-    <h1 class="welcome_font">Welcome to</h1>
-    <h1 id="login_logo" class="logo_font">Camagru</h1>
-    <h3 id="signup_welcome" class="welcome_font">Please sign up to see photos<br/> from you and your friends</h3>
-    <form name="signupform" id="signupform" onsubmit="return false;" action="index.php" method="post">
-      <input id="username" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkusername()" onkeyup="restrict('username')" name="username" maxlength="15" placeholder="Username">
-      <span id="unamestatus"></span>
-      <br />
-      <input id="email" class="login_input" type="text" onfocus="emptyElement('status')" onblur="checkemail()" name="email" placeholder="Email"><br>
-      <span id="emailstatus"></span>
-      <input id="firstname" class="login_input" type="text" onfocus="emptyElement('status')" name="firstname" placeholder="First Name"><br>
-      <input id="lastname" class="login_input" type="text" onfocus="emptyElement('status')" name="lastname" placeholder="Last Name"><br>
-      <input id="pass1" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Password"><br>
-      <input id="pass2" class="login_input" type="password" onfocus="emptyElement('status')" name="password" minlength="5" placeholder="Verify Password"><br>
-      <select id="country" onfocus="emptyElement('status')"><?php include_once 'resources/countries.php'; ?></select>
-      <button id="signupbtn" class="welcome_font" onclick="signup()" type="submit" name="submit" value="signup">Sign Up</button><br>
-    </form>
-  </div>
-  <div class="signup_status">
-    <span id="status"></span>
-  </div>
+          <div id="login_signup">
+            <h4 class="welcome_font">Already have an Account?</h4>
+            <form class="" action="index.php" method="post">
+              <button id="login_button" class="welcome_font" type="submit"  name="submit" value="login">Log In</button>
+            </form>
+          </div>
+        </div>
 
-  <div id="login_signup">
-    <h4 class="welcome_font">Already have an Account?</h4>
-    <form class="" action="index.php" method="post">
-      <button id="login_button" class="welcome_font" type="submit"  name="submit" value="login">Log In</button>
-    </form>
-  </div>
-</div>
+       </div> <!-- Body -->
+
+
+    </div> <!-- Body Container -->
+    <script>
+
+    </script>
+  </body>
+</html>

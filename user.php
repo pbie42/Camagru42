@@ -16,7 +16,7 @@ $lastsession = "";
 if (isset($_GET["u"])) {
   $u = preg_replace('#[^a-z0-9]#i', '', $_GET['u']);
 } else {
-  header("location: localhost:8080/42/camagru/index.php");
+  header("location: localhost:8080/camagru42test/index.php");
   exit();
 }
 //Select the member from the users table
@@ -38,6 +38,11 @@ if ($u == $log_username && $user_ok == true) {
   $avatar_form .= '<input id="choose_avatar" class="inputfile" type="file" name="avatar" data-multiple-caption="{count} files selected" multiple required/><label id="choose_avatar_label" for="choose_avatar"><span>Choose Photo</span></label>';
   $avatar_form .= '<p><input id="change_avatar_btn" class="inputfile" type="submit" value="Upload"/><label id="choose_avatar_label" for="change_avatar_btn">Upload</label></p>';
   $avatar_form .= '</form>';
+  $reset_pass_form ='<form id="newpassform" class="" action="user.php" method="post">
+    <input id="newpass1" class="login_input" type="password" name="password" value="" minlength="5" placeholder="New Password">
+    <input id="newpass2" class="login_input" type="password" name="password" value="" minlength="5" placeholder="Verify New Password">
+    <button id="signupbtn" class="welcome_font" onclick="passreset()" type="submit" name="submit" value="signup">Reset Password</button><br>
+  </form>';
 }
 //Get the user row from the query above
 while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
@@ -57,7 +62,25 @@ $profile_pic = '<img id="profile_avatar" src="user/'.$u.'/'.$avatar.'" alt="'.$u
 if ($avatar == NULL) {
   $profile_pic = '<img class="avatar" src="resources/user.png" alt="'.$user1.'" />';
 }
-//TODO Will need to customize id tags for this page as well.
+?>
+<?php
+if (isset($_POST['u']) && isset($_POST['np']) && $_POST['np'] != "" && $_POST['u'] != "") {
+  $up = preg_replace('#[^a-z0-9]#i', '', $_POST['u']);
+  $np = $_POST['np'];
+  if ($up == "" || $np == "") {
+    echo "There was a problem please try again.";
+  } elseif ($up != $log_username) {
+    echo "This is not your account";
+  } elseif (strlen($np) < 5) {
+    echo "Your new password is not long enough";
+  } else {
+    $new_pass_hache = hash('whirlpool', $_POST['np']);
+    $npsql = "UPDATE users SET password='$new_pass_hache' WHERE username='$log_username'";
+    $npquery = mysqli_query($db_conx, $npsql);
+    echo "pass_change_success";
+  }
+  exit();
+}
 ?>
 <?php
 //The part below is to deal with blocking checks
@@ -152,7 +175,7 @@ if ($friend_count < 1) {
     } else {
       $friend_pic = 'resources/user.png';
     }
-    $friendsHTML .= '<a href="user.php?u='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"</a><p id="friend_name">'.$friend_username.'</p><br />';
+    $friendsHTML .= '<a href="user.php?u='.$friend_username.'"><img class="friendpics" src="'.$friend_pic.'" alt="'.$friend_username.'" title="'.$friend_username.'"></a><p id="friend_name">'.$friend_username.'</p><br />';
   }
 }
 ?>
@@ -192,33 +215,70 @@ else {
               <?php echo $avatar_form; ?><?php echo $profile_pic; ?><?php echo $profile_pic_btn; ?>
             </div>
             <h3 id="user_name"><?php echo $u; ?></h3>
-            <p>Is the viewer the page owner? <b><?php echo $isOwner; ?></b></p>
             <p>First Name: <?php echo $fname; ?></p>
             <p>Last Name: <?php echo $lname; ?></p>
             <p>Email: <?php echo $email; ?></p>
             <p>Country: <?php echo $country; ?></p>
-            <p>User Level: <?php echo $userlevel; ?></p>
             <p>Join Date: <?php echo $joindate; ?></p>
             <p>Last Session: <?php echo $lastsession; ?></p>
             <p>Number of Friends: <?php echo $friend_count; ?></p>
+            <?php echo $reset_pass_form; ?>
+            <span id="statusnew"></span>
             <hr />
-            <p><span id="friendBtn" class="userspan"></p>
+            <p><span id="friendBtn" class="userspan"><?php echo $friend_button; ?></p>
             <p><span id="blockBtn" class="userspan"><?php echo $block_button; ?></span></p>
             <hr />
             <h1 id="notificationtitle" class="welcome_font">Friends</h1>
             <?php echo $friendsHTML; ?>
             <hr>
             <div id="photo_showcase" onclick="window.location = 'photos.php?u=<?php echo $u; ?>';" title="view <?php echo $u; ?>&#39;s photo galleries">
-              <?php echo $coverpic; ?>
+
             </div>
-            <hr>
-            <?php include_once 'template_status.php'; ?>
+
           </div>
+          <?php include_once 'feeduser.php'; ?>
         </div>
       </div>
       <?php include_once 'php_includes/footer.php'; ?>
     </div>
     <script type="text/javascript">
+    function passreset() {
+      var np1 = _("newpass1").value;
+      var np2 = _("newpass2").value;
+      var u = "<?php echo $log_username ?>";
+      var statusnew = _("statusnew");
+      if (np1 == "" || np2 == "") {
+        statusnew.innerHTML = "Please fill out all fields";
+        statusnew.style.display = "block";
+      } else if (np1 != np2) {
+        statusnew.innerHTML = "Your passwords do not match";
+        statusnew.style.display = "block";
+      } else {
+        _("signupbtn").style.display = "none";
+        //Again in this method below we can replace 'Please wait...' with gif html code
+        statusnew.innerHTML = 'Please wait...';
+        var ajax = ajaxObj("POST", "user.php?u="+u);
+        ajax.onreadystatechange = function() {
+          if (ajaxReturn(ajax) == true) {
+            var response = ajax.responseText;
+            var cleanresponse = trim1(response);
+            if (cleanresponse != "pass_change_success") {
+              statusnew.innerHTML = cleanresponse;
+              _("signupbtn").style.display = "block";
+              console.log("getting here");
+              console.log(cleanresponse);
+            } else {
+              alert("Password Change Successful")
+              _("signupbtn").style.display = "none";
+              console.log("Successful");
+              statusnew.innerHTML = "";
+              _("newpassform").style.display = "none";
+            }
+          }
+        }
+        ajax.send("u="+u+"&np="+np1);
+      }
+    }
       var inputs = document.querySelectorAll( '.inputfile' );
       Array.prototype.forEach.call( inputs, function( input )
       {

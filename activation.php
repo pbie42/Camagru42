@@ -17,7 +17,7 @@ if (isset($_GET['id']) && isset($_GET['u']) && isset($_GET['e']) && isset($_GET[
     	exit();
 	}
 	// Check their credentials against the database
-	$sql = "SELECT * FROM users WHERE id='$id' AND username='$u' AND email='$e' AND password='$p' LIMIT 1";
+	$sql = "SELECT * FROM users WHERE id='$id' AND username='$u' AND email='$e' AND token='$p' LIMIT 1";
     $query = mysqli_query($db_conx, $sql);
 	$numrows = mysqli_num_rows($query);
 	// Evaluate for a match in the system (0 = no match, 1 = match)

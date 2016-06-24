@@ -21,7 +21,7 @@ if ($user_ok == true) {
      $emailcut = substr($e, 0, 4);
      $randNum = rand(10000, 99999);
      $tempPass = "$emailcut$randNum";
-     $hashTempPass = md5($tempPass);
+     $hashTempPass = hash('whirlpool', $temp_pass);
      $sql = "UPDATE useroptions SET temp_pass='$hashTempPass' WHERE username='$u' LIMIT 1";
      $query = mysqli_query($db_conx, $sql);
      $to = "$e";
@@ -31,7 +31,7 @@ if ($user_ok == true) {
      $headers .= "MIME-Version: 1.0\n";
      $headers .= "Content-type: text/html; charset=iso-8859-1\n";
      //TODO Will need to do something similar to what I will do for the email confirmation so I don't send a password.
-     $msg = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Camagru Message</title><link href="https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa" rel="stylesheet" type="text/css"></head><body style="margin:0px; font-family:"Nunito", sans-serif;"><div style="padding:10px; background:rgb(117, 52, 52); font-size:24px; color:#CCC;"><span style="font-family:"Damion", cursive; font-size:30px;">Camagru </span>Temporary Password</div><div style="padding:24px; font-size:17px; font-family:"Nunito", sans-serif;">Hello '.$u.',<br /><br />This is an automated message from Camagru. If you did not recently initiate the Forgot Password process, please disregard this email.<br /><br />You have indicated that you forgot your login password and/or username. We can generate a temporary password for you to log in with, then once logged in you can change your password to anything you like.<br /><br />After you click the link below your password to login will be:<br /><br />'.$tempPass.'<br /><br /><a href="http://localhost:8080/camagru/forgot_pass.php?u='.$u.'&p='.$hashTempPass.'">Click here to apply the temporary password to your account.</a><br /><br />If you do not click the link in this email no changes will be made to your account. In order to set your login password to the temporary password you must click the link above</div></body></html>';
+     $msg = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Camagru Message</title><link href="https://fonts.googleapis.com/css?family=Oswald|Damion|Nunito|Comfortaa" rel="stylesheet" type="text/css"></head><body style="margin:0px; font-family:"Nunito", sans-serif;"><div style="padding:10px; background:rgb(117, 52, 52); font-size:24px; color:#CCC;"><span style="font-family:"Damion", cursive; font-size:30px;">Camagru </span>Temporary Password</div><div style="padding:24px; font-size:17px; font-family:"Nunito", sans-serif;">Hello '.$u.',<br /><br />This is an automated message from Camagru. If you did not recently initiate the Forgot Password process, please disregard this email.<br /><br />You have indicated that you forgot your login password and/or username. We can generate a temporary password for you to log in with, then once logged in you can change your password to anything you like.<br /><br />After you click the link below your password to login will be:<br /><br />'.$tempPass.'<br /><br /><a href="http://localhost:8080/camagru/forgot_pass.php?u='.$u.'&p='.$hashTempPass.'">Click here to apply the temporary password to your account.</a><br /><br />If you do not click the link in this email no changes will be made to your account. In order to set your login password to the temporary password you must click the link above. Please change your password as soon as you log back into the site!!!</div></body></html>';
      if (mail($to, $subject, $msg, $headers)) {
        echo "success";
        exit();

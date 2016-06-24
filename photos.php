@@ -15,17 +15,10 @@ if ($u == $log_username && $user_ok == true) {
   $isOwner = "yes";
   $photo_form = '<form id="photo_form" enctype="multipart/form-data" method="post" action="php_parsers/photo_system.php">';
   $photo_form .= '<h3>Hi '.$u.', add a new photo into one of your galleries</h3>';
-  $photo_form .= '<b>Choose Gallery</b> ';
-  $photo_form .= '<select name="gallery" requred';
-  $photo_form .= '<option value=""></option>';
-  $photo_form .= '<option value="Myself">Myself</option>';
-  $photo_form .= '<option value="Family">Family</option>';
-  $photo_form .= '<option value="Pets">Pets</option>';
-  $photo_form .= '<option value="Friends">Friends</option>';
-  $photo_form .= '<option value="Random">Random</option>';
-  $photo_form .= '</select>';
   $photo_form .= ' &nbsp; &nbsp; &nbsp; <b>Choose Photo:</b> ';
   $photo_form .= '<input type="file" name="photo" accept="image/*" required />';
+  $photo_form .= '<br /><b>Add a comment</b>';
+  $photo_form .= '<input id="comment_input" type="text" name="comment" />';
   $photo_form .= '<p><input type="submit" value="Upload Photo Now" /></p>';
   $photo_form .= '</form>';
 }

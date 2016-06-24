@@ -14,14 +14,11 @@ $isOwner = "no";
 if ($u == $log_username && $user_ok == true) {
   $isOwner = "yes";
   $photo_form = '<form id="photo_form" enctype="multipart/form-data" method="post" action="php_parsers/photo_system.php">';
-  $photo_form .= '<h3>Hi <span class="username">'.$u.'</span>! <br />Add a photo from your computer to your feed?</h3>';
+  $photo_form .= '<h3>Hi <span class="username">'.$u.'</span>! <br />Want to add a photo from your computer to your feed?</h3>';
   //$photo_form .= ' &nbsp; &nbsp; &nbsp; <b>Choose Photo:</b> ';
   //$photo_form .= '<input type="file" name="photo" accept="image/*" required />';
-  $photo_form .= '<input id="choose_photo" class="inputfile" type="file" name="photo" data-multiple-caption="{count} files selected" multiple required/><label id="choose_photo_label" for="choose_photo"><span>Choose Photo</span></label>';
-  $photo_form .= '<br /><br /><b>Add a comment</b>';
-  $photo_form .= '<input id="comment_input" type="text" name="comment" /><br />';
   //$photo_form .= '<p><input type="submit" value="Upload Photo Now" /></p>';
-  $photo_form .= '<p><input id="change_photo_btn" class="inputfile" type="submit" value="Upload"/><label id="choose_photo_label" for="change_photo_btn">Upload</label></p>';
+  $photo_form .= '<p><h3>Simply drag and drop an image file from your computer here!!</h3></p>';
   $photo_form .= '<p><input id="nevermind_photo_btn" class="inputfile" /><label id="choose_photo_label" for="nevermind_photo_btn" onclick="backToPhotoMenu()">Nevermind...</label></p>';
   $photo_form .= '</form>';
 }
@@ -49,42 +46,43 @@ if (mysqli_num_rows($query) < 1) {
   }
 }
 ?>
+<div id="photos_section">
+  <div class="main_area_photo welcome_font">
+    <div id="drop-target">
+      <div id="photo_form">
+        <?php echo $photo_form; ?>
+      </div>
+    </div>
 
-        <div id="photos_section">
-          <div class="main_area_photo welcome_font">
-            <div id="drop-target">
-              <div id="photo_form">
-                <?php echo $photo_form; ?>
-              </div>
-            </div>
+    <div id="photos">
 
-            <div id="photos">
+    </div>
+    <div id="picbox">
 
-            </div>
-            <div id="picbox">
-
-            </div>
-          </div>
-        </div>
-        <div id="container_upload" width="640" height="480">
-          <canvas id="myUploadCanvas" width="640"></canvas>
-          <canvas id="myUploadCanvas2" ondrop="add_img2(event)" ondragover="event.preventDefault()"></canvas>
-        </div>
-        <div id="acceptdeclineupload">
-          <div id="toolbox">
-            <?php
-              $i = 0;
-              while (++$i < 50) {
-                echo 	'<img id="img_'.$i.'" class="mask" src="masks/'.$i.'.png" draggable="true" ondragstart="select_img2(event)"></img>';
-              }
-            ?>
-          </div>
-          <form id="pic_form" action="php_parsers/photo_system.php" method="post">
-            <input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" />
-          </form>
-          <button class="snapbutton" onclick="screenshot()" type="button" name="button">Use it!</button>
-          <button class="snapbutton" onclick="dismissupload()" type="button" name="button">No thanks!</button>
-        </div>
+    </div>
+  </div>
+</div>
+<div id="container_upload" width="640" height="480">
+  <canvas id="myUploadCanvas3" width="640"></canvas>
+  <canvas id="myUploadCanvas" width="640"></canvas>
+  <canvas id="myUploadCanvas2" height="200" width="200" ondrop="add_img2(event)" ondragover="event.preventDefault()"></canvas>
+</div>
+<div id="acceptdeclineupload">
+  <div id="toolbox">
+    <?php
+      $i = 0;
+      while (++$i < 52) {
+        echo 	'<img id="img_'.$i.'" class="mask" src="masks/'.$i.'.png" draggable="true" ondragstart="select_img2(event)"></img>';
+      }
+    ?>
+  </div>
+  <form id="pic_form2" action="php_parsers/photo_system.php" method="post">
+    <input id="snap_comment2" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" />
+  </form>
+  <button class="snapbutton" onclick="screenshot2()" type="button" name="button">Use it!</button>
+  <button class="snapbutton" onclick="dismissupload()" type="button" name="button">No thanks!</button>
+  <span id="uploadcamagru" class="camagrufont"></span>
+</div>
     <script type="text/javascript">
     function showGallery(gallery,user) {
       _("galleries").style.display = "none";
@@ -174,8 +172,7 @@ if (mysqli_num_rows($query) < 1) {
         label.innerHTML = labelVal;
     });
     });
-var height2;
-var MAX_WIDTH = 300;
+    var MAX_WIDTH = 600;
 function render(src){
 	var image = new Image();
 	image.onload = function(){
@@ -200,8 +197,8 @@ function render(src){
 
     _("myUploadCanvas").style.height = image.height;
     _("myUploadCanvas").style.width = image.width;
-    height2 = containerheight;
-    //_("myUploadCanvas2").style.width = containerwidth + "px";
+    _("myUploadCanvas2").height = realheight;
+    _("myUploadCanvas2").width = containerwidth;
 		var ctx3 = canvas3.getContext("2d");
 		ctx3.clearRect(0, 0, canvas3.width, canvas3.height);
 		canvas3.width = image.width;
@@ -235,27 +232,22 @@ function dismissupload() {
   _("container_upload").style.display = "none";
   _("acceptdeclineupload").style.display = "none";
   _("photos_section").style.display = "block";
+  _("uploadcamagru").style.display = "none";
 
 }
 var obj2 = [];
-var dragonce = false;
+var dragonce2 = false;
 var canvas2 = document.getElementById("myUploadCanvas2");
 //var camagru = document.getElementById('myCanvas3');
 //var video = document.querySelector("#myVideo");
 var ctx2 = canvas2.getContext("2d");
-var width2 = _("myUploadCanvas").width;
-var ogheight = _("myUploadCanvas").height;
-var height2 = ogheight + ogheight;
-var test = _("myUploadCanvas2").width;
-console.log("width is");
-console.log(width2);
-console.log("height is");
-console.log(height2);
-var myphoto = false;
+var width2;
+var height2;
+var myphoto2 = false;
 //function moveIt() {
 
 
-var dragok = false;
+var dragok2 = false;
 
 function select_img2(e)
 {
@@ -272,12 +264,12 @@ function add_img2(e)
 
 function init_drag2(img_src)
 {
-	var tmp;
+	var tmp2;
   console.log("init_drag2");
-	tmp = {img: new Image(), size: 0, dragok: false, x: 50, y: 50};
-	tmp.img.src = img_src;
-	tmp.size = tmp.img.width > 150 ? 150 / tmp.img.width : 1;
-	obj2.push(tmp);
+	tmp2 = {img: new Image(), size: 0, dragok: false, x: 50, y: 50};
+	tmp2.img.src = img_src;
+	tmp2.size = tmp2.img.width > 100 ? 100 / tmp2.img.width : 1;
+	obj2.push(tmp2);
   console.log("init_drag2 getting here");
 	canvas2.onmousedown = myDown2;
 	canvas2.onmouseup = myUp2;
@@ -288,6 +280,9 @@ function init_drag2(img_src)
 
 function draw2()
 {
+  width2 = _("myUploadCanvas").width;
+  height2 = _("myUploadCanvas").height;
+
 	ctx2.clearRect(0, 0, width2, height2);
 	obj2.forEach(function(item, i)
 	{
@@ -298,16 +293,15 @@ function draw2()
 
 function myMove2(e)
 {
-  console.log("myMove2");
-	var curs = false;
+	var curs2 = false;
 	obj2.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
 			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
 			e.pageY > item.y - 50 + canvas2.offsetTop)
-			curs = true;
-		canvas2.style.cursor = curs ? 'pointer' : 'default';
-		if (item.dragok)
+			curs2 = true;
+		canvas2.style.cursor = curs2 ? 'pointer' : 'default';
+		if (item.dragok2)
 		{
 			item.x = e.pageX - canvas2.offsetLeft;
 			item.y = e.pageY - canvas2.offsetTop;
@@ -317,7 +311,6 @@ function myMove2(e)
 
 function myZoomIn2(e)
 {
-  console.log("myZoomIn2");
 	e.preventDefault();
 	obj2.forEach(function(item, i)
 	{
@@ -330,7 +323,6 @@ function myZoomIn2(e)
 
 function myZoomOut2(e)
 {
-  console.log("myZoomOut2");
 	obj2.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
@@ -343,17 +335,16 @@ function myZoomOut2(e)
 
 function myDown2(e)
 {
-  console.log("myDown2");
 	obj2.forEach(function(item, i)
 	{
 		if (e.pageX < item.x + 50 + canvas2.offsetLeft && e.pageX > item.x - 50 +
 			canvas2.offsetLeft && e.pageY < item.y + 50 + canvas2.offsetTop &&
 			e.pageY > item.y - 50 + canvas2.offsetTop)
 		{
-			if (e.button == 0 && !dragonce)
+			if (e.button == 0 && !dragonce2)
 			{
-				dragonce = true;
-				item.dragok = true;
+				dragonce2 = true;
+				item.dragok2 = true;
 			}
 			if (e.button == 1)
 				obj2.splice(i, 1);
@@ -363,38 +354,57 @@ function myDown2(e)
 
 function myUp2()
 {
-  console.log("myUp2");
 	obj2.forEach(function(item, i)
 	{
-		item.dragok = false;
+		item.dragok2 = false;
 	});
-	dragonce = false;
+	dragonce2 = false;
 	canvas2.style.cursor = 'default';
 }
 
 function screenshot2()
 {
-	var pic_form = document.querySelector('#pic_form');
-  var comment = document.getElementById('snap_comment').value;
-  console.log(comment);
-	var data, post;
+  useIt();
+  var camagru2 = document.getElementById('myUploadCanvas3');
+	var pic_form2 = document.querySelector('#pic_form2');
+  var comment2 = document.getElementById('snap_comment2').value;
+  console.log(comment2);
+	var data2, post2;
 
-	if (!obj[0])
-		return ;
+	if (!obj2[0]) {
+    _("uploadcamagru").style.display = "block";
+    _("uploadcamagru").innerHTML = "Please add one of our images to your photo in order to continue.";
+    return ;
+  }
 
-	data = camagru.toDataURL('image/png');
 
-  var comment_post = '<input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" value="'+comment+'" />';
-	if (data.length > 500000)
+	data2 = camagru2.toDataURL('image/png');
+
+  var comment_post2 = '<input id="snap_comment2" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" value="'+comment2+'" />';
+	if (data2.length > 500000)
 	{
-		post = '<input class="camagru_data" type="text" name="cam" value="'+data.substr(0, 500000)
-			+'"></input><input class="camagru_data" type="text" name="cam1" value="'+data.slice(500000)
+		post2 = '<input class="camagru_data" type="text" name="cam" value="'+data2.substr(0, 500000)
+			+'"></input><input class="camagru_data" type="text" name="cam1" value="'+data2.slice(500000)
 			+'"></input>';
 	}
 	else
-		post = '<input class="camagru_data" type="text" name="cam" value="'+data+'"></input>';
-	pic_form.innerHTML = comment_post + post;
-	pic_form.submit();
+		post2 = '<input class="camagru_data" type="text" name="cam" value="'+data2+'"></input>';
+	pic_form2.innerHTML = comment_post2 + post2;
+	pic_form2.submit();
+}
+
+function useIt() {
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  var myUC = document.getElementById('myUploadCanvas');
+  var myUC2 = document.getElementById('myUploadCanvas2');
+  var ucan3 = document.getElementById('myUploadCanvas3');
+
+  ucan3.width = _("myUploadCanvas2").width;
+  ucan3.height = _("myUploadCanvas2").height;
+  var uctx3 = ucan3.getContext('2d');
+
+  uctx3.drawImage(myUC, 0, 0);
+  uctx3.drawImage(myUC2, 0, 0);
 }
 
 setInterval(draw2, 10);
