@@ -8,19 +8,19 @@ if ($user_ok != true || $log_username == "") {
   header("location: index.php");
   exit();
 }
-?>
-
-<?php
 $feedstring = "";
 $sql = "SELECT * FROM photos ORDER BY uploaddate DESC";
-$query = mysqli_query($db_conx, $sql);
+$query = $db_conx2->prepare($sql);
+//$query = mysqli_query($db_conx, $sql);
+$query->execute();
 $i = 0;
-$countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos");
-$countrow = mysqli_fetch_row($countquery);
-$count = $countrow[0];
-$rowquery = mysqli_query($db_conx, "SELECT * FROM photos");
-$rowcount = mysqli_num_rows($rowquery);
-while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+// $countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos");
+// $countrow = mysqli_fetch_row($countquery);
+// $count = $countrow[0];
+// $rowquery = mysqli_query($db_conx, "SELECT * FROM photos");
+// $rowcount = mysqli_num_rows($rowquery);
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+  print_r ($row);
   $photoid = $row["id"];
   $username = $row["user"];
   $filename = $row["filename"];
