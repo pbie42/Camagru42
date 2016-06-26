@@ -2,13 +2,13 @@
 $headerOptions = "";
 $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php"><img style="height:25px;width:25px;" src="resources/notify2.png" alt="" /></a></li>';
 if ($user_ok == true) {
-  $sql = "SELECT notescheck FROM users WHERE username='$log_username' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $row = mysqli_fetch_row($query);
+  $query_note_check = $db_conx2->prepare("SELECT notescheck FROM users WHERE username='$log_username' LIMIT 1");
+  $query_note_check->execute();
+  $row = $query_note_check->fetch(PDO::FETCH_NUM);
   $notescheck = $row[0];
-  $sql = "SELECT id FROM notifications WHERE username='$log_username' AND date_time > '$notescheck' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $numrows = mysqli_num_rows($query);
+  $query_notifications = $db_conx2->prepare("SELECT id FROM notifications WHERE username='$log_username' AND date_time > '$notescheck' LIMIT 1");
+  $query_notifications->execute();
+  $numrows = $query_notifications->fetchColumn();
   if ($numrows == 0) {
     $envelope = '<li id="alerts" class="logo_font menuitem"><a href="notifications.php"><img style="height:25px;width:25px;" src="resources/notify2.png" alt="" /></a></li>';
   } else {

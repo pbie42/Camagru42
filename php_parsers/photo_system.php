@@ -58,9 +58,9 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
     header("location: ../message.php?msg=ERROR: An unknown error occured");
     exit();
   }
-  $sql = "SELECT avatar FROM users WHERE username='$log_username' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $row = mysqli_fetch_row($query);
+  $query_avatar = $db_conx2->prepare("SELECT avatar FROM users WHERE username='$log_username' LIMIT 1");
+  $query_avatar->execute();
+  $row = $query_avatar->fetch(PDO::FETCH_NUM);
   $avatar = $row[0];
   if ($avatar != "") {
     $picurl = "../user/$log_username/$avatar";
@@ -77,9 +77,9 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
   $wmax = 300;
   $hmax = 300;
   image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
-  $sql = "UPDATE users SET avatar='$db_file_name' WHERE username='$log_username' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  mysqli_close($db_conx);
+  $query_avatar_update = $db_conx2->prepare("UPDATE users SET avatar='$db_file_name' WHERE username='$log_username' LIMIT 1");
+  $query_avatar_update->execute();
+  $db_conx2 = null;
   header("location: ../user.php?u=$log_username");
   exit();
 }
@@ -108,41 +108,48 @@ if (isset($_POST['cam']) && $_POST['cam'] != "") {
   $hmax = 300;
   image_resize($target_file, $resized_file, $wmax, $hmax, $fileExt);
   image_resize($target_file_all, $resized_file_all, $wmax, $hmax, $fileExt);
-  $sql = "INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())";
-  $query = mysqli_query($db_conx, $sql);
-  $sql = "SELECT id FROM photos WHERE filename='$db_file_name'";
-  $query = mysqli_query($db_conx, $sql);
-  $row = mysqli_fetch_array($query);
+  $query_photo_insert = $db_conx2->prepare("INSERT INTO photos(user, gallery, filename, uploaddate) VALUES ('$log_username','$gallery','$db_file_name',now())");
+  $query_photo_insert->execute();
+  $query_photo_id = $db_conx2->prepare("SELECT id FROM photos WHERE filename='$db_file_name'");
+  $query_photo_id->execute();
+  $row = $query_photo_id->fetch(PDO::FETCH_ASSOC);
   $realid = $row["id"];
   $testcomment = $_POST['comment_camagru'];
   if (strlen($testcomment) < 1) {
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
+    $query_no_comment = $db_conx2->prepare("INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a',now(),now())");
+    $query_no_comment->execute();
+    $id = $db_conx2->lastInsertId();
+    $query_status_id_no_comment = $db_conx2->prepare("UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
+    $query_status_id_no_comment->execute();
   } else {
     $comment = htmlentities($_POST['comment_camagru']);
     $comment = mysqli_real_escape_string($db_conx, $comment);
-    $anothertestcomment = "fuckin a homie";
-    $sql = "INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())";
-    $query = mysqli_query($db_conx, $sql);
-    $id = mysqli_insert_id($db_conx);
-    mysqli_query($db_conx, "UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
+    $query_comment = $db_conx2->prepare("INSERT INTO status(account_name, author, type, data, postdate) VALUES('$log_username','$log_username','a','$comment',now())");
+    $query_comment->execute();
+    $id = $db_conx2->lastInsertId();
+    $query_status_id = $db_conx2->prepare("UPDATE status SET osid='$realid' WHERE id='$id' LIMIT 1");
+    $query_status_id->execute();
   }
   $friends = array();
-  $fquery = mysqli_query($db_conx, "SELECT user1 FROM friends WHERE user2='$log_username' AND accepted='1'");
-  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
+  $fquery1 = $db_conx2->prepare("SELECT user1 FROM friends WHERE user2='$log_username' AND accepted='1'");
+  $fquery1->execute();
+  //$fquery = mysqli_query($db_conx, "SELECT user1 FROM friends WHERE user2='$log_username' AND accepted='1'");
+  while ($frow = $fquery1->fetch(PDO::FETCH_ASSOC)) {
     array_push($friends, $frow["user1"]);
   }
-  $fquery = mysqli_query($db_conx, "SELECT user2 FROM friends WHERE user1='$log_username' AND accepted='1'");
-  while ($frow = mysqli_fetch_array($fquery, MYSQLI_ASSOC)) {
+  $fquery2 = $db_conx2->prepare("SELECT user2 FROM friends WHERE user1='$log_username' AND accepted='1'");
+  $fquery2->execute();
+  //$fquery = mysqli_query($db_conx, "SELECT user2 FROM friends WHERE user1='$log_username' AND accepted='1'");
+  while ($frow = $fquery2->fetch(PDO::FETCH_ASSOC)) {
     array_push($friends, $frow["user2"]);
   }
   for ($i=0; $i < count($friends); $i++) {
     $friend = $friends[$i];
     $app = "Post";
     $note = '<span class="username">'.$log_username.'</span> made a new post!<br /><a href="feed.php#post_'.$realid.'">Click here to view the post</a>';
-    mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
+    $query_friend_notify = $db_conx2->prepare("INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
+    $query_friend_notify->execute();
+    //mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
   }
   header("location: ../feed.php");
   exit();

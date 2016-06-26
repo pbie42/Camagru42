@@ -21,7 +21,7 @@
         <p id="pleaseaddphoto" class="camagrufont">
           Please add an image to your photo in order to proceed !
         </p>
-        
+
       </div>
 
     </div>
