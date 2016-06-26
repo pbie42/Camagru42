@@ -36,20 +36,26 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   if ($username != $log_username && $user_ok == true) {
     //This part below is to see if the person viewing the profile is logged in and to
     //see if they are friends already with that person
-    $friend_check = "SELECT id FROM friends WHERE user1='$log_username' AND user2='$username' AND accepted='1' OR user1='$username' AND user2='$log_username' AND accepted='1' LIMIT 1";
-    if (mysqli_num_rows(mysqli_query($db_conx, $friend_check)) > 0) {
+    $friend_check = $db_conx2->prepare("SELECT id FROM friends WHERE user1='$log_username' AND user2='$username' AND accepted='1' OR user1='$username' AND user2='$log_username' AND accepted='1' LIMIT 1");
+    $friend_check->execute();
+    $friend_num_rows = $friend_check->fetchColumn();
+    if ($friend_num_rows > 0) {
       $isFriend = true;
     }
     //This next part checks if the owner of the profile that the viewer is looking
     //at has blocked this viewer or not
-    $block_check1 = "SELECT id FROM blockedusers WHERE blocker='$username' AND blockee='$log_username' LIMIT 1";
-    if (mysqli_num_rows(mysqli_query($db_conx, $block_check1)) > 0) {
+    $block_check1 = $db_conx2->prepare("SELECT id FROM blockedusers WHERE blocker='$username' AND blockee='$log_username' LIMIT 1");
+    $block_check1->execute();
+    $block_check1_num_rows = $block_check1->fetchColumn();
+    if ($block_check1_num_rows > 0) {
       $ownerBlockViewer = true;
     }
     //This part is to check if the viewer has blocked the owner of the profile
     //that they are viewing
-    $block_check2 = "SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$username' LIMIT 1";
-    if (mysqli_num_rows(mysqli_query($db_conx, $block_check2)) > 0) {
+    $block_check2 = $db_conx2->prepare("SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$username' LIMIT 1");
+    $block_check2->execute();
+    $block_check2_num_rows = $block_check2->fetchColumn();
+    if ($block_check2_num_rows > 0) {
       $viewerBlockOwner = true;
     }
   }
@@ -66,10 +72,12 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   $convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
   $convertedTime = ($timeAgoObject -> convert_datetime($uploaddate));
   $whenpost = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
-  $sql1 = "SELECT * FROM status WHERE osid='$photoid' AND account_name='$username' AND type='a' LIMIT 1";
-  $query1 = mysqli_query($db_conx, $sql1);
-  $statusnumrows = mysqli_num_rows($query1);
-  while ($rowcomm = mysqli_fetch_array($query1, MYSQLI_ASSOC)) {
+  $query1 = $db_conx2->prepare("SELECT * FROM status WHERE osid='$photoid' AND account_name='$username' AND type='a' LIMIT 1");
+  $query1->execute();
+  $query1bis = $db_conx2->prepare("SELECT * FROM status WHERE osid='$photoid' AND account_name='$username' AND type='a' LIMIT 1");
+  $query1bis->execute();
+  $statusnumrows = $query1bis->fetchColumn();
+  while ($rowcomm = $query1->fetch(PDO::FETCH_ASSOC)) {
     ++$i;
     $statusid = $rowcomm["osid"];
     $statuslist = "";
@@ -81,10 +89,13 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $data = str_replace("&amp;","&",$data);
   	$data = stripslashes($data);
     $status_replies = "";
-  	$query_replies = mysqli_query($db_conx, "SELECT * FROM status WHERE osid='$statusid' AND type='b' ORDER BY postdate ASC");
-  	$replynumrows = mysqli_num_rows($query_replies);
+  	$query_replies = $db_conx2->prepare("SELECT * FROM status WHERE osid='$statusid' AND type='b' ORDER BY postdate ASC");
+    $query_replies->execute();
+    $replynumrows = $query_replies->fetchColumn();
       if($replynumrows > 0){
-        while ($row2 = mysqli_fetch_array($query_replies, MYSQLI_ASSOC)) {
+        $query_replies2 = $db_conx2->prepare("SELECT * FROM status WHERE osid='$statusid' AND type='b' ORDER BY postdate ASC");
+        $query_replies2->execute();
+        while ($row2 = $query_replies2->fetch(PDO::FETCH_ASSOC)) {
   				$statusreplyid = $row2["id"];
   				$replyauthor = $row2["author"];
   				$replydata = $row2["data"];
@@ -129,9 +140,10 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   		}
   }
   $likesbutton = "";
-  $likesql = "SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1";
-  $likesquery = mysqli_query($db_conx, $likesql);
-  if ($likesquery && (mysqli_num_rows($likesquery) > 0)) {
+  $likesquery = $db_conx2->prepare("SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1");
+  $likesquery->execute();
+  $likesquery_num_rows = $likesquery->fetchColumn();
+  if ($likesquery && ($likesquery_num_rows > 0)) {
     $likesbutton = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'unlike\')" src="resources/likefull.png" />';
   } else {
     $likesbutton = '<img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'like\')" src="resources/likeempty.png" />';
