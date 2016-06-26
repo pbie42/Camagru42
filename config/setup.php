@@ -1,7 +1,6 @@
 <?php
 //include_once 'db_conx.php';
 include 'database.php';
-
     try {
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         /* set the PDO error mode to exception*/
