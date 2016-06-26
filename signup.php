@@ -12,9 +12,9 @@ if ($user_ok == true || $log_username != "") {
 if (isset($_POST["usernamecheck"])) {
   include_once 'php_includes/db_conx.php';
   $username = preg_replace('#[^a-z0-9]#i', '', $_POST['usernamecheck']);
-  $sql = "SELECT id FROM users WHERE username='$username' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $uname_check = mysqli_num_rows($query);
+  $query = $db_conx2->prepare("SELECT id FROM users WHERE username='$username' LIMIT 1");
+  $query->execute();
+  $uname_check = $query->fetchColumn();
   if (strlen($username) < 5) {
     echo '<strong style="color:#F00;">Usernames must be at least 5 characters</strong>';
     exit();
@@ -37,9 +37,9 @@ if (isset($_POST["usernamecheck"])) {
 if (isset($_POST["emailcheck"])) {
   include_once 'php_includes/db_conx.php';
   $email = mysqli_real_escape_string($db_conx, $_POST['e']);
-  $sql = "SELECT id FROM users WHERE email='$email' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $email_check = mysqli_num_rows($query);
+  $query = $db_conx2->prepare("SELECT id FROM users WHERE email='$email' LIMIT 1");
+  $query->execute();
+  $email_check = $query->fetchColumn();
   if ($email_check < 1) {
     echo '<strong style="color:#009900;">Unused email address</strong>';
     exit();
@@ -64,13 +64,13 @@ if (isset($_POST["emailcheck"])) {
    //Get user IP address
    $ip = preg_replace('#[^0-9.]#', '', getenv('REMOTE_ADDR'));
    //Duplicate data checks for username and email
-   $sql = "SELECT id FROM users WHERE username='$u' LIMIT 1";
-   $query = mysqli_query($db_conx, $sql);
-   $u_check = mysqli_num_rows($query);
+   $query_u_check = $db_conx2->prepare("SELECT id FROM users WHERE username='$u' LIMIT 1");
+   $query_u_check->execute();
+   $u_check = $query_u_check->fetchColumn();
    //-------------------------------------------------
-   $sql = "SELECT id FROM users WHERE email='$e' LIMIT 1";
-   $query = mysqli_query($db_conx, $sql);
-   $e_check = mysqli_num_rows($query);
+   $query_e_check = $db_conx2->prepare("SELECT id FROM users WHERE email='$e' LIMIT 1");
+   $query_e_check->execute();
+   $e_check = $query_e_check->fetchColumn();
    //Form data error handling
    if ($u == "" || $e == "" || $p == "" || $c == "") {
      echo "The form has not been completed";
@@ -91,23 +91,19 @@ if (isset($_POST["emailcheck"])) {
      //End form data error handling
         //Begin insertion of data into the database
         //Has the password and apply salt
-      //TODO Change this to something more secure!!!!!!!!!!!
-      //TODO need to change the activation process. Need to make sure that I don't send the password even if it is ecrypted. Should do a randStrGen activation code that will be used only for the activation process.
-      //$p_hash = md5($p);
       $p_hash = hash('whirlpool', $_POST['p']);
       //Add user info into the database table for the main site table
       //!!!!!!!IMPORTANT!!!!! in the values section never put spaces!!!!!!
       $token = date("DMjGisY")."".rand(1000,9999);
-      $sql = "INSERT INTO users (username, firstname, lastname, email, password, country, ip, signup, lastlogin, notescheck, token)
-		        VALUES('$u','$f','$l','$e','$p_hash','$c','$ip',now(),now(),now(),'$token')";
-      $query = mysqli_query($db_conx, $sql);
-      if (false===$query) {
-        echo mysqli_error($db_conx);
+      $query_user_insert = $db_conx2->prepare("INSERT INTO users (username, firstname, lastname, email, password, country, ip, signup, lastlogin, notescheck, token)
+		        VALUES('$u','$f','$l','$e','$p_hash','$c','$ip',now(),now(),now(),'$token')");
+      if (!$query_user_insert->execute()) {
+        echo $query_user_insert->errorInfo();
       }
-      $uid = mysqli_insert_id($db_conx);
+      $uid = $db_conx2->lastInsertId();
       //Establish their row in the useroptions table
-      $sql = "INSERT INTO useroptions (id, username) VALUES ('$uid', '$u')";
-      $query = mysqli_query($db_conx, $sql);
+      $query_user_options = $db_conx2->prepare("INSERT INTO useroptions (id, username) VALUES ('$uid', '$u')");
+      $query_user_options->execute();
       //Create directory(folder) to hold each user's files(pics)
       if (!file_exists("user/$u")) {
         mkdir("user/$u", 0755);

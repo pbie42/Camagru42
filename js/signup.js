@@ -85,6 +85,12 @@ function signup() {
         }
       }
     }
+    console.log(u);
+    console.log(e);
+    console.log(p1);
+    console.log(c);
+    console.log(f);
+    console.log(l);
     ajax.send("u="+u+"&e="+e+"&p="+p1+"&c="+c+"&f="+f+"&l="+l);
   }
 }

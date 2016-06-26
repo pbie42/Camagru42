@@ -8,9 +8,9 @@ include_once 'php_includes/check_login_status.php';
 if (isset($_POST["logincheck"])) {
   include_once 'php_includes/db_conx.php';
   $username = preg_replace('#[^a-z0-9]#i', '', $_POST['logincheck']);
-  $sql = "SELECT id FROM users WHERE username='$username' AND activated='1' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $login_check = mysqli_num_rows($query);
+  $query = $db_conx2->prepare("SELECT id FROM users WHERE username='$username' AND activated='1' LIMIT 1");
+  $query->execute();
+  $login_check = $query->fetchColumn();
   if ($login_check < 1) {
     echo '<strong style="color:#F00;">Account not yet activated!</strong>';
     exit();
@@ -36,9 +36,9 @@ if (isset($_POST["logincheck"])) {
       exit();
     } else {
       //End form data error handling
-      $sql = "SELECT id, username, password FROM users WHERE username='$u' AND password='$p' AND activated='1' LIMIT 1";
-      $query = mysqli_query($db_conx, $sql);
-      $row = mysqli_fetch_row($query);
+      $query1 = $db_conx2->prepare("SELECT id, username, password FROM users WHERE username='$u' AND password='$p' AND activated='1' LIMIT 1");
+      $query1->execute();
+      $row = $query1->fetch(PDO::FETCH_NUM);
       $db_id = $row[0];
       $db_username = $row[1];
       $db_pass_str = $row[2];
@@ -54,8 +54,8 @@ if (isset($_POST["logincheck"])) {
       setcookie("user", $db_username, strtotime( '+30 days' ), "/", "", "", TRUE);
       setcookie("pass", $db_pass_str, strtotime( '+30 days' ), "/", "", "", TRUE);
       //Update their "IP" and "LASTLOGIN" fields
-      $sql = "UPDATE users SET ip='$ip', lastlogin=now() WHERE username='$db_username' LIMIT 1";
-      $query = mysqli_query($db_conx, $sql);
+      $query2 = $db_conx2->prepare("UPDATE users SET ip='$ip', lastlogin=now() WHERE username='$db_username' LIMIT 1");
+      $query2->execute();
       echo $db_username;
       exit();
       }

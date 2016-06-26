@@ -20,10 +20,10 @@ if (isset($_GET["u"])) {
   exit();
 }
 //Select the member from the users table
-$sql = "SELECT * FROM users WHERE username='$u' AND activated='1' LIMIT 1";
-$user_query = mysqli_query($db_conx, $sql);
+$user_query = $db_conx2->prepare("SELECT * FROM users WHERE username='$u' AND activated='1' LIMIT 1");
+$user_query->execute();
 //Make sure that the user exists in the table
-$numrows = mysqli_num_rows($user_query);
+$numrows = $user_query->fetchColumn();
 if ($numrows < 1) {
   echo "That user does not exist or is not yet activated.";
   exit();
@@ -45,7 +45,9 @@ if ($u == $log_username && $user_ok == true) {
   </form>';
 }
 //Get the user row from the query above
-while ($row = mysqli_fetch_array($user_query, MYSQLI_ASSOC)) {
+$user_query2 = $db_conx2->prepare("SELECT * FROM users WHERE username='$u' AND activated='1' LIMIT 1");
+$user_query2->execute();
+while ($row = $user_query2->fetch(PDO::FETCH_ASSOC)) {
   $profile_id = $row["id"];
   $fname = $row["firstname"];
   $lname = $row["lastname"];
@@ -75,8 +77,8 @@ if (isset($_POST['u']) && isset($_POST['np']) && $_POST['np'] != "" && $_POST['u
     echo "Your new password is not long enough";
   } else {
     $new_pass_hache = hash('whirlpool', $_POST['np']);
-    $npsql = "UPDATE users SET password='$new_pass_hache' WHERE username='$log_username'";
-    $npquery = mysqli_query($db_conx, $npsql);
+    $npquery = $db_conx2->prepare("UPDATE users SET password='$new_pass_hache' WHERE username='$log_username'");
+    $npquery->execute();
     echo "pass_change_success";
   }
   exit();
@@ -90,20 +92,26 @@ $viewerBlockOwner = false;
 if ($u != $log_username && $user_ok == true) {
   //This part below is to see if the person viewing the profile is logged in and to
   //see if they are friends already with that person
-  $friend_check = "SELECT id FROM friends WHERE user1='$log_username' AND user2='$u' AND accepted='1' OR user1='$u' AND user2='$log_username' AND accepted='1' LIMIT 1";
-  if (mysqli_num_rows(mysqli_query($db_conx, $friend_check)) > 0) {
+  $friend_check = $db_conx2->prepare("SELECT id FROM friends WHERE user1='$log_username' AND user2='$u' AND accepted='1' OR user1='$u' AND user2='$log_username' AND accepted='1' LIMIT 1");
+  $friend_check->execute();
+  $friend_check_num_rows = $friend_check->fetchColumn();
+  if ($friend_check_num_rows > 0) {
     $isFriend = true;
   }
   //This next part checks if the owner of the profile that the viewer is looking
   //at has blocked this viewer or not
-  $block_check1 = "SELECT id FROM blockedusers WHERE blocker='$u' AND blockee='$log_username' LIMIT 1";
-  if (mysqli_num_rows(mysqli_query($db_conx, $block_check1)) > 0) {
+  $block_check1 = $db_conx2->prepare("SELECT id FROM blockedusers WHERE blocker='$u' AND blockee='$log_username' LIMIT 1");
+  $block_check1->execute();
+  $block_check1_num_rows = $block_check1->fetchColumn();
+  if ($block_check1_num_rows > 0) {
     $ownerBlockViewer = true;
   }
   //This part is to check if the viewer has blocked the owner of the profile
   //that they are viewing
-  $block_check2 = "SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$u' LIMIT 1";
-  if (mysqli_num_rows(mysqli_query($db_conx, $block_check2)) > 0) {
+  $block_check2 = $db_conx2->prepare("SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$u' LIMIT 1");
+  $block_check2->execute();
+  $block_check2_num_rows = $block_check2->fetchColumn();
+  if ($block_check2_num_rows > 0) {
     $viewerBlockOwner = true;
   }
 }
@@ -131,23 +139,23 @@ if ($viewerBlockOwner == true) {
 <?php
 $friendsHTML = '';
 $friends_view_all_link = '';
-$sql = "SELECT COUNT(id) FROM friends WHERE user1='$u' AND accepted='1' OR user2='$u' AND accepted='1'";
-$query = mysqli_query($db_conx, $sql);
-$query_count = mysqli_fetch_row($query);
+$query = $db_conx2->prepare("SELECT COUNT(id) FROM friends WHERE user1='$u' AND accepted='1' OR user2='$u' AND accepted='1'");
+$query->execute();
+$query_count = $query->fetch(PDO::FETCH_NUM);
 $friend_count = $query_count[0];
 if ($friend_count < 1) {
   $friendsHTML = $u." has no friends yet";
 } else {
   $max = 10;
   $all_friends = array();
-  $sql = "SELECT user1 FROM friends WHERE user2='$u' AND accepted='1' ORDER BY RAND() LIMIT $max";
-  $query = mysqli_query($db_conx, $sql);
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_all_friends = $db_conx2->prepare("SELECT user1 FROM friends WHERE user2='$u' AND accepted='1' ORDER BY RAND() LIMIT $max");
+  $query_all_friends->execute();
+  while ($row = $query_all_friends->fetch(PDO::FETCH_ASSOC)) {
     array_push($all_friends, $row["user1"]);
   }
-  $sql = "SELECT user2 FROM friends WHERE user1='$u' AND accepted='1' ORDER BY RAND() LIMIT $max";
-  $query = mysqli_query($db_conx, $sql);
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_all_friends2 = $db_conx2->prepare("SELECT user2 FROM friends WHERE user1='$u' AND accepted='1' ORDER BY RAND() LIMIT $max");
+  $query_all_friends2->execute();
+  while ($row = $query_all_friends2->fetch(PDO::FETCH_ASSOC)) {
     array_push($all_friends, $row["user2"]);
   }
   $friendArrayCount = count($all_friends);
@@ -165,9 +173,9 @@ if ($friend_count < 1) {
     $orLogic .= "username='$user' OR ";
   }
   $orLogic = chop($orLogic, "OR ");
-  $sql = "SELECT username, avatar FROM users WHERE $orLogic";
-  $query = mysqli_query($db_conx, $sql);
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_friend_info = $db_conx2->prepare("SELECT username, avatar FROM users WHERE $orLogic");
+  $query_friend_info->execute();
+  while ($row = $query_friend_info->fetch(PDO::FETCH_ASSOC)) {
     $friend_username = $row["username"];
     $friend_avatar = $row["avatar"];
     if ($friend_avatar != "") {
@@ -181,10 +189,13 @@ if ($friend_count < 1) {
 ?>
 <?php
 $coverpic = "";
-$sql = "SELECT filename FROM photos WHERE user='$u' ORDER BY RAND() LIMIT 1";
-$query = mysqli_query($db_conx, $sql);
-if (mysqli_num_rows($query) > 0) {
-  $row = mysqli_fetch_row($query);
+$query_coverpic = $db_conx2->prepare("SELECT filename FROM photos WHERE user='$u' ORDER BY RAND() LIMIT 1");
+$query_coverpic->execute();
+$coverpic_num_rows = $query_coverpic->fetchColumn();
+if ($coverpic_num_rows > 0) {
+  $query_coverpic2 = $db_conx2->prepare("SELECT filename FROM photos WHERE user='$u' ORDER BY RAND() LIMIT 1");
+  $query_coverpic2->execute();
+  $row = $query_coverpic2->fetch(PDO::FETCH_NUM);
   $filename = $row[0];
   $coverpic = '<img src="user/'.$u.'/'.$filename.'" alt="pic" />';
 }

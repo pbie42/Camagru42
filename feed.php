@@ -20,7 +20,6 @@ $i = 0;
 // $rowquery = mysqli_query($db_conx, "SELECT * FROM photos");
 // $rowcount = mysqli_num_rows($rowquery);
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-  print_r ($row);
   $photoid = $row["id"];
   $username = $row["user"];
   $filename = $row["filename"];
