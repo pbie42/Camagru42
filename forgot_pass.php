@@ -10,20 +10,22 @@ if ($user_ok == true) {
  //Ajax calls this code to execute
  if (isset($_POST["e"])) {
    $e = mysqli_real_escape_string($db_conx, $_POST['e']);
-   $sql = "SELECT id, username FROM users WHERE email='$e' AND activated='1' LIMIT 1";
-   $query = mysqli_query($db_conx, $sql);
-   $numrows = mysqli_num_rows($query);
-   if ($numrows > 0) {
-     while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+   $query_email = $db_conx2->prepare("SELECT id, username FROM users WHERE email='$e' AND activated='1' LIMIT 1");
+   $query_email->execute();
+   $numrows_email = $query_email->fetchColumn();
+   if ($numrows_email > 0) {
+     $query_email2 = $db_conx2->prepare("SELECT id, username FROM users WHERE email='$e' AND activated='1' LIMIT 1");
+     $query_email2->execute();
+     while ($row = $query_email2->fetch(PDO::FETCH_ASSOC)) {
        $id = $row["id"];
        $u = $row["username"];
      }
      $emailcut = substr($e, 0, 4);
      $randNum = rand(10000, 99999);
      $tempPass = "$emailcut$randNum";
-     $hashTempPass = hash('whirlpool', $temp_pass);
-     $sql = "UPDATE useroptions SET temp_pass='$hashTempPass' WHERE username='$u' LIMIT 1";
-     $query = mysqli_query($db_conx, $sql);
+     $hashTempPass = hash('whirlpool', $tempPass);
+     $query_update_temp_pass = $db_conx2->prepare("UPDATE useroptions SET temp_pass='$hashTempPass' WHERE username='$u' LIMIT 1");
+     $query_update_temp_pass->execute();
      $to = "$e";
      $from = "pbiecamagru42@gmail.com";
      $subject = "Camagru Temporary Password PLEASE DO NOT RESPOND";
@@ -58,16 +60,18 @@ if (isset($_GET['u']) && isset($_GET['p'])) {
     //anyone think that they have found something out.
     exit();
   }
-  $sql = "SELECT id FROM useroptions WHERE username='$u' AND temp_pass='$temppasshash' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $numrows = mysqli_num_rows($query);
-  if ($numrows == 0) {
+  $query_useroptions_id = $db_conx2->prepare("SELECT id FROM useroptions WHERE username='$u' AND temp_pass='$temppasshash' LIMIT 1");
+  $query_useroptions_id->execute();
+  $numrows_useroptions_id = $query_useroptions_id->fetchColumn();
+  if ($numrows_useroptions_id == 0) {
     header("location: message.php?msg=There is no match for that username with that temporary password in the system.");
   } else {
-    $row = mysqli_fetch_row($query);
+    $query_useroptions_id2 = $db_conx2->prepare("SELECT id FROM useroptions WHERE username='$u' AND temp_pass='$temppasshash' LIMIT 1");
+    $query_useroptions_id2->execute();
+    $row = $query_useroptions_id2->fetch(PDO::FETCH_NUM);
     $id = $row[0];
-    $sql = "UPDATE users SET password='$temppasshash' WHERE id='$id' AND username='$u' LIMIT 1";
-    $query = mysqli_query($db_conx, $sql);
+    $query_update_pass = $db_conx2->prepare("UPDATE users SET password='$temppasshash' WHERE id='$id' AND username='$u' LIMIT 1");
+    $query_update_pass->execute();
     header("location: index.php");
     exit();
   }

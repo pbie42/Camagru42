@@ -24,18 +24,23 @@ if ($u == $log_username && $user_ok == true) {
 }
 //Select the user galleries
 $gallery_list = "";
-$sql = "SELECT DISTINCT gallery FROM photos WHERE user='$u'";
-$query = mysqli_query($db_conx, $sql);
-if (mysqli_num_rows($query) < 1) {
+$query_gallery = $db_conx2->prepare("SELECT DISTINCT gallery FROM photos WHERE user='$u'");
+$query_gallery->execute();
+$query_gallery_num_rows = $query_gallery->fetchColumn();
+if ($query_gallery_num_rows < 1) {
   $gallery_list = "This user has not uploaded any photos yet.";
 } else {
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_gallery2 = $db_conx2->prepare("SELECT DISTINCT gallery FROM photos WHERE user='$u'");
+  $query_gallery2->execute();
+  while ($row = $query_gallery2->fetch(PDO::FETCH_ASSOC)) {
     $gallery = $row["gallery"];
-    $countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos WHERE user='$u' AND gallery='$gallery'");
-    $countrow = mysqli_fetch_row($countquery);
+    $countquery = $db_conx2->prepare("SELECT COUNT(id) FROM photos WHERE user='$u' AND gallery='$gallery'");
+    $countquery->execute();
+    $countrow = $countquery->fetch(PDO::FETCH_NUM);
     $count = $countrow[0];
-    $filequery = mysqli_query($db_conx, "SELECT filename FROM photos WHERE user='$u' AND gallery='$gallery' ORDER BY RAND() LIMIT 1");
-    $filerow = mysqli_fetch_row($filequery);
+    $filequery = $db_conx2->prepare("SELECT filename FROM photos WHERE user='$u' AND gallery='$gallery' ORDER BY RAND() LIMIT 1");
+    $filequery->execute();
+    $filerow = $filequery->fetch(PDO::FETCH_NUM);
     $file = $filerow[0];
     $gallery_list .= '<div>';
     $gallery_list .= '<div onclick="showGallery(\''.$gallery.'\',\''.$u.'\')">';

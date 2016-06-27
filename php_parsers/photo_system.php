@@ -3,7 +3,7 @@ include_once '../php_includes/check_login_status.php';
 ?>
 <?php
 //TODO use this function below and figure out how to convert it for use with a feed
-if (isset($_POST["show"]) && $_POST["show"] == "galpics") {
+/*if (isset($_POST["show"]) && $_POST["show"] == "galpics") {
   $picstring = "";
   $gallery = preg_replace('#[^a-z0-9]#i', '', $_POST["gallery"]);
   $user = preg_replace('#[^a-z0-9]#i', '', $_POST["user"]);
@@ -20,7 +20,7 @@ if (isset($_POST["show"]) && $_POST["show"] == "galpics") {
   $picstring = trim($picstring, "|||");
   echo $picstring;
   exit();
-}
+}*/
 ?>
 <?php
 if ($user_ok != true || $log_username == "") {
@@ -147,16 +147,15 @@ if (isset($_POST['cam']) && $_POST['cam'] != "") {
     $friend = $friends[$i];
     $app = "Post";
     $note = '<span class="username">'.$log_username.'</span> made a new post!<br /><a href="feed.php#post_'.$realid.'">Click here to view the post</a>';
-    $query_friend_notify = $db_conx2->prepare("INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
-    $query_friend_notify->execute();
-    //mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
+    $query_friend_notify = $db_conx2-
+    mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$friend','$log_username','$app','$note',now())");
   }
   header("location: ../feed.php");
   exit();
 }
 ?>
 <?php
-if (isset($_FILES["photo"]["name"])) {
+/*if (isset($_FILES["photo"]["name"])) {
   $sql = "SELECT COUNT(id) FROM photos WHERE user='$log_username'";
   $query = mysqli_query($db_conx, $sql);
   $row = mysqli_fetch_row($query);
@@ -252,7 +251,7 @@ if (isset($_FILES["photo"]["name"])) {
   //header("location: ../photos.php?u=$log_username");
   header("location: ../feed.php");
   exit();
-}
+}*/
 ?>
 <?php
 if (isset($_POST["delete"]) && $_POST["id"] != "") {
@@ -271,6 +270,31 @@ if (isset($_POST["delete"]) && $_POST["id"] != "") {
   }
   mysqli_close($db_conx);
   echo "deleted_ok";
+  exit();
+}
+?>
+<?php
+if (isset($_POST["deletepost"]) && $_POST["id"] != "") {
+  $id = preg_replace('#[^0-9]#', '', $_POST["id"]);
+  $query_user_file = $db_conx2->prepare("SELECT user, filename FROM photos WHERE id='$id' LIMIT 1");
+  $query_user_file->execute();
+  $row_user_file = $query_user_file->fetch(PDO::FETCH_NUM);
+  $user = $row_user_file[0];
+  $filename = $row_user_file[1];
+  if ($user == $log_username) {
+    $picurl = "../user/$log_username/$filename";
+    $picurl2 = "../user/all/$filename";
+    if (file_exists($picurl) || file_exists($picurl2)) {
+      unlink($picurl);
+      unlink($picurl2);
+      $query_delete_photo = $db_conx2->prepare("DELETE FROM photos WHERE id='$id' LIMIT 1");
+      $query_delete_photo->execute();
+      $query_delete_status = $db_conx2->prepare("DELETE FROM status WHERE osid='$id'");
+      $query_delete_status->execute();
+      echo "post_deleted_ok";
+    }
+  }
+  $db_conx2 = null;
   exit();
 }
 ?>

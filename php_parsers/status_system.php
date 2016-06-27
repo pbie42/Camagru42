@@ -5,35 +5,71 @@ if ($user_ok != true || $log_username == "") {
 }
 ?>
 <?php
+if (isset($_POST['u']) && isset($_POST['np']) && $_POST['np'] != "" && $_POST['u'] != "") {
+  $up = preg_replace('#[^a-z0-9]#i', '', $_POST['u']);
+  $np = $_POST['np'];
+  if ($up == "" || $np == "") {
+    echo "There was a problem please try again.";
+    exit();
+  } elseif ($up != $log_username) {
+    echo "This is not your account";
+    exit();
+  } elseif (strlen($np) < 5) {
+    echo "Your new password is not long enough";
+    exit();
+  } else {
+    $new_pass_hache = hash('whirlpool', $_POST['np']);
+    $npquery = $db_conx2->prepare("UPDATE users SET password='$new_pass_hache' WHERE username='$log_username'");
+    $npquery->execute();
+    echo "pass_change_success";
+    exit();
+  }
+  header("location: logout.php");
+  exit();
+}
+?>
+<?php
 if (isset($_POST['photoid']) && isset($_POST['liker']) && isset($_POST['username']) && isset($_POST['action'])) {
   $photoid = preg_replace('#[^0-9]#', '', $_POST['photoid']);
   $liker = preg_replace('#[^a-z0-9 ]#i', '', $_POST['liker']);
   $username = preg_replace('#[^a-z0-9 ]#i', '', $_POST['username']);
   if ($_POST['action'] == "like") {
-    $sqllike = "INSERT INTO likes(osid, username, liker, likes) VALUES('$photoid','$username','$liker',1)";
-    $querylike = mysqli_query($db_conx, $sqllike);
-    $sqlphotolike = "UPDATE photos SET likes=likes+1 WHERE id='$photoid'";
-    $queryphotolike = mysqli_query($db_conx, $sqlphotolike);
+    $querylike = $db_conx2->prepare("INSERT INTO likes(osid, username, liker, likes) VALUES('$photoid','$username','$liker',1)");
+    $querylike->execute();
+    $queryphotolike = $db_conx2->prepare("UPDATE photos SET likes=likes+1 WHERE id='$photoid'");
+    $queryphotolike->execute();
     $app = "Post Like";
     $note = '<span class="username">'.$liker.'</span> liked your post!<br /><a href="feed.php#post_'.$photoid.'">Click here to view the post</a>';
-    mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$username','$liker','$app','$note',now())");
+    $querylikenotify = $db_conx2->prepare("INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$username','$liker','$app','$note',now())");
+    $querylikenotify->execute();
     echo "like_ok";
   } else if ($_POST['action'] == "unlike") {
-    $sqlunlike = "DELETE FROM likes WHERE osid='$photoid' AND liker='$liker'";
-    $queryunlike = mysqli_query($db_conx, $sqlunlike);
-    $sqlphotounlike = "UPDATE photos SET likes=likes-1 WHERE id='$photoid'";
-    $queryphotounlike = mysqli_query($db_conx, $sqlphotounlike);
+    $querylikecheck = $db_conx2->prepare("SELECT likes FROM photos WHERE osid='$photoid'");
+    $querylikecheck->execute();
+    $rowlikecheck = $querylikecheck->fetch(PDO::FETCH_ASSOC);
+    $likesbefore = $rowlikecheck["likes"];
+    //TODO Figure out why this isnt working. This is the last thing you need to fix!!!!!
+    if ($likesbefore == 0) {
+      echo "$likesbefore";
+      echo "nice_try_asshole";
+      exit();
+    }
+    $queryunlike = $db_conx2->prepare("DELETE FROM likes WHERE osid='$photoid' AND liker='$liker'");
+    $queryunlike->execute();
+    $queryphotounlike = $db_conx2->prepare("UPDATE photos SET likes=likes-1 WHERE id='$photoid'");
+    $queryphotounlike->execute();
     $app = "Post Like";
-    mysqli_query($db_conx, "DELETE FROM notifications WHERE username='$username' AND initiator='$liker' AND app='$app'");
+    $queryunlikenotify = $db_conx2->prepare("DELETE FROM notifications WHERE username='$username' AND initiator='$liker' AND app='$app'");
+    $queryunlikenotify->execute();
     echo "unlike_ok";
   }
   //TODO Set notification for when your photo is liked
-  mysqli_close($db_conx);
+  $db_conx2 = null;
   exit();
 }
 ?>
 <?php
-if (isset($_POST['action']) && $_POST['action'] == "status_post") {
+/*if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   //Make sure the post data is not empty
   if (strlen($_POST['data']) < 1) {
     mysqli_close($db_conx);
@@ -86,7 +122,7 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   //TODO need to decide whether I will allow this or not. Probably should for a bonus
   //Can also use this for things other than comments such as whenever someone makes a
   //new photo post. All I would have to do is adapt this for my photo_system parsing.
-  $friends = array();
+  /*$friends = array();
   $query = mysqli_query($db_conx, "SELECT user1 FROM friends WHERE user2='$log_username' AND accepted='1'");
   while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
     array_push($friends, $row["user1"]);
@@ -104,13 +140,13 @@ if (isset($_POST['action']) && $_POST['action'] == "status_post") {
   mysqli_close($db_conx);
   echo "post_ok|$id";
   exit();
-}
+}*/
 ?>
 <?php
 if (isset($_POST['action']) && $_POST['action'] == "status_reply") {
   //First we make sure the data is not empty
   if (strlen($_POST['data']) < 1) {
-    mysqli_close($db_conx);
+    $db_conx2 = null;
     echo "data_empty";
     exit();
   }
@@ -121,39 +157,39 @@ if (isset($_POST['action']) && $_POST['action'] == "status_reply") {
   $data = htmlentities($_POST['data']);
   $data = mysqli_real_escape_string($db_conx, $data);
   //Next we make sure the account name exists (the profile being posted on)
-  $sql = "SELECT COUNT(id) FROM users WHERE username='$account_name' AND activated='1' LIMIT 1";
-  $query = mysqli_query($db_conx, $sql);
-  $row = mysqli_fetch_row($query);
+  $query_account = $db_conx2->prepare("SELECT COUNT(id) FROM users WHERE username='$account_name' AND activated='1' LIMIT 1");
+  $query_account->execute();
+  $row = $query_account->fetch(PDO::FETCH_NUM);
   if ($row[0] < 1) {
-    mysqli_close($db_conx);
+    $db_conx2 = null;
     echo "account_no_exit";
     exit();
   }
-  //If everything is oke we are then going to insert the status reply post into the database
-  $sql = "INSERT INTO status(osid, account_name, author, type, data, postdate) VALUES('$osid','$account_name','$log_username','b','$data',now())";
-  $query = mysqli_query($db_conx, $sql);
+  //If everything is ok we are then going to insert the status reply post into the database
+  $query_insert_reply = $db_conx2->prepare("INSERT INTO status(osid, account_name, author, type, data, postdate) VALUES('$osid','$account_name','$log_username','b','$data',now())");
+  $query_insert_reply->execute();
   //We are using the mysqli_insert_id function because we want the reply id. We
   //send it back to ajax so that the user can instantly delete the reply if they
   //would like without having to page refresh. The post delete will requre this id number.
-  $id = mysqli_insert_id($db_conx);
+  $id = $db_conx2->lastInsertId();
   //Insert notifications for everybody in the conversation except the author
-  $sql = "SELECT author FROM status WHERE osid='$osid' AND author!='$log_username' GROUP BY author";
-  $query = mysqli_query($db_conx, $sql);
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_author = $db_conx2->prepare("SELECT author FROM status WHERE osid='$osid' AND author!='$log_username' GROUP BY author");
+  $query_author->execute();
+  while ($row = $query_author->fetch(PDO::FETCH_ASSOC)) {
     $participant = $row["author"];
     $app = "Post Comment";
     $note = '<span class="username">'.$log_username.'</span> commented here:<br /><a href="feed.php#post_'.$osid.'">Click here to view the conversation</a>';
     mysqli_query($db_conx, "INSERT INTO notifications(username, initiator, app, note, date_time) VALUES('$participant','$log_username','$app','$note',now())");
   }
-  $nsql = "SELECT user FROM photos WHERE id='$osid' LIMIT 1";
-  $nquery = mysqli_query($db_conx, $nsql);
-  while ($nrow = mysqli_fetch_array($nquery, MYSQLI_ASSOC)) {
+  $nquery = $db_conx2->prepare("SELECT user FROM photos WHERE id='$osid' LIMIT 1");
+  $nquery->execute();
+  while ($nrow = $nquery->fetch(PDO::FETCH_ASSOC)) {
     $tonotify = $nrow["user"];
   }
   if ($tonotify != $log_username) {
-    $asql = "SELECT email FROM users WHERE username='$tonotify' LIMIT 1";
-    $aquery = mysqli_query($db_conx, $asql);
-    while ($arow = mysqli_fetch_array($aquery, MYSQLI_ASSOC)) {
+    $aquery = $db_conx2->prepare("SELECT email FROM users WHERE username='$tonotify' LIMIT 1");
+    $aquery->execute();
+    while ($arow = $aquery->fetch(PDO::FETCH_ASSOC)) {
       $e = $arow["email"];
     }
     $to = "$e";
@@ -166,7 +202,7 @@ if (isset($_POST['action']) && $_POST['action'] == "status_reply") {
     mail($to, $subject, $message, $headers);
   }
 
-  mysqli_close($db_conx);
+  $db_conx2 = null;
   echo "reply_ok|$id";
   exit();
 }
@@ -196,20 +232,22 @@ if (isset($_POST['action']) && $_POST['action'] == "delete_status") {
 <?php
 if (isset($_POST['action']) && $_POST['action'] == "delete_reply") {
   if (!isset($_POST['replyid']) || $_POST['replyid'] == "") {
-    mysqli_close($db_conx);
+    $db_conx2 = null;
     exit();
   }
   $replyid = preg_replace('#[^0-9]#', '', $_POST['replyid']);
   //Check to make sure the person deleting this reply is either the account owner or the person who wrote it.
-  $query = mysqli_query($db_conx, "SELECT osid, account_name, author FROM status WHERE id='$replyid' LIMIT 1");
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_owner = $db_conx2->prepare("SELECT osid, account_name, author FROM status WHERE id='$replyid' LIMIT 1");
+  $query_owner->execute();
+  while ($row = $query_owner->fetch(PDO::FETCH_ASSOC)) {
     $osid = $row["osid"];
     $account_name = $row["account_name"];
     $author = $row["author"];
   }
   if ($author == $log_username || $account_name == $log_username) {
-    mysqli_query($db_conx, "DELETE FROM status WHERE id='$replyid' LIMIT 1");
-    mysqli_close($db_conx);
+    $query_delete_reply = $db_conx2->prepare("DELETE FROM status WHERE id='$replyid' LIMIT 1");
+    $query_delete_reply->execute();
+    $db_conx2 = null;
     echo "delete_ok";
     exit();
   }

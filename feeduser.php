@@ -21,7 +21,9 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   if ($likes == "") {
     $likes = 0;
   }
-
+  if ($username == $log_username && $user_ok == true) {
+    $delete_post = '<button class="delete_post_btn" onclick="deletePost2(\''.$photoid.'\',\''.$log_username.'\')">Delete This Post?</button>';
+  }
   //The part below is to deal with blocking checks
   $isFriend = false;
   $ownerBlockViewer = false;
@@ -142,7 +144,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $likesbutton = '<img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'like\')" src="resources/likeempty.png" />';
   }
   $feedstring .= '<div id="message_section">
-    <div id="post_'.$photoid.'" class="main_feed_area welcome_font">
+    <div id="post_'.$photoid.'" onmouseover="showDelete(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\')" onmouseout="hideDelete(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\')" class="main_feed_area welcome_font">
       <div class="postheader">
         <div class="feed_username">
           <a href="user.php?u='.$author.'">
@@ -161,6 +163,9 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
           '.$likesbutton.'
         </div>
         <h4 id="like_number_'.$photoid.'" class="number_likes">'.$likes.' likes</h4>
+        <div id="delete_post_'.$photoid.'" class="delete_post_div">
+          '.$delete_post.'
+        </div>
       </div>
       <div id="statusarea">
         '.$statuslist.'
@@ -230,5 +235,39 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     		alert(maxlimit+" maximum character limit reached");
     		field.value = field.value.substring(0, maxlimit);
     	}
+    }
+    function showDelete(photoid,logusername,username) {
+      if (logusername != username) {
+        return ;
+      }
+      else {
+        _("delete_post_"+photoid).style.display = "block";
+      }
+    }
+    function hideDelete(photoid,logusername,username) {
+      if (logusername != username) {
+        return ;
+      }
+      else {
+        _("delete_post_"+photoid).style.display = "none";
+      }
+    }
+    function deletePost2(id,logusername) {
+      var conf = confirm("Press OK to confirm the delete action on this post.");
+      if (conf != true) {
+        return false;
+      }
+      var ajax = ajaxObj("POST", "php_parsers/photo_system.php");
+      ajax.onreadystatechange = function () {
+        if (ajaxReturn(ajax) == true) {
+          if (ajax.responseText == "post_deleted_ok") {
+            alert("This picture has been deleted successfully. We will now refresh the page for you.");
+            window.location = "user.php?u="+logusername;
+          } else {
+            console.log(ajax.responseText);
+          }
+        }
+      }
+      ajax.send("deletepost=post&id="+id);
     }
     </script>

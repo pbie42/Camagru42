@@ -38,7 +38,7 @@ if ($u == $log_username && $user_ok == true) {
   $avatar_form .= '<input id="choose_avatar" class="inputfile" type="file" name="avatar" data-multiple-caption="{count} files selected" multiple required/><label id="choose_avatar_label" for="choose_avatar"><span>Choose Photo</span></label>';
   $avatar_form .= '<p><input id="change_avatar_btn" class="inputfile" type="submit" value="Upload"/><label id="choose_avatar_label" for="change_avatar_btn">Upload</label></p>';
   $avatar_form .= '</form>';
-  $reset_pass_form ='<form id="newpassform" class="" action="user.php" method="post">
+  $reset_pass_form ='<form id="newpassform" class="" action="logout.php" method="post">
     <input id="newpass1" class="login_input" type="password" name="password" value="" minlength="5" placeholder="New Password">
     <input id="newpass2" class="login_input" type="password" name="password" value="" minlength="5" placeholder="Verify New Password">
     <button id="signupbtn" class="welcome_font" onclick="passreset()" type="submit" name="submit" value="signup">Reset Password</button><br>
@@ -63,25 +63,6 @@ while ($row = $user_query2->fetch(PDO::FETCH_ASSOC)) {
 $profile_pic = '<img id="profile_avatar" src="user/'.$u.'/'.$avatar.'" alt="'.$u.'" />';
 if ($avatar == NULL) {
   $profile_pic = '<img class="avatar" src="resources/user.png" alt="'.$user1.'" />';
-}
-?>
-<?php
-if (isset($_POST['u']) && isset($_POST['np']) && $_POST['np'] != "" && $_POST['u'] != "") {
-  $up = preg_replace('#[^a-z0-9]#i', '', $_POST['u']);
-  $np = $_POST['np'];
-  if ($up == "" || $np == "") {
-    echo "There was a problem please try again.";
-  } elseif ($up != $log_username) {
-    echo "This is not your account";
-  } elseif (strlen($np) < 5) {
-    echo "Your new password is not long enough";
-  } else {
-    $new_pass_hache = hash('whirlpool', $_POST['np']);
-    $npquery = $db_conx2->prepare("UPDATE users SET password='$new_pass_hache' WHERE username='$log_username'");
-    $npquery->execute();
-    echo "pass_change_success";
-  }
-  exit();
 }
 ?>
 <?php
@@ -242,9 +223,6 @@ else {
             <h1 id="notificationtitle" class="welcome_font">Friends</h1>
             <?php echo $friendsHTML; ?>
             <hr>
-            <div id="photo_showcase" onclick="window.location = 'photos.php?u=<?php echo $u; ?>';" title="view <?php echo $u; ?>&#39;s photo galleries">
-
-            </div>
 
           </div>
           <?php include_once 'feeduser.php'; ?>
@@ -268,7 +246,7 @@ else {
         _("signupbtn").style.display = "none";
         //Again in this method below we can replace 'Please wait...' with gif html code
         statusnew.innerHTML = 'Please wait...';
-        var ajax = ajaxObj("POST", "user.php?u="+u);
+        var ajax = ajaxObj("POST", "php_parsers/status_system.php");
         ajax.onreadystatechange = function() {
           if (ajaxReturn(ajax) == true) {
             var response = ajax.responseText;
@@ -279,7 +257,7 @@ else {
               console.log("getting here");
               console.log(cleanresponse);
             } else {
-              alert("Password Change Successful")
+              alert("Password Change Successful! You will now be logged out. Please log back in with your new password.")
               _("signupbtn").style.display = "none";
               console.log("Successful");
               statusnew.innerHTML = "";

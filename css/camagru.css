@@ -1007,6 +1007,36 @@ margin-bottom:         10px;
   width:               310px;
 }
 
+.delete_post_div {
+  display:             none;
+}
+
+.delete_post_btn {
+  width:               150px;
+  height:              20px;
+  background-color:    rgb(117, 52, 52);
+  color:               #FFFFFF;
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  padding:             0;
+  font-size:           12px;
+  z-index:             2;
+}
+
+.delete_post_btn:hover {
+  width:               150px;
+  height:              20px;
+  background-color:    rgba(88, 2, 2, 1);
+  color:               #FFFFFF;
+  border-color:        rgb(117, 52, 52);
+  border:              1px solid;
+  border-radius:       3px;
+  padding:             0;
+  font-size:           12px;
+  z-index:             2;
+}
+
 #statusui {
   text-align:          center;
 }
@@ -1016,12 +1046,12 @@ textarea::-webkit-input-placeholder {
 }
 
 #statusarea {
-  margin-left: auto;
-  margin-right: auto;
+  margin-left:         auto;
+  margin-right:        auto;
 }
 
 #template_status {
-  text-align: left;
+  text-align:          left;
 }
 
 #feed_section {

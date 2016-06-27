@@ -20,6 +20,7 @@ function logincheck() {
 function login() {
   var u = _("username").value;
   var p = _("password").value;
+  console.log("getting here");
   if (u == "" || p == "") {
     _("loginstatus").innerHTML = "Please fill out all of the form fields";
   } else {
@@ -31,6 +32,7 @@ function login() {
       if (ajaxReturn(ajax) == true) {
         var response = ajax.responseText;
         var cleanresponse = trim1(response);
+        console.log(cleanresponse);
         if (cleanresponse == "login_failed") {
           _("loginstatus").innerHTML = "Login unsuccessful, please try again.";
           _("login_button").style.display = "block";

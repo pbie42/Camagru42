@@ -5,13 +5,15 @@ if ($user_ok != true || $log_username == "") {
   exit();
 }
 $notification_list = "";
-$sql = "SELECT * FROM notifications WHERE username LIKE BINARY '$log_username' ORDER BY date_time DESC";
-$query = mysqli_query($db_conx, $sql);
-$numrows = mysqli_num_rows($query);
-if ($numrows < 1) {
+$query_notifications = $db_conx2->prepare("SELECT * FROM notifications WHERE username LIKE BINARY '$log_username' ORDER BY date_time DESC LIMIT 10");
+$query_notifications->execute();
+$numrows_notifications = $query_notifications->fetchColumn();
+if ($numrows_notifications < 1) {
   $notification_list = "<p>You do not have any notifications</p>";
 } else {
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_notifications2 = $db_conx2->prepare("SELECT * FROM notifications WHERE username LIKE BINARY '$log_username' ORDER BY date_time DESC LIMIT 10");
+  $query_notifications2->execute();
+  while ($row = $query_notifications2->fetch(PDO::FETCH_ASSOC)) {
     $noteid = $row["id"];
     $initiator = $row["initiator"];
     $app = $row["app"];
@@ -21,23 +23,28 @@ if ($numrows < 1) {
     $notification_list .= "<p>$note</p>";
   }
 }
-mysqli_query($db_conx, "UPDATE users SET notescheck=now() WHERE username='$log_username' LIMIT 1");
+$query_notecheck = $db_conx2->prepare("UPDATE users SET notescheck=now() WHERE username='$log_username' LIMIT 1");
+$query_notecheck->execute();
+//mysqli_query($db_conx, "UPDATE users SET notescheck=now() WHERE username='$log_username' LIMIT 1");
 ?>
 <?php
 $friend_requests = "";
-$sql = "SELECT * FROM friends WHERE user2='$log_username' AND accepted='0' ORDER BY datemade ASC";
-$query = mysqli_query($db_conx, $sql);
-$numrows = mysqli_num_rows($query);
-if ($numrows < 1) {
+$query_friend_requests = $db_conx2->prepare("SELECT * FROM friends WHERE user2='$log_username' AND accepted='0' ORDER BY datemade ASC");
+$query_friend_requests->execute();
+$numrows_friend_requests = $query_friend_requests->fetchColumn();
+if ($numrows_friend_requests < 1) {
   $friend_requests = '<p>You do not have any friend requests</p>';
 } else {
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+  $query_friend_requests2 = $db_conx2->prepare("SELECT * FROM friends WHERE user2='$log_username' AND accepted='0' ORDER BY datemade ASC");
+  $query_friend_requests2->execute();
+  while ($row = $query_friend_requests2->fetch(PDO::FETCH_ASSOC)) {
     $reqID = $row["id"];
     $user1 = $row["user1"];
     $datemade = $row["datemade"];
     $datemade = strftime("%B %d", strtotime($datemade));
-    $thumbquery = mysqli_query($db_conx, "SELECT avatar FROM users WHERE username='$user1' LIMIT 1");
-    $thumbrow = mysqli_fetch_row($thumbquery);
+    $thumbquery = $db_conx2->prepare("SELECT avatar FROM users WHERE username='$user1' LIMIT 1");
+    $thumbquery->execute();
+    $thumbrow = $thumbquery->fetch(PDO::FETCH_NUM);
     $user1avatar = $thumbrow[0];
     $user1pic = '<img src="user/'.$user1.'/'.$user1avatar.'" alt="'.$user1.'" class="user_pic" />';
     if ($user1avatar == NULL) {
