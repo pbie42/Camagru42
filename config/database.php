@@ -3,13 +3,13 @@
         $DB_DSN = "mysql:host=localhost;";
         $DB_USER = "root";
         $DB_PASSWORD = "root";
-        $DB_NAME = "camagru_test";
-        $DB_DSN_MADE = "mysql:dbname=camagru_test;host=localhost;";
+        $DB_NAME = "camagru";
+        $DB_DSN_MADE = "mysql:dbname=camagru;host=localhost;";
     } else {
         $DB_DSN = "mysql:host=localhost;";
         $DB_USER = "root";
         $DB_PASSWORD = "root";
-        $DB_NAME = "camagru_test";
-        $DB_DSN_MADE = "mysql:dbname=camagru_test;host=localhost;";
+        $DB_NAME = "camagru";
+        $DB_DSN_MADE = "mysql:dbname=camagru;host=localhost;";
     }
 ?>

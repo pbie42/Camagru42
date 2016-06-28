@@ -255,7 +255,7 @@ function screenshot()
 	pic_form.submit();
 }
 
-setInterval(draw, 10);
+setInterval(draw, 20);
 
 
 </script>

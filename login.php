@@ -69,17 +69,17 @@ if (isset($_POST["logincheck"])) {
     <h1 class="welcome_font">Welcome to</h1>
     <h1 id="login_logo" class="logo_font">Camagru</h1>
     <h3 class="welcome_font">Please log in to see photos<br/> from you and your friends</h3>
-    <form id="login_form" action="index.php" method="post">
+    <form id="login_form" action="index.php" onsubmit="return false" method="post">
       <!--TODO Need to clean this part up when the user hasn't activated their account-->
       <input id="username" class="login_input" type="text" onfocus="" onblur="logincheck()" name="username" placeholder="Username" required><br />
       <span id="lognamestatus"></span>
       <input id="password" class="login_input" type="password" onfocus="" name="password" placeholder="Password" required><br>
-      <button id="login_button" class="welcome_font" onclick="login()" type="submit" value="login" name="submit">Log In</button>
+      <button id="login_button" class="welcome_font" onclick="login();" type="submit" value="login" name="submit">Log In</button>
     </form>
     <h4 id="login_forgot"><a href="forgot_pass.php">Forgot your username or password?</a></h4>
-  </div>
-  <div class="">
-    <span id="loginstatus"></span>
+    <div class="">
+      <span id="loginstatus"></span>
+    </div>
   </div>
   <div id="login_signup">
     <h4 class="welcome_font">Don't have an Account?</h4>

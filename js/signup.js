@@ -69,12 +69,14 @@ function signup() {
     //Again in this method below we can replace 'Please wait...' with gif html code
     status.innerHTML = 'Please wait...';
     var ajax = ajaxObj("POST", "signup.php");
+    console.log("getting here");
     ajax.onreadystatechange = function() {
       if (ajaxReturn(ajax) == true) {
         var response = ajax.responseText;
         var cleanresponse = trim1(response);
         if (cleanresponse != "signup_success") {
           status.innerHTML = cleanresponse;
+          console.log(cleanresponse);
           _("signupbtn").style.display = "block";
         } else {
           window.scrollTo(0, 0);
@@ -82,6 +84,7 @@ function signup() {
           _("signupform").style.height = "250px";
           _("login_signup").style.display = "none";
           status.style.display = "none";
+          console.log(cleanresponse);
         }
       }
     }

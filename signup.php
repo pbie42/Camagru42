@@ -161,9 +161,9 @@ if (isset($_POST["emailcheck"])) {
               <select id="country" onfocus="emptyElement('status')"><?php include_once 'resources/countries.php'; ?></select>
               <button id="signupbtn" class="welcome_font" onclick="signup()" type="submit" name="submit" value="signup">Sign Up</button><br>
             </form>
-          </div>
-          <div class="signup_status">
-            <span id="status"></span>
+            <div class="signup_status">
+              <span id="status"></span>
+            </div>
           </div>
 
           <div id="login_signup">

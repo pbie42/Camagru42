@@ -20,7 +20,6 @@ function logincheck() {
 function login() {
   var u = _("username").value;
   var p = _("password").value;
-  console.log("getting here");
   if (u == "" || p == "") {
     _("loginstatus").innerHTML = "Please fill out all of the form fields";
   } else {
@@ -29,6 +28,7 @@ function login() {
     _("loginstatus").innerHTML = 'please wait...';
     var ajax = ajaxObj("POST", "login.php");
     ajax.onreadystatechange = function () {
+      console.log("not going in if statement");
       if (ajaxReturn(ajax) == true) {
         var response = ajax.responseText;
         var cleanresponse = trim1(response);
@@ -37,6 +37,7 @@ function login() {
           _("loginstatus").innerHTML = "Login unsuccessful, please try again.";
           _("login_button").style.display = "block";
         } else {
+          console.log(cleanresponse);
           //I can direct the user to any page I want by adding any variables
           //I want below. So as to use the php to show certain things in my index page.
           window.location = "user.php?u="+ajax.responseText;

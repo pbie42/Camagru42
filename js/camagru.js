@@ -91,13 +91,13 @@ function snap(){
 
     //Draw the video frame to the canvas
     canvas.getContext('2d').drawImage(video, 0, 0);
+    var can = document.getElementById('myCanvas');
     var myC2 = document.getElementById('myCanvas2');
     var can3 = document.getElementById('myCanvas3');
     can3.width = video.videoWidth;
     can3.height = video.videoHeight;
     var ctx3 = can3.getContext('2d');
-
-    ctx3.drawImage(canvas, 0, 0);
+    ctx3.drawImage(can, 0, 0);
     ctx3.drawImage(myC2, 0, 0);
   }, 100);
 }, function (){console.warn("Error getting audio stream from getUserMedia")});
@@ -129,7 +129,6 @@ function addPhoto () {
   var apd = document.getElementById('addphotodiv');
   var cp = document.getElementById('container_photo');
   var sd = document.getElementById('snapdiv');
-  console.log("This working?");
   camera();
   apd.style.display = "none";
   cp.style.display = "block";

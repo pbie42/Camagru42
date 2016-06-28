@@ -322,7 +322,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             alert("This picture has been deleted successfully. We will now refresh the page for you.");
             window.location = "feed.php";
           } else {
-            console.log(ajax.responseText);
+
           }
         }
       }

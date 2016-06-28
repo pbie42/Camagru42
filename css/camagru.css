@@ -644,6 +644,7 @@ option {
   margin-left:         auto;
 }
 
+
 #toolbox {
   height:              175px;
   width:               380;
@@ -706,6 +707,11 @@ option {
   margin-top:          20px;
   font-size:           20px;
   z-index:             2;
+}
+
+.addphotobutton:hover {
+  background-color:    rgba(88, 2, 2, 1);
+  cursor:              pointer;
 }
 
 #pleaseaddphoto {
@@ -1035,6 +1041,7 @@ margin-bottom:         10px;
   padding:             0;
   font-size:           12px;
   z-index:             2;
+  cursor:              pointer;
 }
 
 #statusui {

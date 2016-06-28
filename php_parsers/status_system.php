@@ -44,13 +44,12 @@ if (isset($_POST['photoid']) && isset($_POST['liker']) && isset($_POST['username
     $querylikenotify->execute();
     echo "like_ok";
   } else if ($_POST['action'] == "unlike") {
-    $querylikecheck = $db_conx2->prepare("SELECT likes FROM photos WHERE osid='$photoid'");
+    $querylikecheck = $db_conx2->prepare("SELECT likes FROM photos WHERE id='$photoid'");
     $querylikecheck->execute();
     $rowlikecheck = $querylikecheck->fetch(PDO::FETCH_ASSOC);
     $likesbefore = $rowlikecheck["likes"];
     //TODO Figure out why this isnt working. This is the last thing you need to fix!!!!!
-    if ($likesbefore == 0) {
-      echo "$likesbefore";
+    if (($likesbefore - 1) < 0) {
       echo "nice_try_asshole";
       exit();
     }
