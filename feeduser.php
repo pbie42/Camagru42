@@ -7,11 +7,6 @@ $feedstring = "";
 $query = $db_conx2->prepare("SELECT * FROM photos WHERE user='$u' ORDER BY uploaddate DESC");
 $query->execute();
 $i = 0;
-//$countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos");
-//$countrow = mysqli_fetch_row($countquery);
-//$count = $countrow[0];
-//$rowquery = mysqli_query($db_conx, "SELECT * FROM photos");
-//$rowcount = mysqli_num_rows($rowquery);
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   $photoid = $row["id"];
   $username = $row["user"];
@@ -182,7 +177,6 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     <script type="text/javascript">
     function replyToStatus(sid,user,ta,btn){
     	var data = _(ta).value;
-      console.log(data);
     	if(data == ""){
     		alert("Please type a reply");
     		return false;

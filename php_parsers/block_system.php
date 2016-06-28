@@ -33,7 +33,7 @@ if (isset($_POST['type']) && isset($_POST['blockee'])) {
     }
   } else if ($_POST['type'] == "unblock") {
     if ($numrows == 0) {
-      mysqli_close($db_conx);
+      $db_conx2 = null;
       echo "You do not have this user blocked";
       exit();
     } else {

@@ -36,7 +36,7 @@ if (isset($_POST["usernamecheck"])) {
 <?php
 if (isset($_POST["emailcheck"])) {
   include_once 'php_includes/db_conx.php';
-  $email = mysqli_real_escape_string($db_conx, $_POST['e']);
+  $email = $_POST['e'];
   $query = $db_conx2->prepare("SELECT id FROM users WHERE email='$email' LIMIT 1");
   $query->execute();
   $email_check = $query->fetchColumn();
@@ -56,7 +56,7 @@ if (isset($_POST["emailcheck"])) {
    include_once 'php_includes/db_conx.php';
    //Gather the posted data into local variables
    $u = preg_replace('#[^a-z0-9]#i', '', $_POST['u']);
-   $e = mysqli_real_escape_string($db_conx, $_POST['e']);
+   $e = $_POST['e'];
    $p = $_POST['p'];
    $c = preg_replace('#[^a-z]#i', '', $_POST['c']);
    $f = preg_replace('#[^a-z]#i', '', $_POST['f']);

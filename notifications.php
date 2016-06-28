@@ -25,7 +25,6 @@ if ($numrows_notifications < 1) {
 }
 $query_notecheck = $db_conx2->prepare("UPDATE users SET notescheck=now() WHERE username='$log_username' LIMIT 1");
 $query_notecheck->execute();
-//mysqli_query($db_conx, "UPDATE users SET notescheck=now() WHERE username='$log_username' LIMIT 1");
 ?>
 <?php
 $friend_requests = "";

@@ -11,14 +11,8 @@ if ($user_ok != true || $log_username == "") {
 $feedstring = "";
 $sql = "SELECT * FROM photos ORDER BY uploaddate DESC";
 $query = $db_conx2->prepare($sql);
-//$query = mysqli_query($db_conx, $sql);
 $query->execute();
 $i = 0;
-// $countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos");
-// $countrow = mysqli_fetch_row($countquery);
-// $count = $countrow[0];
-// $rowquery = mysqli_query($db_conx, "SELECT * FROM photos");
-// $rowcount = mysqli_num_rows($rowquery);
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   $photoid = $row["id"];
   $username = $row["user"];
@@ -268,7 +262,6 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     	ajax.onreadystatechange = function() {
     		if(ajaxReturn(ajax) == true) {
     			if(ajax.responseText == "like_ok"){
-            console.log("we are getting here");
     				_("like_button_div_"+photoid).innerHTML = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''+photoid+'\',\''+liker+'\',\''+username+'\',\''+numlike+'\',\'unlike\')" src="resources/likefull.png" />';
             _("like_number_"+photoid).innerHTML = numlike+" likes";
     			} else {

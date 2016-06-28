@@ -81,14 +81,23 @@ if ($query_gallery_num_rows < 1) {
       }
     ?>
   </div>
-  <form id="pic_form2" action="php_parsers/photo_system.php" method="post">
-    <input id="snap_comment2" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" />
-  </form>
+  <p class="camagrufont">
+    Once added to canvas double click to enlarge, right click to make smaller, scroll click to delete.
+  </p>
+  <form id="pic_form2" action="php_parsers/photo_system.php" method="post"></form>
+    <input id="snap_comment2" type="text" class="snapcomment" onkeydown="enterCheck(event,this);" name="comment_camagru" placeholder=" Add a comment about this photo?" />
+
   <button class="snapbutton" onclick="screenshot2()" type="button" name="button">Use it!</button>
   <button class="snapbutton" onclick="dismissupload()" type="button" name="button">No thanks!</button>
   <span id="uploadcamagru" class="camagrufont"></span>
 </div>
     <script type="text/javascript">
+    function enterCheck(e,btn) {
+    	var keycode = e.keyCode;
+    	if (keycode == 13) {
+        return false;
+    	}
+    }
     function showGallery(gallery,user) {
       _("galleries").style.display = "none";
       _("section_title").innerHTML = user+'&#39;s '+gallery+' Gallery &nbsp; <button onclick="backToGalleries()">Go back to all galleries</button>';
@@ -197,8 +206,6 @@ function render(src){
 
     var width = _("container_upload").style.width;
     var height = _("container_upload").style.height;
-    console.log(height);
-    console.log(width);
 
     _("myUploadCanvas").style.height = image.height;
     _("myUploadCanvas").style.width = image.width;
@@ -256,13 +263,11 @@ var dragok2 = false;
 
 function select_img2(e)
 {
-	console.log(e.target.src);
 	e.dataTransfer.setData("text", e.target.src);
 }
 
 function add_img2(e)
 {
-  console.log("We are getting here");
 	e.preventDefault();
 	init_drag2(e.dataTransfer.getData("text"));
 }
@@ -270,12 +275,10 @@ function add_img2(e)
 function init_drag2(img_src)
 {
 	var tmp2;
-  console.log("init_drag2");
 	tmp2 = {img: new Image(), size: 0, dragok: false, x: 50, y: 50};
 	tmp2.img.src = img_src;
 	tmp2.size = tmp2.img.width > 100 ? 100 / tmp2.img.width : 1;
 	obj2.push(tmp2);
-  console.log("init_drag2 getting here");
 	canvas2.onmousedown = myDown2;
 	canvas2.onmouseup = myUp2;
 	canvas2.ondblclick = myZoomIn2;
@@ -373,7 +376,7 @@ function screenshot2()
   var camagru2 = document.getElementById('myUploadCanvas3');
 	var pic_form2 = document.querySelector('#pic_form2');
   var comment2 = document.getElementById('snap_comment2').value;
-  console.log(comment2);
+  _("snap_comment2").style.display = "none";
 	var data2, post2;
 
 	if (!obj2[0]) {

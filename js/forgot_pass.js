@@ -8,7 +8,6 @@ function forgotpass() {
         ajax.onreadystatechange = function() {
             if (ajaxReturn(ajax) == true) {}
             var response = ajax.responseText;
-            console.log(response);
             if (response == "success") {
                 _("forgotpass_form").innerHTML = "<h2 class='welcome_font thankyoured'>Password Created!</h2><p class='welcome_font'>Please check your email <strong class='thankyoured'>inbox</strong> and <strong class='thankyoured'>junk mail</strong> box at <strong class='thankyoured'>" + e + "</strong> in a moment to receive your temporary password</p>";
             } else if (response == "no_exist") {

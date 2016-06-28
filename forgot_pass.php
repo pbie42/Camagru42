@@ -9,7 +9,7 @@ if ($user_ok == true) {
 <?php
  //Ajax calls this code to execute
  if (isset($_POST["e"])) {
-   $e = mysqli_real_escape_string($db_conx, $_POST['e']);
+   $e = $_POST['e'];
    $query_email = $db_conx2->prepare("SELECT id, username FROM users WHERE email='$e' AND activated='1' LIMIT 1");
    $query_email->execute();
    $numrows_email = $query_email->fetchColumn();

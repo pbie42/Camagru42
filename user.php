@@ -16,7 +16,7 @@ $lastsession = "";
 if (isset($_GET["u"])) {
   $u = preg_replace('#[^a-z0-9]#i', '', $_GET['u']);
 } else {
-  header("location: localhost:8080/camagru42test/index.php");
+  header("location: index.php");
   exit();
 }
 //Select the member from the users table
@@ -25,7 +25,7 @@ $user_query->execute();
 //Make sure that the user exists in the table
 $numrows = $user_query->fetchColumn();
 if ($numrows < 1) {
-  echo "That user does not exist or is not yet activated.";
+  header("location: message.php?msg=That user does not exist or is not yet activated.");
   exit();
 }
 //Check to see if the viewer is the account owner
@@ -254,12 +254,9 @@ else {
             if (cleanresponse != "pass_change_success") {
               statusnew.innerHTML = cleanresponse;
               _("signupbtn").style.display = "block";
-              console.log("getting here");
-              console.log(cleanresponse);
             } else {
               alert("Password Change Successful! You will now be logged out. Please log back in with your new password.")
               _("signupbtn").style.display = "none";
-              console.log("Successful");
               statusnew.innerHTML = "";
               _("newpassform").style.display = "none";
             }
@@ -293,6 +290,37 @@ else {
           label.innerHTML = labelVal;
       });
       });
+      function likeStatus(photoid,liker,username,likes,action) {
+        var ajax = ajaxObj("POST", "php_parsers/status_system.php");
+        var numlike = parseInt(likes) + 1;
+      	ajax.onreadystatechange = function() {
+      		if(ajaxReturn(ajax) == true) {
+      			if(ajax.responseText == "like_ok"){
+      				_("like_button_div_"+photoid).innerHTML = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''+photoid+'\',\''+liker+'\',\''+username+'\',\''+numlike+'\',\'unlike\')" src="resources/likefull.png" />';
+              _("like_number_"+photoid).innerHTML = numlike+" likes";
+      			} else {
+      				alert(ajax.responseText);
+      			}
+      		}
+      	}
+      	ajax.send("photoid="+photoid+"&liker="+liker+"&username="+username+"&action="+action);
+      }
+      function unlikeStatus(photoid,liker,username,likes,action) {
+        var ajax = ajaxObj("POST", "php_parsers/status_system.php");
+        var numlike = likes - 1;
+        var div = "like_button_div_";
+      	ajax.onreadystatechange = function() {
+      		if(ajaxReturn(ajax) == true) {
+      			if(ajax.responseText == "unlike_ok"){
+              _("like_number_"+photoid).innerHTML = numlike+" likes";
+              _("like_button_div_"+photoid).innerHTML = '<img id="like_button" class="likebutton" onclick="likeStatus(\''+photoid+'\',\''+liker+'\',\''+username+'\',\''+numlike+'\',\'like\')" src="resources/likeempty.png" />';
+      			} else {
+      				alert(ajax.responseText);
+      			}
+      		}
+      	}
+      	ajax.send("photoid="+photoid+"&liker="+liker+"&username="+username+"&action="+action);
+      }
     </script>
   </body>
 </html>

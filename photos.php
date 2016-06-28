@@ -22,29 +22,6 @@ if ($u == $log_username && $user_ok == true) {
   $photo_form .= '<p><input type="submit" value="Upload Photo Now" /></p>';
   $photo_form .= '</form>';
 }
-//Select the user galleries
-$gallery_list = "";
-$sql = "SELECT DISTINCT gallery FROM photos WHERE user='$u'";
-$query = mysqli_query($db_conx, $sql);
-if (mysqli_num_rows($query) < 1) {
-  $gallery_list = "This user has not uploaded any photos yet.";
-} else {
-  while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-    $gallery = $row["gallery"];
-    $countquery = mysqli_query($db_conx, "SELECT COUNT(id) FROM photos WHERE user='$u' AND gallery='$gallery'");
-    $countrow = mysqli_fetch_row($countquery);
-    $count = $countrow[0];
-    $filequery = mysqli_query($db_conx, "SELECT filename FROM photos WHERE user='$u' AND gallery='$gallery' ORDER BY RAND() LIMIT 1");
-    $filerow = mysqli_fetch_row($filequery);
-    $file = $filerow[0];
-    $gallery_list .= '<div>';
-    $gallery_list .= '<div onclick="showGallery(\''.$gallery.'\',\''.$u.'\')">';
-    $gallery_list .= '<img src="user/'.$u.'/'.$file.'" alt="cover photo" />';
-    $gallery_list .= '</div>';
-    $gallery_list .= '<b>'.$gallery.'</b> ('.$count.')';
-    $gallery_list .= '</div>';
-  }
-}
 ?>
 
 <!DOCTYPE html>

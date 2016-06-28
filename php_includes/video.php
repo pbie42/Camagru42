@@ -13,9 +13,9 @@
       <canvas id="myCanvas" width="640" height="480"></canvas>
       <canvas id="myCanvas3" width="640" height="480"></canvas>
       <div class="acceptdecline">
-        <form id="pic_form" action="php_parsers/photo_system.php" method="post">
+        <form id="pic_form" action="php_parsers/photo_system.php" method="post"></form>
           <input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" />
-        </form>
+
         <button class="snapbutton" onclick="screenshot()" type="button" name="button">Use it!</button>
         <button class="snapbutton" onclick="dismiss()" type="button" name="button">No thanks!</button>
         <p id="pleaseaddphoto" class="camagrufont">
@@ -39,6 +39,9 @@
       }
     ?>
   </div>
+  <p class="camagrufont">
+    Once added to canvas double click to enlarge, right click to make smaller, scroll click to delete.
+  </p>
 </div>
 <script type="text/javascript">
 function addPhotoMenu() {
@@ -56,9 +59,6 @@ function camagru(imgno) {
   canvas.ondrop = drop;
   canvas.ondragover = allowDrop;
 
-  console.log(canvasLeft);
-  console.log(canvasTop);
-
     var img = document.getElementById("img_"+imgno);
     img.onmousedown = mousedown;
     img.ondragstart = dragstart;
@@ -72,10 +72,6 @@ function camagru(imgno) {
   function mousedown(ev) {
       startOffsetX = ev.offsetX;
       startOffsetY = ev.offsetY;
-      console.log("startOffsetX");
-      console.log("startOffsetY");
-      console.log(startOffsetX);
-      console.log(startOffsetY);
   }
 
 
@@ -85,18 +81,10 @@ function camagru(imgno) {
 
   function drop(ev) {
       ev.preventDefault();
-      console.log("ev.clientX");
-      console.log("ev.clientY");
-      console.log(ev.clientX);
-      console.log(ev.clientY);
       var dropX = ev.clientX - canvasLeft - startOffsetX;
       var dropY = ev.clientY - canvasTop - startOffsetY;
       var id = ev.dataTransfer.getData("Text");
       var dropElement = document.getElementById(id);
-      console.log("dropX");
-      console.log("dropY");
-      console.log(dropX);
-      console.log(dropY);
       // draw the drag image at the drop coordinates
 
       ctx.drawImage(dropElement, dropX, dropY)
@@ -121,7 +109,6 @@ var dragok = false;
 
 function select_img(e)
 {
-	console.log(e.target.src);
 	e.dataTransfer.setData("text", e.target.src);
 }
 
@@ -231,7 +218,7 @@ function screenshot()
 {
 	var pic_form = document.querySelector('#pic_form');
   var comment = document.getElementById('snap_comment').value;
-  console.log(comment);
+  _("snap_comment").style.display = "none";
 	var data, post;
 
 	if (!obj[0]) {
