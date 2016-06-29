@@ -19,6 +19,10 @@ if (isset($_GET["u"])) {
   header("location: index.php");
   exit();
 }
+if ($user_ok != true || $log_username == "") {
+  header("location: index.php");
+  exit();
+}
 //Select the member from the users table
 $user_query = $db_conx2->prepare("SELECT * FROM users WHERE username='$u' AND activated='1' LIMIT 1");
 $user_query->execute();
