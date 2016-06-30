@@ -67,11 +67,18 @@ if (isset($_FILES["avatar"]["name"]) && $_FILES["avatar"]["tmp_name"] != "") {
 if (isset($_POST['cam']) && $_POST['cam'] != "") {
   $gallery = $log_username;
   $cam = $_POST['cam'];
+  $layer = $_POST['layer'];
 	if (isset($_POST['cam1']))
 		$cam = implode('', array($cam, $_POST['cam1']));
+  if (isset($_POST['layer1']))
+		$layer = implode('', array($layer, $_POST['layer1']));
 	list($type, $cam) = explode(';', $cam);
+  list($type, $layer) = explode(';', $layer);
 	list(, $cam) = explode(',', $cam);
+  list(, $layer) = explode(',', $layer);
 	$cam = imagecreatefromstring(base64_decode($cam));
+  $layer = imagecreatefromstring(base64_decode($layer));
+	imagecopy($cam, $layer, 0, 0, 0, 0, imagesx($cam), imagesy($cam));
 	$fileExt = "png";
   $db_file_name = date("DMjGisY")."".rand(1000,9999).".".$fileExt;
 	$photo_path = "../user/all/$db_file_name";

@@ -218,16 +218,21 @@ function screenshot()
 {
 	var pic_form = document.querySelector('#pic_form');
   var comment = document.getElementById('snap_comment').value;
+  var can1 = _("myCanvas");
+  var can2 = _("myCanvas2");
+  _("pic_form").style.display = "none";
   _("snap_comment").style.display = "none";
-	var data, post;
+	var data, post, data1, post1;
 
 	if (!obj[0]) {
     _("pleaseaddphoto").style.display = "block";
+    _("snap_comment").style.display = "";
     return ;
   }
 
 
-	data = camagru.toDataURL('image/png');
+	data = can1.toDataURL('image/png');
+  data1 = can2.toDataURL('image/png');
 
   var comment_post = '<input id="snap_comment" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" value="'+comment+'" />';
 	if (data.length > 500000)
@@ -238,7 +243,15 @@ function screenshot()
 	}
 	else
 		post = '<input class="camagru_data" type="text" name="cam" value="'+data+'"></input>';
-	pic_form.innerHTML = comment_post + post;
+  if (data1.length > 500000)
+	{
+		post1 = '<input class="camagru_data" type="text" name="layer" value="'+data1.substr(0, 500000)
+			+'"></input><input class="camagru_data" type="text" name="layer1" value="'+data1.slice(500000)
+			+'"></input>';
+	}
+	else
+		post1 = '<input type="text" name="layer" value="'+data1+'"></input>';
+	pic_form.innerHTML = comment_post + post + post1;
 	pic_form.submit();
 }
 
