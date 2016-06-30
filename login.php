@@ -87,4 +87,7 @@ if (isset($_POST["logincheck"])) {
       <button id="signupbtn" class="welcome_font" type="submit" value="signup" name="submit">Sign Up</button>
     </form>
   </div>
+  <div id="preview_camagru">
+    <h4 id="preview_camagru_text" class="welcome_font"><a href="feedpublic.php">Preview Camagru?</a></h4>
+  </div>
 </div>

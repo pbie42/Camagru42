@@ -262,6 +262,33 @@ button.welcome_font {
   text-align:          center;
 }
 
+#preview_camagru {
+  height:              auto;
+  width:               350px;
+  border-radius:       10px;
+  font-size:           30px;
+  background-color:    #FFFFFF;
+  border:              1px solid;
+  border-color:        #edeeee;
+  margin-top:          15px;
+  margin-left:         auto;
+  margin-right:        auto;
+  text-align:          center;
+}
+
+#preview_camagru:hover {
+  background-color:    rgb(117, 52, 52);
+}
+
+#preview_camagru_text {
+  font-size:           30px;
+  color:               rgb(117, 52, 52);
+}
+
+#preview_camagru_text:hover {
+  color:               #FFFFFF;
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
 /* Sign Up */
