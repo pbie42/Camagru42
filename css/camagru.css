@@ -88,7 +88,7 @@ header {
 }
 
 #brand {
-  width:               20%;
+  width:               70%;
   display:             flex;
 }
 
@@ -99,12 +99,12 @@ header {
 #logo_header {
   width:               50px;
   height:              50px;
-  margin-left:         5px;
+  margin-left:         30px;
   margin-top:          17px;
 }
 
 #menu_bottom {
-  float: right;
+  float:               right;
   padding:             0;
   padding-left:        0px;
   padding-top:         6px;
@@ -114,7 +114,7 @@ header {
 
 #menu {
   position:            absolute;
-  width:               80%;
+  width:               30%;
   z-index:             1;
 }
 
@@ -421,6 +421,14 @@ option {
   position:            relative;
   width:               100%;
   height:              auto;
+}
+
+#notmessage_section {
+  margin-top:          20px;
+  position:            relative;
+  width:               100%;
+  height:              auto;
+  z-index:             4;
 }
 
 .main_area_message {
@@ -1310,7 +1318,7 @@ header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
 
 /* 48em = 768px */
 
-@media (min-width: 48em) {
+@media (min-width: 100em) {
   header li {
     float:              right;left;
   }

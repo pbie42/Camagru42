@@ -131,9 +131,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   		$convertedTime = ($timeAgoObject -> convert_datetime($postdate));
   		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
   		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a>: '.$data.' </b> <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
-  		if($isFriend == true || $log_username == $username){
   	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event,'.$statusid.',\''.$log_username.'\',\'replytext_'.$statusid.'\',this)" placeholder="Add a comment..."></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
-  		}
+  		
   }
   $likesbutton = "";
   $likesquery = $db_conx2->prepare("SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1");
@@ -165,6 +164,175 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         </div>
         <h4 id="like_number_'.$photoid.'" class="number_likes">'.$likes.' likes</h4>
         <div id="delete_post_'.$photoid.'" class="delete_post_div">
+          '.$delete_post.'
+        </div>
+      </div>
+      <div id="statusarea">
+        '.$statuslist.'
+      </div>
+      <div id="statusui">
+        '.$status_ui.'
+      </div>
+    </div>
+  </div>';
+}
+
+$feedstringbis = "";
+$query = $db_conx2->prepare("SELECT * FROM photos WHERE user='$log_username' ORDER BY uploaddate DESC");
+$query->execute();
+$i = 0;
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+  $photoid = $row["id"];
+  $username = $row["user"];
+  $filename = $row["filename"];
+  $uploaddate = $row["uploaddate"];
+  $likes = $row["likes"];
+  if ($likes == "") {
+    $likes = 0;
+  }
+  if ($username == $log_username && $user_ok == true) {
+    $delete_post = '<button class="delete_post_btn" onclick="deletePost(\''.$photoid.'\')">Delete This Post?</button>';
+  }
+  //The part below is to deal with blocking checks
+  $isFriend = false;
+  $ownerBlockViewer = false;
+  $viewerBlockOwner = false;
+  if ($username != $log_username && $user_ok == true) {
+    //This part below is to see if the person viewing the profile is logged in and to
+    //see if they are friends already with that person
+    $friend_check = $db_conx2->prepare("SELECT id FROM friends WHERE user1='$log_username' AND user2='$username' AND accepted='1' OR user1='$username' AND user2='$log_username' AND accepted='1' LIMIT 1");
+    $friend_check->execute();
+    $friend_num_rows = $friend_check->fetchColumn();
+    if ($friend_num_rows > 0) {
+      $isFriend = true;
+    }
+    //This next part checks if the owner of the profile that the viewer is looking
+    //at has blocked this viewer or not
+    $block_check1 = $db_conx2->prepare("SELECT id FROM blockedusers WHERE blocker='$username' AND blockee='$log_username' LIMIT 1");
+    $block_check1->execute();
+    $block_check1_num_rows = $block_check1->fetchColumn();
+    if ($block_check1_num_rows > 0) {
+      $ownerBlockViewer = true;
+    }
+    //This part is to check if the viewer has blocked the owner of the profile
+    //that they are viewing
+    $block_check2 = $db_conx2->prepare("SELECT id FROM blockedusers WHERE blocker='$log_username' AND blockee='$username' LIMIT 1");
+    $block_check2->execute();
+    $block_check2_num_rows = $block_check2->fetchColumn();
+    if ($block_check2_num_rows > 0) {
+      $viewerBlockOwner = true;
+    }
+  }
+
+  include_once 'classes/time_ago.php';
+  $timeAgoObject = new convertToAgo;
+  $now = time();
+  $dtNow = new DateTime("@$now");
+  $phpnow = $dtNow->format('Y-m-d H:i:s');
+  $NowStr = $phpnow;
+  $NowZoneNameFrom = "UTC";
+  $NowZoneNameTo = "Europe/Amsterdam";
+  $NowZoneGood = date_create($NowStr, new DateTimeZone($NowZoneNameFrom))->setTimezone(new DateTimeZone($NowZoneNameTo))->format("Y-m-d H:i:s");
+  $convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
+  $convertedTime = ($timeAgoObject -> convert_datetime($uploaddate));
+  $whenpost = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
+  $query1 = $db_conx2->prepare("SELECT * FROM status WHERE osid='$photoid' AND account_name='$username' AND type='a' LIMIT 1");
+  $query1->execute();
+  $query1bis = $db_conx2->prepare("SELECT * FROM status WHERE osid='$photoid' AND account_name='$username' AND type='a' LIMIT 1");
+  $query1bis->execute();
+  $statusnumrows = $query1bis->fetchColumn();
+  while ($rowcomm = $query1->fetch(PDO::FETCH_ASSOC)) {
+    ++$i;
+    $statusid = $rowcomm["osid"];
+    $statuslist = "";
+    $account_name = $rowcomm["account_name"];
+    $author = $rowcomm["author"];
+    $postdate = $rowcomm["postdate"];
+    $data = $rowcomm["data"];
+    $data = nl2br($data);
+    $data = str_replace("&amp;","&",$data);
+  	$data = stripslashes($data);
+    $status_replies = "";
+  	$query_replies = $db_conx2->prepare("SELECT * FROM status WHERE osid='$statusid' AND type='b' ORDER BY postdate ASC");
+    $query_replies->execute();
+    $replynumrows = $query_replies->fetchColumn();
+      if($replynumrows > 0){
+        $query_replies2 = $db_conx2->prepare("SELECT * FROM status WHERE osid='$statusid' AND type='b' ORDER BY postdate ASC");
+        $query_replies2->execute();
+        while ($row2 = $query_replies2->fetch(PDO::FETCH_ASSOC)) {
+  				$statusreplyid = $row2["id"];
+  				$replyauthor = $row2["author"];
+  				$replydata = $row2["data"];
+  				$replydata = nl2br($replydata);
+  				$replypostdate = $row2["postdate"];
+  				$replydata = str_replace("&amp;","&",$replydata);
+  				$replydata = stripslashes($replydata);
+  				$replyDeleteButton = '';
+  				if($replyauthor == $log_username || $account_name == $log_username ){
+  					$replyDeleteButton = '<span id="srdb_'.$statusreplyid.'" class="username replyDeleteButton"><a href="#" onclick="return false;" onmousedown="deleteReply(\''.$statusreplyid.'\',\'reply_'.$statusreplyid.'\');" title="DELETE THIS COMMENT">X</a></span>';
+  				}
+  				include_once 'classes/time_ago.php';
+  				$timeAgoObject = new convertToAgo;
+  				$now = time();
+  				$dtNow = new DateTime("@$now");
+  				$phpnow = $dtNow->format('Y-m-d H:i:s');
+  				$NowStr = $phpnow;
+  				$NowZoneNameFrom = "UTC";
+  				$NowZoneNameTo = "Europe/Amsterdam";
+  				$NowZoneGood = date_create($NowStr, new DateTimeZone($NowZoneNameFrom))->setTimezone(new DateTimeZone($NowZoneNameTo))->format("Y-m-d H:i:s");
+  				$convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
+  				$convertedTime = ($timeAgoObject -> convert_datetime($replypostdate));
+  				$whenreply = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
+  				$status_replies .= '<div id="reply_'.$statusreplyid.'" class="reply_boxes"><div class="status_plus_delete"><div class="status_length"><b><a href="user.php?u='.$replyauthor.'"><span class="username">'.$replyauthor.'</span></a> '.$whenreply.': '.$replydata.'</b></div> '.$replyDeleteButton.'</div></div>';
+  	    }
+      }
+      include_once 'classes/time_ago.php';
+  		$timeAgoObject = new convertToAgo;
+  		$now = time();
+  		$dtNow = new DateTime("@$now");
+  		$phpnow = $dtNow->format('Y-m-d H:i:s');
+  		$NowStr = $phpnow;
+  		$NowZoneNameFrom = "UTC";
+  		$NowZoneNameTo = "Europe/Amsterdam";
+  		$NowZoneGood = date_create($NowStr, new DateTimeZone($NowZoneNameFrom))->setTimezone(new DateTimeZone($NowZoneNameTo))->format("Y-m-d H:i:s");
+  		$convertedNow = ($timeAgoObject -> convert_datetime($NowZoneGood));
+  		$convertedTime = ($timeAgoObject -> convert_datetime($postdate));
+  		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
+  		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a>: '.$data.' </b> <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
+  		if($isFriend == true || $log_username == $username){
+  	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event,'.$statusid.',\''.$log_username.'\',\'replytext_'.$statusid.'\',this)" placeholder="Add a comment..."></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
+  		}
+  }
+  $likesbutton = "";
+  $likesquery = $db_conx2->prepare("SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1");
+  $likesquery->execute();
+  $likesquery_num_rows = $likesquery->fetchColumn();
+  if ($likesquery && ($likesquery_num_rows > 0)) {
+    $likesbutton = '<img id="like_button" class="likebutton" onclick="unlikeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'unlike\')" src="resources/likefull.png" />';
+  } else {
+    $likesbutton = '<img id="like_button" class="likebutton" onclick="likeStatus(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\',\''.$likes.'\',\'like\')" src="resources/likeempty.png" />';
+  }
+  $feedstringbis .= '<div id="notmessage_section">
+    <div id="post_'.$photoid.'" onmouseover="showDelete2(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\')" onmouseout="hideDelete2(\''.$photoid.'\',\''.$log_username.'\',\''.$username.'\')" class="main_feed_area welcome_font">
+      <div class="postheader">
+        <div class="feed_username">
+          <a href="user.php?u='.$author.'">
+            <h4 class="username">'.$username.'</h4>
+          </a>
+        </div>
+        <div class="feed_date">
+          <h4>'.$whenpost.'</h4>
+        </div>
+      </div>
+      <div class="post_photo">
+        <img src="user/all/'.$filename.'" />
+      </div>
+      <div class="post_likes">
+        <div id="like_button_div_'.$photoid.'">
+          '.$likesbutton.'
+        </div>
+        <h4 id="like_number_'.$photoid.'" class="number_likes">'.$likes.' likes</h4>
+        <div id="'.$photoid.'_delete_post" class="delete_post_div">
           '.$delete_post.'
         </div>
       </div>
@@ -301,6 +469,22 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
       }
       else {
         _("delete_post_"+photoid).style.display = "none";
+      }
+    }
+    function showDelete2(photoid,logusername,username) {
+      if (logusername != username) {
+        return ;
+      }
+      else {
+        _(photoid+"_delete_post").style.display = "block";
+      }
+    }
+    function hideDelete2(photoid,logusername,username) {
+      if (logusername != username) {
+        return ;
+      }
+      else {
+        _(photoid+"_delete_post").style.display = "none";
       }
     }
     function deletePost(id) {

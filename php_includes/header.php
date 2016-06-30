@@ -19,6 +19,7 @@ if ($user_ok == true) {
 
 <header>
   <div id="header_top">
+    <a href="index.php">
     <div id="brand">
       <?php
         include_once 'php_includes/check_login_status.php';
@@ -50,7 +51,7 @@ if ($user_ok == true) {
     </div> <!-- brand -->
 
     <div id="menu">
-
+    </a>
 <?php
   if ($_SESSION['username'] != "")
   {
@@ -60,6 +61,8 @@ if ($user_ok == true) {
       <ul id="menu_bottom" class="menu">
         <?php echo $envelope; ?>
         <li class="logo_font menuitem"><a href="user.php?u=<?php echo $_SESSION['username']; ?>"><img id="usericon" style="height:27px;width:20px;" src="resources/user.png" alt="" /></a></li>
+        <li id="feed" class="logo_font menuitem"><a href="feedpublic.php"><img style="height:27px;width:27px;" src="resources/feed.png" alt="" /></a></li>
+
         <li id="logout" class="logo_font menuitem" onclick="home()"><a href="logout.php"><img style="height:27px;width:27px;" src="resources/logout.png" alt="" /></a></li>
 <?php
   }

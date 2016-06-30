@@ -125,9 +125,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
   		$convertedTime = ($timeAgoObject -> convert_datetime($postdate));
   		$when = ($timeAgoObject -> makeAgo($convertedNow, $convertedTime));
   		$statuslist .= '<div id="status_'.$statusid.'" class="status_boxes"><div class="status_plus_delete"><div class="commentmade"><b><a class="username" href="user.php?u='.$author.'"><span class="username">'.$author.'</span></a>: '.$data.' </b> <br /></div>'.$statusDeleteButton.'</div>'.$status_replies.'</div>';
-  		if($isFriend == true || $log_username == $username){
   	    $statuslist .= '<textarea id="replytext_'.$statusid.'" class="replytext textbox" onkeyup="statusMax(this,250)" onkeydown="enterReplyStatus(event,'.$statusid.',\''.$log_username.'\',\'replytext_'.$statusid.'\',this)" placeholder="Add a comment..."></textarea><button id="replyBtn_'.$statusid.'" class="replyBtn" onclick="replyToStatus('.$statusid.',\''.$username.'\',\'replytext_'.$statusid.'\',this)">Reply</button>';
-  		}
   }
   $likesbutton = "";
   $likesquery = $db_conx2->prepare("SELECT * FROM likes WHERE osid='$photoid' AND liker='$log_username' LIMIT 1");

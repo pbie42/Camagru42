@@ -23,12 +23,12 @@
         </p>
 
       </div>
-
+      <?php echo $feedstringbis; ?>
     </div>
 </div>
 <?php include_once 'photoscopy.php'; ?>
 <div id="snapdiv">
-  <button class="snapbutton" type="button" onclick="snap()" name="button">Take a photo!</button>
+  <button class="snapbutton" type="button" onclick="snap()" name="button">Preview your Camagru?</button>
   <button class="snapbutton" type="button" onclick="addPhotoMenu()" name="button">Add a photo?</button>
   <button class="snapbutton bottombutton" onclick="dismissPhoto()" type="button" name="button">Nevermind...</button>
   <div id="toolbox">

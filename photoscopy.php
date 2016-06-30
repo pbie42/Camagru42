@@ -374,10 +374,13 @@ function screenshot2()
 {
   useIt();
   var camagru2 = document.getElementById('myUploadCanvas3');
+  var camagrumain = document.getElementById('myUploadCanvas');
+  var camagrulayer = document.getElementById('myUploadCanvas2');
 	var pic_form2 = document.querySelector('#pic_form2');
   var comment2 = document.getElementById('snap_comment2').value;
+  _("pic_form2").style.display = "none";
   _("snap_comment2").style.display = "none";
-	var data2, post2;
+	var data2b, post2b, data1b, post1b;
 
 	if (!obj2[0]) {
     _("uploadcamagru").style.display = "block";
@@ -386,18 +389,27 @@ function screenshot2()
   }
 
 
-	data2 = camagru2.toDataURL('image/png');
+	data2b = camagrumain.toDataURL('image/png');
+  data1b = camagrulayer.toDataURL('image/png');
 
   var comment_post2 = '<input id="snap_comment2" type="text" class="snapcomment" name="comment_camagru" placeholder=" Add a comment about this photo?" value="'+comment2+'" />';
-	if (data2.length > 500000)
+	if (data2b.length > 500000)
 	{
-		post2 = '<input class="camagru_data" type="text" name="cam" value="'+data2.substr(0, 500000)
-			+'"></input><input class="camagru_data" type="text" name="cam1" value="'+data2.slice(500000)
+		post2b = '<input class="camagru_data" type="text" name="cam" value="'+data2b.substr(0, 500000)
+			+'"></input><input class="camagru_data" type="text" name="cam1" value="'+data2b.slice(500000)
 			+'"></input>';
 	}
 	else
-		post2 = '<input class="camagru_data" type="text" name="cam" value="'+data2+'"></input>';
-	pic_form2.innerHTML = comment_post2 + post2;
+		post2b = '<input class="camagru_data" type="text" name="cam" value="'+data2b+'"></input>';
+  if (data1b.length > 500000)
+	{
+		post1b = '<input class="camagru_data" type="text" name="layer" value="'+data1b.substr(0, 500000)
+			+'"></input><input class="camagru_data" type="text" name="layer1" value="'+data1b.slice(500000)
+			+'"></input>';
+	}
+	else
+		post1b = '<input type="text" name="layer" value="'+data1b+'"></input>';
+	pic_form2.innerHTML = comment_post2 + post2b + post1b;
 	pic_form2.submit();
 }
 
